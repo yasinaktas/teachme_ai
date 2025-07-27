@@ -3,3 +3,16 @@
     + Dio, Bloc, TTS, Hive, Google Fonts, Font Awesome bağımlılıklarını ekledim
     + Klasörleri ekledim: blocs, constants, enums, extensions, models, pages, repositories, widgets
     + Test yazmak için tests klasörü ekledim
+
+27 Temmuz 2025 10.30
+    + services klasörünü ekledim
+    + constants içine app_colors dosyasını ekledim
+    + models içine course dosyasını ekledim
+    + assets klasörünü ekledim
+    + assets içine images, fonts, lotties klasörlerini ekledim
+    + models içine instructor dosyasını ekledim
+    + models içine chapter dosyasını ekledim
+    + models içine question dosyasını ekledim
+    + models içine answer dosyasını ekledim
+    + models içine app_settings dosyasını ekledim
+    + cache klasörünü ekledim
