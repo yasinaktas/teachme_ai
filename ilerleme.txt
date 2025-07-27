@@ -1,0 +1,5 @@
+27 Temmuz 2025 01.45
+    + Projeyi oluşturdum, projede state management yöntemi olarak BLoC kullanacağım
+    + Dio, Bloc, TTS, Hive, Google Fonts, Font Awesome bağımlılıklarını ekledim
+    + Klasörleri ekledim: blocs, constants, enums, extensions, models, pages, repositories, widgets
+    + Test yazmak için tests klasörü ekledim
