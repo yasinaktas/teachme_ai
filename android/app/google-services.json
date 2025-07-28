@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "998581643705",
+    "project_id": "teachme-ai-3b8cf",
+    "storage_bucket": "teachme-ai-3b8cf.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998581643705:android:0bdf1ccf5974ccd7a6ee68",
+        "android_client_info": {
+          "package_name": "com.yasinaktasdev.teachme_ai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCo82WDoAoldgUDuwSv2ZCLHaHpfVtCJm8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

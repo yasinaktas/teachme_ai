@@ -8,11 +8,6 @@ import 'package:teachme_ai/pages/public_courses_page.dart';
 import 'package:teachme_ai/widgets/add_button.dart';
 import 'package:teachme_ai/widgets/custom_bottom_navigation_bar.dart';
 
-// Drawer olacak
-// Custom Bottom Navigation Bar olacak
-// Bottom Navigation Bar'ın yanında Add buttonu olacak
-// AppBar'da title ve profil iconu olacak
-
 class HostPage extends StatefulWidget {
   const HostPage({super.key});
 
@@ -54,6 +49,7 @@ class _HostPageState extends State<HostPage> {
         actionsPadding: const EdgeInsets.only(right: 8.0),
       ),
       drawer: Drawer(backgroundColor: AppColors.backgroundColor),
+      extendBody: true,
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(context).padding.bottom + 16,

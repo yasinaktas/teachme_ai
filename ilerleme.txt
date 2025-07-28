@@ -10,7 +10,7 @@ Proje kısa tanımı: Arka tarafta Yapay zeka kullanarak kişiye özel eğitim i
 
 27 Temmuz 2025 01.45
     + Projeyi oluşturdum, projede state management yöntemi olarak BLoC kullanacağım
-    + Dio, Bloc, TTS, Hive, Google Fonts, Font Awesome bağımlılıklarını ekledim
+    + Dio, BloC, TTS, Hive, Google Fonts, Font Awesome bağımlılıklarını ekledim
     + Klasörleri ekledim: blocs, constants, enums, extensions, models, pages, repositories, widgets
     + Test yazmak için tests klasörü ekledim
 
@@ -80,3 +80,35 @@ Proje kısa tanımı: Arka tarafta Yapay zeka kullanarak kişiye özel eğitim i
         - TODO -> Buradaki repository ve service de provider ile sağlanacak 
     + HomePage'e BlocBuilder ekledim
     + HomePage'i stateful yaptım ve initState içinde CourseBloc'un CourseFetchEvent'ini çağırdım
+    + HomePage içinde geçici CourseCard tasarımı yaptım
+        - TODO -> Bu card ayrı bir widget olacak
+    + CoursePage'e Course parametresi ekledim
+    + MaterialApp routes'a CoursePage ekledim
+    + HomePage'e subcription card ekledim
+        - TODO -> Bu card ayrı bir widget olacak
+    + SubscriptionPage ekledim ve MaterialApp routes'a ekledim
+    
+28 Temmuz 2025 20.25    
+    + Equatable paketini ekledim
+    + Firebase'de teachme-ai projesi oluşturdum
+    + Terminalde firebase login çalıştırdım
+    + Terminalde flutterfire configure çalıştırdım
+    + Ruby hatası aldım, terminalde sudo gem install xcodeproj çalıştırdım
+    + Tekrar terminalde flutterfire configure çalıştırdım
+    + firebase_core bağımlılığını ekledim
+    + firebase_auth bağımlılığını ekledim
+    + extensions klasörüne padding_extension dosyasını ekledim
+    + HomePage'deki card'lara padding_extension'ı (.withPadding()) uyguladım
+    + main'i async yaptım ve WidgetsFlutterBinding.ensureInitialized(); await Firebase.initializeApp(); ekledim
+    + auth_event, auth_state ve auth_bloc dosyalarını ekledim
+    + MultiBlocProvider'a AutoBloc ekledim, ios version hatası verdi
+    + IOS version 12'den 15'e yükselttim
+    + HomePage'den CourseFetchEventi kaldırdım, MultiBlocProvider içinde tetikledim
+    + HomePage'i stateless yaptım
+    + Boş LoginPage ve SignupPage ekledim
+    + SplashPage ekledim
+    + MaterialApp routes initialRoute'u SplashPage olarak değiştirdim
+    + MaterialApp routes'a host, login ve signup ekledim
+    + SplashPage'e 2 saniye delay ekledim
+    + HomePage'de searchbar unfocus yapabilmek için Scaffoldu GestureDetector ile sarmaladım
+    + GestureDetector'e FocusScope.of(context).unfocus(); ekledim

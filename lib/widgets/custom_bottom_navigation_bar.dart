@@ -18,7 +18,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.zero,
-      color: AppColors.cardColor,
+      color: AppColors.cardOppositeColor,
       elevation: AppDimensions.cardElevation,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
@@ -30,7 +30,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           final isSelected = index == selectedIndex;
           return Material(
             color: isSelected
-                ? AppColors.primarySurfaceColor
+                ? AppColors.primaryShadowColor
                 : Colors.transparent,
             borderRadius: BorderRadius.circular(AppDimensions.cardRadius - 4),
             child: InkWell(
