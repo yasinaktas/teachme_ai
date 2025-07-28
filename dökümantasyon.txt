@@ -1,0 +1,82 @@
+NOT: Bu projenin geliştirme süreçlerinde yapay zeka araçlarından yardım almadım (Bilmediğim konularda araştırma
+yapmak dışında). Mayıs 2025 - Temmuz 2025 tarihleri arasında katıldığım ve başarı ile tamamladığım SoftITo'nun 
+(İstanbul Ticaret Odası) 320 saatlik Flutter ile uygulama geliştirme eğitimi ve "Flutter
+Design Patterns and Best Practices" kitabından öğrendiklerimi uygulamaya çalıştım.
+
+Proje kısa tanımı: Arka tarafta Yapay zeka kullanarak kişiye özel eğitim içeriği (kurs) sunan mobil uygulama
+(ve web) projesi.
+
+# GELİŞTİRME SÜRECİ
+
+27 Temmuz 2025 01.45
+    + Projeyi oluşturdum, projede state management yöntemi olarak BLoC kullanacağım
+    + Dio, Bloc, TTS, Hive, Google Fonts, Font Awesome bağımlılıklarını ekledim
+    + Klasörleri ekledim: blocs, constants, enums, extensions, models, pages, repositories, widgets
+    + Test yazmak için tests klasörü ekledim
+
+27 Temmuz 2025 10.30
+    + services klasörünü ekledim
+    + constants içine app_colors dosyasını ekledim
+    + models içine course dosyasını ekledim
+    + assets klasörünü ekledim
+    + assets içine images, fonts, lotties klasörlerini ekledim
+    + models içine instructor dosyasını ekledim
+    + models içine chapter dosyasını ekledim
+    + models içine question dosyasını ekledim
+    + models içine answer dosyasını ekledim
+    + models içine app_settings dosyasını ekledim
+    + cache klasörünü ekledim
+
+27 Temmuz 2025 13.00
+    + Lottie bağımlılığını ekledim
+    + ios build identifier'ı "com.yasinaktasdev.teachmeai" olarak güncelledim
+    + android applicationId'yi "com.yasinaktasdev.teachme_ai" olarak güncelledim
+    + constants içine app_strings dosyasını ekledim
+    + Sayfaları içleri boş ve stateless şeklinde pages klasörüne ekledim
+    + Eklediğim sayfalar: AddCoursePage, ChapterPage, CoursePage, HomePage, HostPage, PublicCoursesPage
+    + MaterialApp home parametresini HostPage olarak güncelledim
+    + AndroidManifest'te label'ı TeachMe olarak güncelledim, flutter clean ve flutter run çalıştırdım
+
+27 Temmuz 2025 15.45
+    + MaterialApp için ThemeData tanımladım ve background color değerlerini verdim
+    + HostPage'e AppBar ve Drawer ekledim
+    + constants klasörü içine app_dimensions dosyasını ekledim
+    + HostPage AppBar'a profile buttonu ekledim
+        - TODO -> Kullanıcı girişine göre bu butonu güncelle
+    + widgets içine custom_bottom_navigation_bar dosyasını ekledim
+    + models içine navigation_item dosyasını ekledim
+    + custom_bottom_navigation_bar widget'ını tasarladım
+    + widgets içine add_button dosyasını ekledim ve tasarladım
+    + Google Fonts bağımlılığını ekledim
+        - TODO -> AppBar Title style sabitlere eklenecek
+
+27 Temmuz 2025 20.00
+    + HostPage scrolledUnderElevation değerini 0 yaptım
+    + HomePage CustomScrollView ekledim
+    + AppDimensions'a pagePadding değerini 16 olarak ekledim
+    + HomePage'e search bar ekledim
+    + MaterialApp'e initialRoute ve routes ekledim: host ve addCourse
+    + AddCoursePage'e boş appBar ekledim
+    + Drawer backgroundColor'ı değiştirdim
+    + tests klasörüne test_course_data dosyasını ekledim
+    + ProfilePage oluşturdum, routes'a ekledim, HostPage appBar'dan yönlendirdim
+
+28 Temmuz 2025 01.15
+    + models içine user_course_progress ve user_question_answer dosyalarını ekledim
+    + tests içine test_user_progress dosyasını ekledim
+
+28 Temmuz 2025 13.00
+    + ThemeData içinde systemNavigationBarColor ve statusBarColor ayarlamaları yaptım
+    + models içindeki user_course_progress ve user_question_answer dosyalarını sildim
+    + course, chapter, question ve answer yapılarını nested hale getirdim ve progress değişkenlerini ekledim
+    + tests klasöründeki testleri şimdilik sildim
+
+28 Temmuz 2025 15.00
+    + i_course_service ve fake_course_service dosyalarını ekledim
+    + i_course_repository ve fake_course_repository dosyalarını ekledim
+    + course_bloc, course_event, course_state ekledim
+    + MaterialApp'i MultiBlocProvider ile sarmaladım
+    + MultiBlocProvider'a CourseBloc ekledim
+        - TODO -> Buradaki repository ve service de provider ile sağlanacak 
+    + HomePage'e BlocBuilder ekledim
+    + HomePage'i stateful yaptım ve initState içinde CourseBloc'un CourseFetchEvent'ini çağırdım
