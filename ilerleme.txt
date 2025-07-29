@@ -112,3 +112,15 @@ Proje kısa tanımı: Arka tarafta Yapay zeka kullanarak kişiye özel eğitim i
     + SplashPage'e 2 saniye delay ekledim
     + HomePage'de searchbar unfocus yapabilmek için Scaffoldu GestureDetector ile sarmaladım
     + GestureDetector'e FocusScope.of(context).unfocus(); ekledim
+
+28 Temmuz 2025 23.30
+    + Projeyi android telefonumda çalıştırdım, hatalar çıktı
+    + ndkVersion = "27.0.12077973" yaptım
+    + minSdk = 23 yaptım
+    + HomePage'deki CourseCard tasarımını widgets'a ekledim
+    + HomePage'deki SubscriptionBanner tasarımını widgets'a ekledim
+    + ChatGPT'ye panda maskotu çizdirdim ve images'e ekledim
+    + HomePage üst tarafına karşılama kısmı ekledim
+
+29 Temmuz 2025 10.00
+    + Github student pack ile Heroku'ya başvurdum

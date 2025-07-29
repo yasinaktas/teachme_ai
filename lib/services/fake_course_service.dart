@@ -11,7 +11,7 @@ class FakeCourseService implements ICourseService {
 
     // Return a list of fake courses
     return [
-      Course(
+      /*Course(
         id: '1',
         title: 'Introduction to Flutter 1',
         description: 'Learn the basics of Flutter development.',
@@ -168,7 +168,7 @@ class FakeCourseService implements ICourseService {
             transcript:
                 'This chapter covers the basics of Flutter development.',
             questions: [],
-            isCompleted: true,
+            isCompleted: false,
           ),
           Chapter(
             id: '2',
@@ -179,7 +179,7 @@ class FakeCourseService implements ICourseService {
             transcript:
                 'This chapter guides you through building your first app.',
             questions: [],
-            isCompleted: true,
+            isCompleted: false,
           ),
           Chapter(
             id: '3',
@@ -192,7 +192,7 @@ class FakeCourseService implements ICourseService {
             transcript:
                 'This chapter explains different state management techniques.',
             questions: [],
-            isCompleted: true,
+            isCompleted: false,
           ),
           Chapter(
             id: '4',
@@ -204,7 +204,7 @@ class FakeCourseService implements ICourseService {
             transcript:
                 'This chapter covers networking in Flutter applications.',
             questions: [],
-            isCompleted: true,
+            isCompleted: false,
           ),
           Chapter(
             id: '5',
@@ -366,7 +366,7 @@ class FakeCourseService implements ICourseService {
             questions: [],
           ),
         ],
-      ),
+      ),*/
     ];
   }
 }
