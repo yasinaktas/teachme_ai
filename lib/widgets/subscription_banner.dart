@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SubscriptionBanner extends StatelessWidget {
   const SubscriptionBanner({super.key});
@@ -12,14 +13,24 @@ class SubscriptionBanner extends StatelessWidget {
     return Card(
       margin: EdgeInsets.zero,
       color: AppColors.primaryColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: AppDimensions.listCardElevation,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppDimensions.listCardRadius),
+      ),
       child: InkWell(
         onTap: () {
           Navigator.pushNamed(context, "/subscription");
         },
-        borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+        borderRadius: BorderRadius.circular(AppDimensions.bottomCardRadius),
         child: ListTile(
-          leading: Icon(Icons.trending_up, color: Colors.white, size: 32),
+          leading: Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Icon(
+              FontAwesomeIcons.graduationCap,
+              color: Colors.white,
+              size: 24,
+            ),
+          ),
           title: Text(
             "Learn",
             style: GoogleFonts.quicksand(
@@ -40,7 +51,7 @@ class SubscriptionBanner extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.white, width: 1),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppDimensions.listCardRadius),
             ),
             child: Row(
               spacing: 4,

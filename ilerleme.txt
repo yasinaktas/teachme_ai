@@ -124,3 +124,75 @@ Proje kısa tanımı: Arka tarafta Yapay zeka kullanarak kişiye özel eğitim i
 
 29 Temmuz 2025 10.00
     + Github student pack ile Heroku'ya başvurdum
+
+29 Temmuz 23.15 (ChatGPT'den yardım aldım)
+    + Terminalde "pip install fastapi uvicorn google-generativeai python-dotenv" çalıştırdım
+    + Masaüstümde teachme-ai-backend adlı klasör oluşturdum
+    + teachme-ai-backend içine .env, main.py ve requirements.txt dosyalarını oluşturdum
+    + .env içine GEMINI_API_KEY ekledim
+    + main.py içinde model olarak gemini-2.0-flash kullandım
+    + local başlatma için termianlde "uvicorn main:app --reload" çalıştırdım
+    + Test etmek için terminalde curl -X POST http://127.0.0.1:8000/ask -H "Content-Type: application/json" -d '{"prompt": "Explain quantum computing in simple terms"}' çalıştırdım
+
+30 Temmuz 2025 12.45
+    + services içine i_ai_api_service ve gemini_api_service dosyalarını ekledim
+    + GeminiApiService sınıfında Dio ile backende istek attım
+    + repositories içine i_generate_course ve generate_course dosyalarını ekledim
+    + repositories içine api_result dosyasını ekledim
+    + bloc içine generate_coruse klasörü ekledim
+    + generate_coruse klasörü içine generate_course_bloc dosyasını ekledim
+    + generate_coruse klasörü içine generate_course_event dosyasını ekledim
+    + generate_coruse klasörü içine generate_course_state dosyasını ekledim
+
+30 Temmuz 3035 15.00
+    + Course içinden instructor çıkardım
+        - TODO -> Instructor dinamik olarak seçilebilsin
+    + generate_course_state düzenledim
+    + generate_course_event düzenledim
+    + generate_course_bloc düzenledim
+
+30 Temmuz 2025 17.45
+    + i_generate_course fonksiyonlarının geri dönüş değerlerini ApiResult olarak değiştirdim
+    Bu bölümü generate_course bloc kısmının senaryosunu düşünerek geçirdim
+
+30 Temmuz 2025 22.00
+    + flutter_launcher_icons paketini ekledim (dev dependencies)
+    + ChatGPT'ye iki tane logo çizdirdim
+    + assets içine icons klasörü ekledim ve içine logo.png ekledim
+    + pubspec.yaml içine şunları ekledim:
+        flutter_launcher_icons:
+            android: true
+            ios: true
+            image_path: "assets/icons/logo.png"
+            remove_alpha_ios: true // arkaplanı şeffaf olmasına ios izin vermiyor
+    + terminalde "flutter pub run flutter_launcher_icons:main" çalıştırdım
+    + SplashPage'den delay kaldırdım ve stateless'a çevirdim
+    + flutter_native_splash paketini ekledim
+    + pubspec.yaml içine şunları ekledim:
+        flutter_native_splash:
+            color: "#ffffff" # Arka plan rengi
+            image: assets/icons/logo.png # Splash görseli
+            android: true
+            ios: true
+            web: false
+            #branding: assets/branding.png # (İsteğe bağlı) Alt köşedeki branding resmi
+    + termianlde "flutter pub run flutter_native_splash:create" çalıştırdım
+        - delay eklemek istersek runApp üzerine delay ekleyebilir
+        - kapatmak için termianlde "flutter pub run flutter_native_splash:remove" çalıştırabiliriz
+    + auth_page oluşturdum
+    + MaterialApp routes'a AuthPage ekledim
+    + splash'ten auth_page'e yönlendirdim login_page yerine
+    + auth_page'e tabbar ekledim, LoginPage ve SignupPage içeriyor
+    + AuthPage ve SplashPage scaffoldlarına extentBody=true değerini verdim, appbar lazımmış!
+    + LoginPage tasarımını yaptım
+
+31 Temmuz 2025 09.30
+    + LoginPage'e BlocListener<AuthBloc,AuthState> ekledim ve login işlemini yaptım
+        - TODO -> Validator eklenebilir
+        - TODO -> Marka bilgisi LoginPage'e enjekte edilmeli
+    + ProfilePage'e logout buttonu ekledim ve logout işlemi yaptım
+    + pushreplacement HostPage'i stackten kaldırmadığı için pushnamedandremoveuntil'i kullandım
+
+31 Temmuz 2025 18.05
+    + SignupPage tasarımını yaptım
+    + CourseCard progress içine progress text ekledim, bazı font ayarlamaları yaptım

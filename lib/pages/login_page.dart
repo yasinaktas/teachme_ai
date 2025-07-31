@@ -1,13 +1,278 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:teachme_ai/blocs/auth/auth_bloc.dart';
+import 'package:teachme_ai/blocs/auth/auth_event.dart';
+import 'package:teachme_ai/blocs/auth/auth_state.dart';
+import 'package:teachme_ai/constants/app_colors.dart';
+import 'package:teachme_ai/constants/app_dimensions.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool _isPasswordVisible = false;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(child: Text("Login Page")),
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is Authenticated) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushReplacementNamed(context, '/host');
+          });
+        } else if (state is Unauthenticated) {
+          
+        } else if (state is AuthError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.pagePadding,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 48.0),
+                Text(
+                  "Your Email",
+                  style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8.0),
+                TextField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 12.0,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.textFieldRadius,
+                      ),
+                    ),
+                    hintText: 'Email',
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                Text(
+                  "Your Password",
+                  style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8.0),
+                TextField(
+                  controller: _passwordController,
+                  keyboardType: TextInputType.visiblePassword,
+                  obscureText: !_isPasswordVisible,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 12.0,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.textFieldRadius,
+                      ),
+                    ),
+                    hintText: 'Password',
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                        icon: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: AppColors.secondaryShadowColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                //const SizedBox(height: 8.0),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    //style: TextButton.styleFrom(padding: EdgeInsets.zero),
+                    onPressed: () {},
+                    child: Text(
+                      "Forgot password?",
+                      style: GoogleFonts.quicksand(
+                        color: AppColors.primaryDarkColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          final email = _emailController.text.trim();
+                          final password = _passwordController.text.trim();
+                          context.read<AuthBloc>().add(
+                            SignInRequested(email, password),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.textFieldRadius,
+                            ),
+                          ),
+                          backgroundColor: AppColors.primaryDarkColor,
+                        ),
+                        child: Text(
+                          "Continue",
+                          style: GoogleFonts.quicksand(
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24.0),
+                Row(
+                  children: [
+                    Expanded(flex: 2, child: Container()),
+                    Expanded(flex: 3, child: Divider()),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        "Or",
+                        style: GoogleFonts.quicksand(
+                          color: AppColors.secondaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    Expanded(flex: 3, child: Divider()),
+                    Expanded(flex: 2, child: Container()),
+                  ],
+                ),
+                const SizedBox(height: 32.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.textFieldRadius,
+                            ),
+                          ),
+                          side: BorderSide(color: AppColors.secondaryColor),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/images/google_logo.png',
+                              height: 20.0,
+                              width: 20.0,
+                            ),
+                            const SizedBox(width: 8.0),
+                            Text(
+                              "Login with Google",
+                              style: GoogleFonts.quicksand(
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.blackColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        style: OutlinedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(vertical: 16.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.textFieldRadius,
+                            ),
+                          ),
+                          side: BorderSide(color: AppColors.secondaryColor),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/images/apple_logo.png',
+                              height: 20.0,
+                              width: 20.0,
+                            ),
+                            const SizedBox(width: 8.0),
+                            Text(
+                              "Login with Apple",
+                              style: GoogleFonts.quicksand(
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.blackColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have an account?",
+                      style: GoogleFonts.quicksand(
+                        color: AppColors.secondaryColor,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Sign up",
+                        style: GoogleFonts.quicksand(
+                          color: AppColors.primaryDarkColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

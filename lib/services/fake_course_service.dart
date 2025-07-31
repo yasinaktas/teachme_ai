@@ -1,6 +1,5 @@
 import 'package:teachme_ai/models/chapter.dart';
 import 'package:teachme_ai/models/course.dart';
-import 'package:teachme_ai/models/instructor.dart';
 import 'package:teachme_ai/services/i_course_service.dart';
 
 class FakeCourseService implements ICourseService {
@@ -11,17 +10,11 @@ class FakeCourseService implements ICourseService {
 
     // Return a list of fake courses
     return [
-      /*Course(
+      Course(
         id: '1',
         title: 'Introduction to Flutter 1',
         description: 'Learn the basics of Flutter development.',
         language: "en",
-        instructor: Instructor(
-          name: 'John Doe',
-          imageUrl: "",
-          age: 50,
-          gender: "male",
-        ),
         createdAt: DateTime.now(),
         chapters: [
           Chapter(
@@ -76,12 +69,7 @@ class FakeCourseService implements ICourseService {
         title: 'Introduction to Flutter 2',
         description: 'Learn the basics of Flutter development.',
         language: "en",
-        instructor: Instructor(
-          name: 'John Doe',
-          imageUrl: "",
-          age: 50,
-          gender: "male",
-        ),
+
         createdAt: DateTime.now(),
         chapters: [
           Chapter(
@@ -150,12 +138,7 @@ class FakeCourseService implements ICourseService {
         title: 'Introduction to Flutter 2',
         description: 'Learn the basics of Flutter development.',
         language: "en",
-        instructor: Instructor(
-          name: 'John Doe',
-          imageUrl: "",
-          age: 50,
-          gender: "male",
-        ),
+
         createdAt: DateTime.now(),
         chapters: [
           Chapter(
@@ -224,12 +207,7 @@ class FakeCourseService implements ICourseService {
         title: 'Introduction to Flutter 2',
         description: 'Learn the basics of Flutter development.',
         language: "en",
-        instructor: Instructor(
-          name: 'John Doe',
-          imageUrl: "",
-          age: 50,
-          gender: "male",
-        ),
+
         createdAt: DateTime.now(),
         chapters: [
           Chapter(
@@ -298,12 +276,7 @@ class FakeCourseService implements ICourseService {
         title: 'Introduction to Flutter 2',
         description: 'Learn the basics of Flutter development.',
         language: "en",
-        instructor: Instructor(
-          name: 'John Doe',
-          imageUrl: "",
-          age: 50,
-          gender: "male",
-        ),
+
         createdAt: DateTime.now(),
         chapters: [
           Chapter(
@@ -366,7 +339,7 @@ class FakeCourseService implements ICourseService {
             questions: [],
           ),
         ],
-      ),*/
+      ),
     ];
   }
 }

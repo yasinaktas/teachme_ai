@@ -20,6 +20,8 @@ dependencies:
   equatable: ^2.0.7
   firebase_core: ^4.0.0
   firebase_auth: ^6.0.0
+  flutter_native_splash: ^2.4.6
+  
 
 dev_dependencies:
   flutter_test:
@@ -27,8 +29,24 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   hive_generator: ^2.0.1
   build_runner: ^2.5.4
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/logo.png"
+  remove_alpha_ios: true
+
+flutter_native_splash:
+  color: "#ffffff" # Arka plan rengi
+  image: assets/icons/logo.png # Splash görseli
+  android: true
+  ios: true
+  web: false
+  #branding: assets/branding.png # (İsteğe bağlı) Alt köşedeki branding resmi
 
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/icons/

@@ -10,6 +10,7 @@ import 'package:teachme_ai/blocs/course/course_event.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/models/course.dart';
 import 'package:teachme_ai/pages/add_course_page.dart';
+import 'package:teachme_ai/pages/auth_page.dart';
 import 'package:teachme_ai/pages/course_page.dart';
 import 'package:teachme_ai/pages/host_page.dart';
 import 'package:teachme_ai/pages/login_page.dart';
@@ -63,6 +64,7 @@ class MainApp extends StatelessWidget {
         routes: {
           "/": (context) => const SplashPage(),
           "/host": (context) => const HostPage(),
+          "/auth": (context) => const AuthPage(),
           "/login": (context) => const LoginPage(),
           "/signup": (context) => const SignupPage(),
           "/addCourse": (context) => const AddCoursePage(),

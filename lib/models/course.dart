@@ -1,12 +1,10 @@
 import 'package:teachme_ai/models/chapter.dart';
-import 'package:teachme_ai/models/instructor.dart';
 
 class Course {
   final String id;
   final String title;
   final String description;
   final String language;
-  final Instructor instructor;
   final DateTime createdAt;
   final List<Chapter> chapters;
   bool isCompleted;
@@ -16,7 +14,6 @@ class Course {
     required this.title,
     required this.description,
     required this.language,
-    required this.instructor,
     required this.createdAt,
     required this.chapters,
     this.isCompleted = false,

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
@@ -54,8 +55,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     on<AuthStateChanged>((event, emit) {
       if (event.uid != null) {
+        debugPrint("User is authenticated with UID: ${event.uid}");
         emit(Authenticated(event.uid!));
       } else {
+        debugPrint("User is unauthenticated");
         emit(Unauthenticated());
       }
     });

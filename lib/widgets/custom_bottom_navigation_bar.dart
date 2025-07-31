@@ -21,7 +21,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       color: AppColors.cardOppositeColor,
       elevation: AppDimensions.cardElevation,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+        borderRadius: BorderRadius.circular(AppDimensions.bottomCardRadius),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -32,10 +32,14 @@ class CustomBottomNavigationBar extends StatelessWidget {
             color: isSelected
                 ? AppColors.primaryShadowColor
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(AppDimensions.cardRadius - 4),
+            borderRadius: BorderRadius.circular(
+              AppDimensions.bottomCardRadius - 4,
+            ),
             child: InkWell(
               onTap: () => onItemSelected(index),
-              borderRadius: BorderRadius.circular(AppDimensions.cardRadius - 4),
+              borderRadius: BorderRadius.circular(
+                AppDimensions.bottomCardRadius - 4,
+              ),
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16.0,

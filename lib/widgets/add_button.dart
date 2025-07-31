@@ -10,10 +10,10 @@ class AddButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.cardOppositeColor,
-      borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+      borderRadius: BorderRadius.circular(AppDimensions.bottomCardRadius),
       elevation: AppDimensions.cardElevation,
       child: InkWell(
-        borderRadius: BorderRadius.circular(AppDimensions.cardRadius),
+        borderRadius: BorderRadius.circular(AppDimensions.bottomCardRadius),
         splashColor: AppColors.splashColor,
         onTap: () {
           onPressed();
