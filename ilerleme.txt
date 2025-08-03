@@ -1,7 +1,7 @@
-NOT: Bu projenin geliştirme süreçlerinde yapay zeka araçlarından yardım almadım (Bilmediğim konularda araştırma
-yapmak dışında). Mayıs 2025 - Temmuz 2025 tarihleri arasında katıldığım ve başarı ile tamamladığım SoftITo'nun 
+NOT: Mayıs 2025 - Temmuz 2025 tarihleri arasında katıldığım ve başarı ile tamamladığım SoftITo'nun 
 (İstanbul Ticaret Odası) 320 saatlik Flutter ile uygulama geliştirme eğitimi ve "Flutter
-Design Patterns and Best Practices" kitabından öğrendiklerimi uygulamaya çalıştım.
+Design Patterns and Best Practices" kitabından öğrendiklerimi uygulamaya çalıştım. Backend kısımlarında
+yapay zekadan yardım aldım, gerekli yönlendirmeleri yaparak işime yarayacak şekilde çalışmasını sağladım.
 
 Proje kısa tanımı: Arka tarafta Yapay zeka kullanarak kişiye özel eğitim içeriği (kurs) sunan mobil uygulama
 (ve web) projesi.
@@ -196,3 +196,70 @@ Proje kısa tanımı: Arka tarafta Yapay zeka kullanarak kişiye özel eğitim i
 31 Temmuz 2025 18.05
     + SignupPage tasarımını yaptım
     + CourseCard progress içine progress text ekledim, bazı font ayarlamaları yaptım
+    + Projeyi webde çalıştırdım hata aldım
+        - main'de Firebase.initializeApp içine "options: DefaultFirebaseOptions.currentPlatform" ekledim
+    + models içine language dosyasını ekledim
+    + constants içine app_languages dosyasını ekledim
+    + AddCoursePage Stepper'a controlBuilder ekledim
+    + AddCoursePage language step'i ekledim
+
+1 Ağustos 2025 01.00
+    + AddCoursePage tasarımını yeniden yaptım
+    + generate_course_state dosyasını yeniledim
+    + public_course_card tasarımını yaptım
+    + ChatGPT'ye tavsan görseli yaptırdım ve uygulamaya ekledim
+
+1 Ağustos 2025 15.30
+    + Backendde generateSubtitles endpointini tanımladım ve çalışır hale getirdim
+    + QuickType.io'dan dto_subtitles dosyasını backend json'una göre oluşturdum
+    + i_ai_api_service güncelledim, gemini_api_service güncelledim
+    + i_generate_course güncelledim, generate_course_repository güncelledim
+
+1 Ağustos 2025 19.30
+    + generate_course_bloc, generate_course_event, generate_course_state sınıflarını güncelledim
+    + AddCoursePage BlocBuilder ekledim
+    + AddCoursePage generateSubtitles çalışır hale getirdim
+        - TODO -> dto_subtitles'dan shortDescription çıkarılacak, chapterlar üretilirken zaten yazılacak.
+    + AddCoursePage Clear butonu ekledim
+
+1 Ağustos 2025 22.45
+    + Backendde generate_chapter_content ve generate_chapter_transcript endpointlerini yazdım
+    + dto_chapter_content dosyasını ekledim
+    + dto_chapter_transcript dosyasını ekledim
+    + i_ai_api_service ve gemini_api_service dosyalarında chapter content ve transcript kodlarını yazdım
+    + Boş drawer_content dosyasını oluşturdum
+    + public_course_card'a bookmark butonu ekledim
+
+2 Ağustos 2025 18.00
+    + generate_course_bloc generate_course eventini tamamladım
+    + AddCoursePage course loading bölümünü tasarladım ve çalışır hale getirdim
+    + i_course_service addCourse fonksiyonu ekledim
+    + fake_course_service addCourse override ettim
+    + i_course_repository addCourse fonksiyonu ekledim
+    + fake_course_repository addCourse override ettim
+    + generate_course eventinin sonucunda addCourse çalıştırdım
+    + Android telefonumda api test etmek için terminalde "uvicorn main:app --host 0.0.0.0 --port 8000" çalıştırdım
+    + ip adresimi öğrenmek için ifconfig çalıştırdım ve en0'daki inet kısmına baktım
+    + gemini_api_service kısmında ip adresini güncelledim ve telefonumda apiyi çalıştırdım
+    + CoursePage tasarladım
+    + CoursePageCourseCard tasarladım
+    + ChapterPageChapterCard tasarladım
+
+3 Ağustos 2025 01.00
+    + Google Cloud TTS aboneliği başlattım, 300$ kredi verdi
+
+3 Ağustos 2025 07.40
+    + Backendde generateSpeech endpointini oluşturdum
+    + path_provider ve just_audio paketlerini ekledim
+
+3 Ağustos 2025 11.00
+    + i_tts_service ve google_tts_service dosyalarını oluşturdum
+    + i_tts_repository ve google_tts_repository dosyalarını oluşturdum
+    + generate_course_bloc'a i_tts_repository ekledim
+    + main'de generate_course_bloc'u güncelledim
+    + ChapterPage'e audio player bölümü ekledim
+    + Backendde generateChapterQuiz endpointini ekledim
+    + verileri queryParameter olarak göndermenin hatalı olduğunu gördüm 422 hatası aldım
+    + queryParameter kısımlarını data olarak güncellemeye başladım
+    + generateChapterQuiz'i generate_course_bloc'a ekledim
+    

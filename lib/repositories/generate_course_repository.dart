@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:teachme_ai/models/course.dart';
+import 'package:teachme_ai/dto/dto_chapter_content.dart';
+import 'package:teachme_ai/dto/dto_chapter_questions.dart';
+import 'package:teachme_ai/dto/dto_chapter_transcript.dart';
+import 'package:teachme_ai/dto/dto_subtitles.dart';
 import 'package:teachme_ai/repositories/api_result.dart';
 import 'package:teachme_ai/repositories/i_generate_course_repository.dart';
 import 'package:teachme_ai/services/i_ai_api_service.dart';
@@ -11,31 +13,45 @@ class GenerateCourseRepository implements IGenerateCourseRepository {
     : _aiApiService = aiApiService;
 
   @override
-  Future<ApiResult<Course>> generateChapterTranscripts(Course course) {
-    throw UnimplementedError();
+  Future<ApiResult<DtoSubtitles>> getGeneratedSubtitles(
+    String title,
+    String language,
+    int count,
+  ) async {
+    return await _aiApiService.generateSubtitlesAndDescription(
+      title,
+      language,
+      count,
+    );
   }
 
   @override
-  Future<ApiResult<Course>> generateChapters(Course course) {
-    throw UnimplementedError();
+  Future<ApiResult<DtoChapterContent>> getGeneratedChapterContent(String title, String language, String chapterTitle, int length) async{
+    return await _aiApiService.generateChapterContent(
+      title,
+      language,
+      chapterTitle,
+      length,
+    );
   }
 
   @override
-  Future<ApiResult<Course>> generateQuestions(Course course) {
-    throw UnimplementedError();
+  Future<ApiResult<DtoChapterTranscript>> getGeneratedChapterTranscript(String title, String language, String chapterTitle, String content) async{
+    return await _aiApiService.generateChapterTranscript(
+      title,
+      language,
+      chapterTitle,
+      content
+    );
   }
 
   @override
-  Future<ApiResult<Course>> generateSubtitles(Course course) async {
-    try{
-       final response = _aiApiService.ask("");
-       debugPrint(response.toString());
-      // response bir json objesi olacak ve DTO'ya çevrilecek
-      // Bu Json objesinde String listesi olarak alt başlıklar olacak
-      // Bu Json objesinde ayrıca description da olacak
-      return Success(course);
-    }catch(e){
-      return Failure("Subtitles cannot be produces: ${e.toString()}");
-    }
+  Future<ApiResult<DtoChapterQuestions>> generateChapterQuestions(String title, String language, String chapterTitle, String content) async{
+    return await _aiApiService.generateChapterQuestions(
+      title,
+      language,
+      chapterTitle,
+      content,
+    );
   }
 }

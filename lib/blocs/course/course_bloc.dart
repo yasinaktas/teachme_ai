@@ -18,7 +18,7 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
   FutureOr<void> _onFetchCourses(
     CourseFetchEvent event,
     Emitter<CourseState> emit,
-  ) async{
+  ) async {
     emit(state.copyWith(isLoading: true));
     try {
       final courses = await courseRepository.getCourses();
@@ -31,5 +31,13 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
   FutureOr<void> _onAddCourse(
     CourseAddEvent event,
     Emitter<CourseState> emit,
-  ) {}
+  ) async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      await courseRepository.addCourse(event.course);
+      add(CourseFetchEvent());
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, error: e.toString()));
+    }
+  }
 }

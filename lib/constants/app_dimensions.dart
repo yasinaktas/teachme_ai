@@ -6,4 +6,6 @@ class AppDimensions {
   static const double listCardRadius = 8.0;
   static const double listCardElevation = 0.5;
   static const double textFieldRadius = 12.0;
+  static const double stepButtonRadius = 4.0;
+  static const double buttonHeight = 44.0;
 }

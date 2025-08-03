@@ -36,6 +36,8 @@ class CourseCard extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                     color: AppColors.blackColor,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 4.0),
@@ -46,6 +48,8 @@ class CourseCard extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                       color: AppColors.secondaryColor,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 trailing: Container(

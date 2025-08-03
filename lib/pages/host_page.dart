@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_strings.dart';
 import 'package:teachme_ai/models/navigation_item.dart';
+import 'package:teachme_ai/pages/drawer_content.dart';
 import 'package:teachme_ai/pages/home_page.dart';
 import 'package:teachme_ai/pages/public_courses_page.dart';
 import 'package:teachme_ai/widgets/add_button.dart';
@@ -48,7 +49,7 @@ class _HostPageState extends State<HostPage> {
         ],
         actionsPadding: const EdgeInsets.only(right: 8.0),
       ),
-      drawer: Drawer(backgroundColor: AppColors.backgroundColor),
+      drawer: DrawerContent(),
       extendBody: true,
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(

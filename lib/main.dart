@@ -7,10 +7,14 @@ import 'package:teachme_ai/blocs/auth/auth_bloc.dart';
 import 'package:teachme_ai/blocs/auth/auth_event.dart';
 import 'package:teachme_ai/blocs/course/course_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_event.dart';
+import 'package:teachme_ai/blocs/generate_course/generate_course_bloc.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
+import 'package:teachme_ai/firebase_options.dart';
+import 'package:teachme_ai/models/chapter.dart';
 import 'package:teachme_ai/models/course.dart';
 import 'package:teachme_ai/pages/add_course_page.dart';
 import 'package:teachme_ai/pages/auth_page.dart';
+import 'package:teachme_ai/pages/chapter_page.dart';
 import 'package:teachme_ai/pages/course_page.dart';
 import 'package:teachme_ai/pages/host_page.dart';
 import 'package:teachme_ai/pages/login_page.dart';
@@ -19,11 +23,15 @@ import 'package:teachme_ai/pages/signup_page.dart';
 import 'package:teachme_ai/pages/splash_page.dart';
 import 'package:teachme_ai/pages/subscription_page.dart';
 import 'package:teachme_ai/repositories/fake_course_repository.dart';
+import 'package:teachme_ai/repositories/generate_course_repository.dart';
+import 'package:teachme_ai/repositories/google_tts_repository.dart';
 import 'package:teachme_ai/services/fake_course_service.dart';
+import 'package:teachme_ai/services/gemini_api_service.dart';
+import 'package:teachme_ai/services/google_tts_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MainApp());
 }
 
@@ -44,6 +52,14 @@ class MainApp extends StatelessWidget {
         BlocProvider<AuthBloc>(
           create: (context) =>
               AuthBloc(FirebaseAuth.instance)..add(AppStarted()),
+        ),
+        BlocProvider<GenerateCourseBloc>(
+          create: (context) => GenerateCourseBloc(
+            generateCourseRepository: GenerateCourseRepository(
+              aiApiService: GeminiApiService(),
+            ),
+            ttsRepository: GoogleTtsRepository(GoogleTtsService()),
+          ),
         ),
       ],
       child: MaterialApp(
@@ -72,6 +88,10 @@ class MainApp extends StatelessWidget {
           "/course": (context) {
             final course = ModalRoute.of(context)?.settings.arguments;
             return CoursePage(course: course as Course);
+          },
+          "/chapter": (context) {
+            final chapter = ModalRoute.of(context)?.settings.arguments;
+            return ChapterPage(chapter: chapter as Chapter);
           },
           "/subscription": (context) => const SubscriptionPage(),
         },

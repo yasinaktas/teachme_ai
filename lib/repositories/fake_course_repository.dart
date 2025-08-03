@@ -14,8 +14,8 @@ class FakeCourseRepository implements ICourseRepository {
   }
 
   @override
-  Future<void> addCourse(Course course) {
-    throw UnimplementedError();
+  Future<void> addCourse(Course course) async{
+    await courseService.addCourse(course);
   }
 
   @override
