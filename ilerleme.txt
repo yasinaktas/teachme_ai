@@ -262,4 +262,10 @@ Proje kısa tanımı: Arka tarafta Yapay zeka kullanarak kişiye özel eğitim i
     + verileri queryParameter olarak göndermenin hatalı olduğunu gördüm 422 hatası aldım
     + queryParameter kısımlarını data olarak güncellemeye başladım
     + generateChapterQuiz'i generate_course_bloc'a ekledim
-    
+
+3 Ağustos 2025 16.00
+    + uuid paketini ekledim
+    + helper klasörü oluşturdum
+    + helper klasörü içine generate_random_id dosyasını ekledim
+    + blocs içine chapter klasörünü ekledim
+    + chapter_bloc, chapter_state ve chapter event dosyalarını oluşturdum

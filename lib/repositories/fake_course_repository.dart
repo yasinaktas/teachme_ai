@@ -45,11 +45,11 @@ class FakeCourseRepository implements ICourseRepository {
 
   @override
   Future<void> updateChapter(Chapter chapter) {
-    throw UnimplementedError();
+    return courseService.updateChapter(chapter);
   }
 
   @override
   Future<void> updateCourse(Course course) {
-    throw UnimplementedError();
+    return courseService.updateCourse(course);
   }
 }

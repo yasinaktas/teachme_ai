@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_event.dart';
@@ -9,6 +8,7 @@ import 'package:teachme_ai/dto/dto_chapter_content.dart';
 import 'package:teachme_ai/dto/dto_chapter_questions.dart';
 import 'package:teachme_ai/dto/dto_chapter_transcript.dart';
 import 'package:teachme_ai/dto/dto_subtitles.dart';
+import 'package:teachme_ai/helper/generate_random_id.dart';
 import 'package:teachme_ai/models/answer.dart';
 import 'package:teachme_ai/models/chapter.dart';
 import 'package:teachme_ai/models/chapter_status.dart';
@@ -28,7 +28,7 @@ class GenerateCourseBloc
   }) : super(
          GenerateCourseState(
            course: Course(
-             id: "${Random().nextInt(999999999)}",
+             id: GenerateRandomId.generateRandomUUID(),
              title: "",
              description: "",
              language: "English",
@@ -89,7 +89,7 @@ class GenerateCourseBloc
   ) {
     final chapters = event.chapterTitles.map((title) {
       return Chapter(
-        id: "${Random().nextInt(999999)}",
+        id: GenerateRandomId.generateRandomUUID(),
         courseId: state.course.id,
         title: title,
         description: "",
@@ -140,7 +140,7 @@ class GenerateCourseBloc
     final updatedChapters = List<Chapter>.from(state.course.chapters);
     updatedChapters.add(
       Chapter(
-        id: "${Random().nextInt(999999)}",
+        id: GenerateRandomId.generateRandomUUID(),
         courseId: state.course.id,
         title: state.subtitle!,
         description: "",
@@ -191,7 +191,6 @@ class GenerateCourseBloc
       final apiResult = await generateCourseRepository.getGeneratedSubtitles(
         state.course.title,
         state.course.language,
-        2,
       );
       if (apiResult is Success) {
         final dtoSubtitles = apiResult as Success<DtoSubtitles>;
@@ -200,7 +199,7 @@ class GenerateCourseBloc
             course: state.course.copyWith(
               chapters: dtoSubtitles.data.subtitles.map((e) {
                 return Chapter(
-                  id: "${Random().nextInt(999999)}",
+                  id: GenerateRandomId.generateRandomUUID(),
                   courseId: state.course.id,
                   title: e.title,
                   description: "",
@@ -279,14 +278,85 @@ class GenerateCourseBloc
               state.course.title,
               state.course.language,
               chapter.title,
-              40,
+              state.course.chapters.map((c) => c.title).toList(),
             );
         if (apiResultGeneratedContent is Success) {
+          if (state.generateQuestions) {
+            final ApiResult<DtoChapterQuestions> apiResultGeneratedQuestions =
+                await generateCourseRepository.generateChapterQuestions(
+                  state.course.title,
+                  state.course.language,
+                  chapter.title,
+                  (apiResultGeneratedContent as Success).data.content,
+                );
+            if (apiResultGeneratedQuestions is Success) {
+              final List<DtoQuestion> dtoQuestions =
+                  (apiResultGeneratedQuestions as Success).data.questions;
+              final List<Question> questions = dtoQuestions.map((dtoQuestion) {
+                final String questionId = GenerateRandomId.generateRandomUUID();
+                final List<DtoAnswer> dtoAnswers = dtoQuestion.answers;
+                final List<Answer> answers = dtoAnswers.map((dtoAnswer) {
+                  final String id = GenerateRandomId.generateRandomUUID();
+                  return Answer(
+                    id: id,
+                    questionId: questionId,
+                    answerText: dtoAnswer.text,
+                    isCorrect: dtoAnswer.isCorrect,
+                  );
+                }).toList();
+                return Question(
+                  id: questionId,
+                  chapterId: chapter.id,
+                  questionText: dtoQuestion.questionText,
+                  answers: answers,
+                );
+              }).toList();
+              emit(
+                state.copyWith(
+                  chapterLoadingStatus: {
+                    ...state.chapterLoadingStatus,
+                    chapter: state.chapterLoadingStatus[chapter]!.copyWith(
+                      isQuestionsGenerated: true,
+                      generationResultCode: 1,
+                    ),
+                  },
+                  course: state.course.copyWith(
+                    chapters: state.course.chapters.map((c) {
+                      if (c.id == chapter.id) {
+                        return c.copyWith(questions: questions);
+                      }
+                      return c;
+                    }).toList(),
+                  ),
+                ),
+              );
+            } else {
+              final errorResult =
+                  apiResultGeneratedQuestions as Failure<DtoChapterQuestions>;
+              emit(
+                state.copyWith(
+                  isLoadingCourse: false,
+                  lockBottom: false,
+                  errorMessage: errorResult.message,
+                  chapterLoadingStatus: {
+                    ...state.chapterLoadingStatus,
+                    chapter: state.chapterLoadingStatus[chapter]!.copyWith(
+                      isContentGenerated: true,
+                      isTranscriptGenerated: true,
+                      isQuestionsGenerated: false,
+                      generationResultCode: -3,
+                    ),
+                  },
+                ),
+              );
+            }
+          }
           final ApiResult<DtoChapterTranscript> apiResultGeneratedTranscript =
               await generateCourseRepository.getGeneratedChapterTranscript(
                 state.course.title,
                 state.course.language,
                 chapter.title,
+                state.course.chapters.map((c) => c.title).toList(),
                 (apiResultGeneratedContent as Success).data.content,
               );
           if (apiResultGeneratedTranscript is Success) {
@@ -347,76 +417,6 @@ class GenerateCourseBloc
               ),
             );
           }
-          if (state.generateQuestions) {
-            final ApiResult<DtoChapterQuestions> apiResultGeneratedQuestions =
-                await generateCourseRepository.generateChapterQuestions(
-                  state.course.title,
-                  state.course.language,
-                  chapter.title,
-                  (apiResultGeneratedContent as Success).data.content,
-                );
-            if (apiResultGeneratedQuestions is Success) {
-              final List<DtoQuestion> dtoQuestions =
-                  (apiResultGeneratedQuestions as Success).data.questions;
-              final List<Question> questions = dtoQuestions.map((dtoQuestion) {
-                final String questionId = "${Random().nextInt(999999)}";
-                final List<DtoAnswer> dtoAnswers = dtoQuestion.answers;
-                final List<Answer> answers = dtoAnswers.map((dtoAnswer) {
-                  final String id = "${Random().nextInt(999999)}";
-                  return Answer(
-                    id: id,
-                    questionId: questionId,
-                    answerText: dtoAnswer.text,
-                    isCorrect: dtoAnswer.isCorrect,
-                  );
-                }).toList();
-                return Question(
-                  id: questionId,
-                  chapterId: chapter.id,
-                  questionText: dtoQuestion.questionText,
-                  answers: answers,
-                );
-              }).toList();
-              emit(
-                state.copyWith(
-                  chapterLoadingStatus: {
-                    ...state.chapterLoadingStatus,
-                    chapter: state.chapterLoadingStatus[chapter]!.copyWith(
-                      isQuestionsGenerated: true,
-                      generationResultCode: 1,
-                    ),
-                  },
-                  course: state.course.copyWith(
-                    chapters: state.course.chapters.map((c) {
-                      if (c.id == chapter.id) {
-                        return c.copyWith(questions: questions);
-                      }
-                      return c;
-                    }).toList(),
-                  ),
-                ),
-              );
-            } else {
-              final errorResult =
-                  apiResultGeneratedQuestions as Failure<DtoChapterQuestions>;
-              emit(
-                state.copyWith(
-                  isLoadingCourse: false,
-                  lockBottom: false,
-                  errorMessage: errorResult.message,
-                  chapterLoadingStatus: {
-                    ...state.chapterLoadingStatus,
-                    chapter: state.chapterLoadingStatus[chapter]!.copyWith(
-                      isContentGenerated: true,
-                      isTranscriptGenerated: true,
-                      isQuestionsGenerated: false,
-                      generationResultCode: -3,
-                    ),
-                  },
-                ),
-              );
-            }
-          }
         } else {
           final errorResult =
               apiResultGeneratedContent as Failure<DtoChapterContent>;
@@ -463,7 +463,7 @@ class GenerateCourseBloc
     emit(
       state.copyWith(
         course: state.course.copyWith(
-          id: "${Random().nextInt(999999999)}",
+          id: GenerateRandomId.generateRandomUUID(),
           createdAt: DateTime.now(),
           language: "English",
           title: "",

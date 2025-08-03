@@ -16,37 +16,52 @@ class GenerateCourseRepository implements IGenerateCourseRepository {
   Future<ApiResult<DtoSubtitles>> getGeneratedSubtitles(
     String title,
     String language,
-    int count,
   ) async {
     return await _aiApiService.generateSubtitlesAndDescription(
       title,
       language,
-      count,
     );
   }
 
   @override
-  Future<ApiResult<DtoChapterContent>> getGeneratedChapterContent(String title, String language, String chapterTitle, int length) async{
+  Future<ApiResult<DtoChapterContent>> getGeneratedChapterContent(
+    String title,
+    String language,
+    String chapterTitle,
+    List<String> chapterTitles,
+  ) async {
     return await _aiApiService.generateChapterContent(
       title,
       language,
       chapterTitle,
-      length,
+      chapterTitles,
     );
   }
 
   @override
-  Future<ApiResult<DtoChapterTranscript>> getGeneratedChapterTranscript(String title, String language, String chapterTitle, String content) async{
+  Future<ApiResult<DtoChapterTranscript>> getGeneratedChapterTranscript(
+    String title,
+    String language,
+    String chapterTitle,
+    List<String> chapterTitles,
+    String content,
+  ) async {
     return await _aiApiService.generateChapterTranscript(
       title,
       language,
       chapterTitle,
-      content
+      chapterTitles,
+      content,
     );
   }
 
   @override
-  Future<ApiResult<DtoChapterQuestions>> generateChapterQuestions(String title, String language, String chapterTitle, String content) async{
+  Future<ApiResult<DtoChapterQuestions>> generateChapterQuestions(
+    String title,
+    String language,
+    String chapterTitle,
+    String content,
+  ) async {
     return await _aiApiService.generateChapterQuestions(
       title,
       language,

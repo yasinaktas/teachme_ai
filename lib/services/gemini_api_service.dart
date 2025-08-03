@@ -16,18 +16,16 @@ class GeminiApiService implements IAiApiService {
   Future<ApiResult<DtoSubtitles>> generateSubtitlesAndDescription(
     String title,
     String language,
-    int count,
   ) async {
     try {
       final response = await _dio.post(
         '/generateSubtitles',
-        queryParameters: {'title': title, 'language': language, 'count': count},
+        data: {'title': title, 'language': language},
       );
 
       if (response.statusCode == 200) {
         final data = response.data;
         final json = data is String ? jsonDecode(data) : data;
-        //return jsonEncode(json); // JSON objesini stringe çevirip döner
         return Success(DtoSubtitles.fromJson(json));
       } else {
         return Failure(
@@ -36,7 +34,6 @@ class GeminiApiService implements IAiApiService {
         );
       }
     } catch (e) {
-      //return Future.error("Failed to generate subtitles and description: ${e.toString()}");
       return Failure(
         "Failed to generate subtitles and description: ${e.toString()}",
       );
@@ -48,16 +45,16 @@ class GeminiApiService implements IAiApiService {
     String title,
     String language,
     String chapterTitle,
-    int length,
+    List<String> chapterTitles,
   ) async {
     try {
       final response = await _dio.post(
         '/generateChapterContent',
-        queryParameters: {
+        data: {
           'title': title,
           'language': language,
           'chapter_title': chapterTitle,
-          'length': length,
+          'chapter_titles': chapterTitles,
         },
       );
 
@@ -81,15 +78,17 @@ class GeminiApiService implements IAiApiService {
     String title,
     String language,
     String chapterTitle,
+    List<String> chapterTitles,
     String content,
   ) async {
     try {
       final response = await _dio.post(
         '/generateChapterTranscript',
-        queryParameters: {
+        data: {
           'title': title,
           'language': language,
           'chapter_title': chapterTitle,
+          'chapter_titles': chapterTitles,
           'content': content,
         },
       );
@@ -124,7 +123,6 @@ class GeminiApiService implements IAiApiService {
           'title': title,
           'chapter_title': chapterTitle,
           'content': content,
-          'question_count': 5,
         },
       );
 

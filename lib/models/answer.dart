@@ -12,4 +12,20 @@ class Answer {
     required this.isCorrect,
     this.givenAnswer = -1,
   });
+
+  Answer copyWith({
+    String? id,
+    String? questionId,
+    String? answerText,
+    bool? isCorrect,
+    int? givenAnswer,
+  }) {
+    return Answer(
+      id: id ?? this.id,
+      questionId: questionId ?? this.questionId,
+      answerText: answerText ?? this.answerText,
+      isCorrect: isCorrect ?? this.isCorrect,
+      givenAnswer: givenAnswer ?? this.givenAnswer,
+    );
+  }
 }

@@ -133,4 +133,24 @@ class FakeCourseService implements ICourseService {
       _courses.add(course);
     });
   }
+
+  @override
+  Future<void> updateCourse(Course course) async {
+    final index = _courses.indexWhere((c) => c.id == course.id);
+    if (index != -1) {
+      _courses[index] = course;
+    }
+  }
+  
+  @override
+  Future<void> updateChapter(Chapter chapter) async{
+    final courseIndex = _courses.indexWhere((c) => c.id == chapter.courseId);
+    if (courseIndex != -1) {
+      final chapterIndex = _courses[courseIndex].chapters
+          .indexWhere((c) => c.id == chapter.id);
+      if (chapterIndex != -1) {
+        _courses[courseIndex].chapters[chapterIndex] = chapter;
+      }
+    }
+  }
 }

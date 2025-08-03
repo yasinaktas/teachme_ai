@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/auth/auth_bloc.dart';
 import 'package:teachme_ai/blocs/auth/auth_event.dart';
+import 'package:teachme_ai/blocs/chapter/chapter_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_event.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_bloc.dart';
@@ -40,14 +41,15 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FakeCourseRepository fakeCourseRepository = FakeCourseRepository(
+      courseService: FakeCourseService(),
+    );
     return MultiBlocProvider(
       providers: [
         BlocProvider<CourseBloc>(
-          create: (context) => CourseBloc(
-            courseRepository: FakeCourseRepository(
-              courseService: FakeCourseService(),
-            ),
-          )..add(CourseFetchEvent()),
+          create: (context) =>
+              CourseBloc(courseRepository: fakeCourseRepository)
+                ..add(CourseFetchEvent()),
         ),
         BlocProvider<AuthBloc>(
           create: (context) =>
@@ -60,6 +62,10 @@ class MainApp extends StatelessWidget {
             ),
             ttsRepository: GoogleTtsRepository(GoogleTtsService()),
           ),
+        ),
+        BlocProvider<ChapterBloc>(
+          create: (context) =>
+              ChapterBloc(courseRepository: fakeCourseRepository),
         ),
       ],
       child: MaterialApp(

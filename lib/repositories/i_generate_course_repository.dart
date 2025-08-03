@@ -8,20 +8,20 @@ abstract interface class IGenerateCourseRepository {
   Future<ApiResult<DtoSubtitles>> getGeneratedSubtitles(
     String title,
     String language,
-    int count,
   );
 
   Future<ApiResult<DtoChapterContent>> getGeneratedChapterContent(
     String title,
     String language,
     String chapterTitle,
-    int length,
+    List<String> chapterTitles,
   );
 
   Future<ApiResult<DtoChapterTranscript>> getGeneratedChapterTranscript(
     String title,
     String language,
     String chapterTitle,
+    List<String> chapterTitles,
     String content,
   );
 
