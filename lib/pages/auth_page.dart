@@ -19,7 +19,6 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
-  final List<Widget> pages = [LoginPage(), SignupPage()];
 
   @override
   void initState() {
@@ -35,10 +34,19 @@ class _AuthPageState extends State<AuthPage>
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is Authenticated) {
+          Navigator.of(context).pushReplacementNamed('/host');
+        } else if (state is AuthError) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.message)));
+        }
+      },
       builder: (context, state) {
         return DefaultTabController(
-          length: pages.length,
+          length: 2,
           child: Scaffold(
             extendBody: true,
             appBar: AppBar(
@@ -87,7 +95,18 @@ class _AuthPageState extends State<AuthPage>
                   Expanded(
                     child: TabBarView(
                       controller: tabController,
-                      children: pages,
+                      children: [
+                        LoginPage(
+                          onSwitchToSignup: () {
+                            tabController.animateTo(1);
+                          },
+                        ),
+                        SignupPage(
+                          onSwithToLogin: () {
+                            tabController.animateTo(0);
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ],

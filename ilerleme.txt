@@ -293,4 +293,7 @@ Proje kısa tanımı: Arka tarafta Yapay zeka kullanarak kişiye özel eğitim i
 4 Ağustos 2025 18.00
     + Backendi heroku adlı platforma taşıdım
 
-4 Ağustos 2025 20.15
+4 Ağustos 2025 23.15
+    + flutter_html paketini ekledim
+    + cloud_firestore paketini ekledim
+    + Firestore'da proje oluşturdum

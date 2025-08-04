@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firestore;
   StreamSubscription<User?>? _authSubscription;
 
-  AuthBloc(this._firebaseAuth) : super(AuthInitial()) {
+  AuthBloc(this._firebaseAuth, this._firestore) : super(AuthInitial()) {
     _authSubscription = _firebaseAuth.authStateChanges().listen((user) {
       add(AuthStateChanged(user?.uid));
     });
@@ -39,10 +41,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignUpRequested>((event, emit) async {
       emit(AuthLoading());
       try {
-        await _firebaseAuth.createUserWithEmailAndPassword(
-          email: event.email,
-          password: event.password,
-        );
+        final userCredential = await _firebaseAuth
+            .createUserWithEmailAndPassword(
+              email: event.email,
+              password: event.password,
+            );
+
+        final uid = userCredential.user?.uid;
+
+        if (uid != null) {
+          await _firestore.collection('users').doc(uid).set({
+            'username': event.username,
+            'email': event.email,
+            'createdAt': FieldValue.serverTimestamp(),
+          });
+        }
       } on FirebaseAuthException catch (e) {
         emit(AuthError(e.message ?? "Signup failed"));
         emit(Unauthenticated());

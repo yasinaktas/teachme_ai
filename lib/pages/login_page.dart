@@ -8,7 +8,8 @@ import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final VoidCallback onSwitchToSignup;
+  const LoginPage({super.key, required this.onSwitchToSignup});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -20,261 +21,254 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is Authenticated) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushReplacementNamed(context, '/host');
-          });
-        } else if (state is Unauthenticated) {
-          
-        } else if (state is AuthError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
-        }
-      },
+    return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         bool isActive = state is! AuthLoading;
         return Scaffold(
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimensions.pagePadding,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 48.0),
-                Text(
-                  "Your Email",
-                  style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8.0),
-                TextField(
-                  enabled: isActive,
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 12.0,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.textFieldRadius,
-                      ),
-                    ),
-                    hintText: 'Email',
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.pagePadding,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 48.0),
+                  Text(
+                    "Your Email",
+                    style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
                   ),
-                ),
-                const SizedBox(height: 16.0),
-                Text(
-                  "Your Password",
-                  style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8.0),
-                TextField(
-                  enabled: isActive,
-                  controller: _passwordController,
-                  keyboardType: TextInputType.visiblePassword,
-                  obscureText: !_isPasswordVisible,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 12.0,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.textFieldRadius,
+                  const SizedBox(height: 8.0),
+                  TextField(
+                    enabled: isActive,
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 12.0,
                       ),
-                    ),
-                    hintText: 'Password',
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _isPasswordVisible = !_isPasswordVisible;
-                          });
-                        },
-                        icon: Icon(
-                          _isPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          color: AppColors.secondaryShadowColor,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppDimensions.textFieldRadius,
                         ),
                       ),
+                      hintText: 'Email',
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: !isActive ? null : () {},
-                    child: Text(
-                      "Forgot password?",
-                      style: GoogleFonts.quicksand(
-                        color: AppColors.primaryDarkColor,
-                        fontWeight: FontWeight.w600,
+                  const SizedBox(height: 16.0),
+                  Text(
+                    "Your Password",
+                    style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8.0),
+                  TextField(
+                    enabled: isActive,
+                    controller: _passwordController,
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: !_isPasswordVisible,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 12.0,
                       ),
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: !isActive ? null : () {
-                          final email = _emailController.text.trim();
-                          final password = _passwordController.text.trim();
-                          context.read<AuthBloc>().add(
-                            SignInRequested(email, password),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          padding: EdgeInsets.symmetric(vertical: 16.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              AppDimensions.textFieldRadius,
-                            ),
-                          ),
-                          backgroundColor: AppColors.primaryDarkColor,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppDimensions.textFieldRadius,
                         ),
-                        child: Text(
-                          "Continue",
-                          style: GoogleFonts.quicksand(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                      ),
+                      hintText: 'Password',
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          icon: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: AppColors.secondaryShadowColor,
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 24.0),
-                Row(
-                  children: [
-                    Expanded(flex: 2, child: Container()),
-                    Expanded(flex: 3, child: Divider()),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: !isActive ? null : () {},
                       child: Text(
-                        "Or",
-                        style: GoogleFonts.quicksand(
-                          color: AppColors.secondaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                    Expanded(flex: 3, child: Divider()),
-                    Expanded(flex: 2, child: Container()),
-                  ],
-                ),
-                const SizedBox(height: 32.0),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: !isActive ? null : () {},
-                        style: OutlinedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 16.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              AppDimensions.textFieldRadius,
-                            ),
-                          ),
-                          side: BorderSide(color: AppColors.secondaryColor),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/google_logo.png',
-                              height: 20.0,
-                              width: 20.0,
-                            ),
-                            const SizedBox(width: 8.0),
-                            Text(
-                              "Login with Google",
-                              style: GoogleFonts.quicksand(
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.blackColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16.0),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: !isActive ? null : () {},
-                        style: OutlinedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 16.0),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              AppDimensions.textFieldRadius,
-                            ),
-                          ),
-                          side: BorderSide(color: AppColors.secondaryColor),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/apple_logo.png',
-                              height: 20.0,
-                              width: 20.0,
-                            ),
-                            const SizedBox(width: 8.0),
-                            Text(
-                              "Login with Apple",
-                              style: GoogleFonts.quicksand(
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.blackColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have an account?",
-                      style: GoogleFonts.quicksand(
-                        color: AppColors.secondaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        "Sign up",
+                        "Forgot password?",
                         style: GoogleFonts.quicksand(
                           color: AppColors.primaryDarkColor,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: !isActive
+                              ? null
+                              : () {
+                                  final email = _emailController.text.trim();
+                                  final password = _passwordController.text
+                                      .trim();
+                                  context.read<AuthBloc>().add(
+                                    SignInRequested(email, password),
+                                  );
+                                },
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                AppDimensions.textFieldRadius,
+                              ),
+                            ),
+                            backgroundColor: AppColors.primaryDarkColor,
+                          ),
+                          child: Text(
+                            "Continue",
+                            style: GoogleFonts.quicksand(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24.0),
+                  Row(
+                    children: [
+                      Expanded(flex: 2, child: Container()),
+                      Expanded(flex: 3, child: Divider()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          "Or",
+                          style: GoogleFonts.quicksand(
+                            color: AppColors.secondaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      Expanded(flex: 3, child: Divider()),
+                      Expanded(flex: 2, child: Container()),
+                    ],
+                  ),
+                  const SizedBox(height: 32.0),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: !isActive ? null : () {},
+                          style: OutlinedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                AppDimensions.textFieldRadius,
+                              ),
+                            ),
+                            side: BorderSide(color: AppColors.secondaryColor),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/google_logo.png',
+                                height: 20.0,
+                                width: 20.0,
+                              ),
+                              const SizedBox(width: 8.0),
+                              Text(
+                                "Login with Google",
+                                style: GoogleFonts.quicksand(
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.blackColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16.0),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: !isActive ? null : () {},
+                          style: OutlinedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 16.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                AppDimensions.textFieldRadius,
+                              ),
+                            ),
+                            side: BorderSide(color: AppColors.secondaryColor),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/images/apple_logo.png',
+                                height: 20.0,
+                                width: 20.0,
+                              ),
+                              const SizedBox(width: 8.0),
+                              Text(
+                                "Login with Apple",
+                                style: GoogleFonts.quicksand(
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.blackColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Don't have an account?",
+                        style: GoogleFonts.quicksand(
+                          color: AppColors.secondaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          widget.onSwitchToSignup();
+                        },
+                        child: Text(
+                          "Sign up",
+                          style: GoogleFonts.quicksand(
+                            color: AppColors.primaryDarkColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );}
+        );
+      },
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,7 @@ import 'package:teachme_ai/pages/auth_page.dart';
 import 'package:teachme_ai/pages/chapter_page.dart';
 import 'package:teachme_ai/pages/course_page.dart';
 import 'package:teachme_ai/pages/host_page.dart';
-import 'package:teachme_ai/pages/login_page.dart';
 import 'package:teachme_ai/pages/profile_page.dart';
-import 'package:teachme_ai/pages/signup_page.dart';
 import 'package:teachme_ai/pages/splash_page.dart';
 import 'package:teachme_ai/pages/subscription_page.dart';
 import 'package:teachme_ai/repositories/generate_course_repository.dart';
@@ -64,7 +63,8 @@ class MainApp extends StatelessWidget {
         ),
         BlocProvider<AuthBloc>(
           create: (context) =>
-              AuthBloc(FirebaseAuth.instance)..add(AppStarted()),
+              AuthBloc(FirebaseAuth.instance, FirebaseFirestore.instance)
+                ..add(AppStarted()),
         ),
         BlocProvider<GenerateCourseBloc>(
           create: (context) => GenerateCourseBloc(
@@ -103,8 +103,6 @@ class MainApp extends StatelessWidget {
           "/": (context) => const SplashPage(),
           "/host": (context) => const HostPage(),
           "/auth": (context) => const AuthPage(),
-          "/login": (context) => const LoginPage(),
-          "/signup": (context) => const SignupPage(),
           "/addCourse": (context) => const AddCoursePage(),
           "/profile": (context) => const ProfilePage(),
           "/course": (context) {

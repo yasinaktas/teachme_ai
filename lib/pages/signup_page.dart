@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:teachme_ai/blocs/auth/auth_bloc.dart';
+import 'package:teachme_ai/blocs/auth/auth_event.dart';
 import 'package:teachme_ai/blocs/auth/auth_state.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 
 class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+  final VoidCallback onSwithToLogin;
+  const SignupPage({super.key, required this.onSwithToLogin});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
@@ -18,10 +20,15 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
+  bool isEightCharacters = false;
+  bool isNumber = false;
+  bool isUppercase = false;
+  bool isSpecialCharacter = false;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
+        final isLoading = state is AuthLoading;
         return Scaffold(
           body: Padding(
             padding: const EdgeInsets.symmetric(
@@ -37,6 +44,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 const SizedBox(height: 8.0),
                 TextField(
+                  enabled: !isLoading,
                   controller: _usernameController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
@@ -59,6 +67,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 const SizedBox(height: 8.0),
                 TextField(
+                  enabled: !isLoading,
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
@@ -81,6 +90,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 const SizedBox(height: 8.0),
                 TextField(
+                  enabled: !isLoading,
                   controller: _passwordController,
                   keyboardType: TextInputType.visiblePassword,
                   obscureText: !_isPasswordVisible,
@@ -112,6 +122,16 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                     ),
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      isEightCharacters = value.length >= 8;
+                      isNumber = value.contains(RegExp(r'\d'));
+                      isUppercase = value.contains(RegExp(r'[A-Z]'));
+                      isSpecialCharacter = value.contains(
+                        RegExp(r'[!@#$%^&*(),.?":{}|<>]'),
+                      );
+                    });
+                  },
                 ),
                 const SizedBox(height: 16.0),
                 Row(
@@ -120,7 +140,9 @@ class _SignupPageState extends State<SignupPage> {
                       child: Text(
                         "8 characters",
                         style: GoogleFonts.quicksand(
-                          color: AppColors.secondaryColor,
+                          color: isEightCharacters
+                              ? Colors.green
+                              : AppColors.secondaryColor,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -129,7 +151,9 @@ class _SignupPageState extends State<SignupPage> {
                       child: Text(
                         "Number",
                         style: GoogleFonts.quicksand(
-                          color: AppColors.secondaryColor,
+                          color: isNumber
+                              ? Colors.green
+                              : AppColors.secondaryColor,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -143,7 +167,9 @@ class _SignupPageState extends State<SignupPage> {
                       child: Text(
                         "Uppercase",
                         style: GoogleFonts.quicksand(
-                          color: AppColors.secondaryColor,
+                          color: isUppercase
+                              ? Colors.green
+                              : AppColors.secondaryColor,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -152,7 +178,9 @@ class _SignupPageState extends State<SignupPage> {
                       child: Text(
                         "Special character",
                         style: GoogleFonts.quicksand(
-                          color: AppColors.secondaryColor,
+                          color: isSpecialCharacter
+                              ? Colors.green
+                              : AppColors.secondaryColor,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -164,7 +192,40 @@ class _SignupPageState extends State<SignupPage> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: isLoading ? null : () {
+                          final email = _emailController.text.trim();
+                          final password = _passwordController.text.trim();
+                          final username = _usernameController.text.trim();
+
+                          if (email.isEmpty ||
+                              password.isEmpty ||
+                              username.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Please fill in all fields"),
+                              ),
+                            );
+                            return;
+                          }
+
+                          if (!isEightCharacters ||
+                              !isNumber ||
+                              !isUppercase ||
+                              !isSpecialCharacter) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  "Password must meet all requirements",
+                                ),
+                              ),
+                            );
+                            return;
+                          }
+
+                          context.read<AuthBloc>().add(
+                            SignUpRequested(email, password, username),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
                           padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -198,7 +259,9 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        widget.onSwithToLogin();
+                      },
                       child: Text(
                         "Log in",
                         style: GoogleFonts.quicksand(
