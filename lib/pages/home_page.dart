@@ -70,6 +70,7 @@ class HomePage extends StatelessWidget {
                                 height: 14,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
+                                  color: AppColors.primaryColor,
                                 ),
                               ),
                               const SizedBox(width: 16),
@@ -134,6 +135,11 @@ class HomePage extends StatelessWidget {
                         vertical: 2.0,
                       ),
                       child: TextField(
+                        onChanged: (value) {
+                          context.read<CourseBloc>().add(
+                            CourseSearchEvent(value),
+                          );
+                        },
                         decoration: InputDecoration(
                           icon: Icon(
                             Icons.search,
@@ -148,7 +154,6 @@ class HomePage extends StatelessWidget {
                             color: AppColors.secondaryColor,
                             fontSize: 14,
                           ),
-
                           border: InputBorder.none,
                         ),
                       ),
@@ -183,22 +188,31 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                       );
-                    } else if (state.courses.isEmpty) {
+                    } else if (state.filteredCourses.isEmpty) {
                       return SliverFillRemaining(
                         hasScrollBody: false,
                         child: Center(
-                          child: Text(
-                            'No courses available',
-                            style: TextStyle(color: AppColors.secondaryColor),
-                          ),
+                          child:
+                              Text(
+                                'No courses available',
+                                style: TextStyle(
+                                  color: AppColors.secondaryColor,
+                                ),
+                              ).withPadding(
+                                EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).padding.bottom +
+                                      AppDimensions.pagePadding,
+                                ),
+                              ),
                         ),
                       );
                     } else {
                       return SliverList(
                         delegate: SliverChildBuilderDelegate((context, index) {
-                          final course = state.courses[index];
+                          final course = state.filteredCourses[index];
                           return CourseCard(course: course);
-                        }, childCount: state.courses.length),
+                        }, childCount: state.filteredCourses.length),
                       );
                     }
                   },

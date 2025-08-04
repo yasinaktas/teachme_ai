@@ -68,15 +68,6 @@ class _AddCoursePageState extends State<AddCoursePage> {
         }
         if (state.isCourseGenerated) {
           Navigator.of(context).pop();
-          /*context.read<GenerateCourseBloc>().add(Clear());
-          context.read<CourseBloc>().add(CourseAddEvent(state.course));
-          Navigator.of(context).pop();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Course created successfully!"),
-              backgroundColor: Colors.green,
-            ),
-          );*/
         }
       },
       builder: (context, state) {
@@ -88,6 +79,20 @@ class _AddCoursePageState extends State<AddCoursePage> {
               "New Course",
               style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
             ),
+            actions: [
+              Visibility(
+                visible: state.isLoadingCourse,
+                child: SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: AppColors.primaryColor,
+                  ),
+                ),
+              ),
+              SizedBox(width: AppDimensions.pagePadding),
+            ],
           ),
           body: Padding(
             padding: EdgeInsets.only(
@@ -146,11 +151,22 @@ class _AddCoursePageState extends State<AddCoursePage> {
                         Wrap(
                           spacing: 8,
                           children: AppLanguages.languages.map((language) {
+                            final isSelected =
+                                state.course.language == language.name;
                             return ChoiceChip(
-                              label: Text(language.name),
+                              label: Text(
+                                language.name,
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? Colors.white
+                                      : AppColors.secondaryColor,
+                                ),
+                              ),
                               backgroundColor: AppColors.backgroundColor,
                               disabledColor: AppColors.backgroundColor,
-                              selected: state.course.language == language.name,
+                              selectedColor: AppColors.primaryColor,
+                              showCheckmark: false,
+                              selected: isSelected,
                               onSelected: state.lockTop
                                   ? null
                                   : (selected) {
@@ -428,6 +444,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
                         CheckboxListTile(
                           value: state.generateQuestions,
                           enabled: !state.lockBottom,
+                          activeColor: AppColors.primaryColor,
                           onChanged: (value) {
                             context.read<GenerateCourseBloc>().add(
                               ToggleGenerateQuestions(),
@@ -497,7 +514,10 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                       : SizedBox(
                                           width: 16,
                                           height: 16,
-                                          child: CircularProgressIndicator(),
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: AppColors.primaryColor,
+                                          ),
                                         ),
                                 );
                               }).toList(),

@@ -14,6 +14,7 @@ class SplashPage extends StatelessWidget {
           Navigator.pushReplacementNamed(context, '/host');
         } else if (state is Unauthenticated) {
           Navigator.pushReplacementNamed(context, '/auth');
+          //Navigator.pushReplacementNamed(context, '/host');
         }
       },
       child: Scaffold(backgroundColor: Colors.white, extendBody: true),

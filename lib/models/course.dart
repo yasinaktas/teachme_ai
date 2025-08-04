@@ -1,12 +1,24 @@
+import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 import 'package:teachme_ai/models/chapter.dart';
 
-class Course {
+part 'course.g.dart';
+
+@HiveType(typeId: 0)
+class Course extends Equatable {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String title;
+  @HiveField(2)
   final String description;
+  @HiveField(3)
   final String language;
+  @HiveField(4)
   final DateTime createdAt;
+  @HiveField(5)
   final List<Chapter> chapters;
+  @HiveField(6)
   bool isCompleted;
 
   Course({
@@ -38,4 +50,15 @@ class Course {
       isCompleted: isCompleted ?? this.isCompleted,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    chapters,
+    isCompleted,
+    id,
+    title,
+    description,
+    language,
+    createdAt,
+  ];
 }

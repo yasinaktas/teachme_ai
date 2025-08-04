@@ -153,4 +153,11 @@ class FakeCourseService implements ICourseService {
       }
     }
   }
+  
+  @override
+  Future<void> deleteCourse(String courseId) {
+    return Future.delayed(const Duration(seconds: 2), () {
+      _courses.removeWhere((course) => course.id == courseId);
+    });
+  }
 }

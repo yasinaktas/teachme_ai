@@ -9,10 +9,11 @@ import 'package:teachme_ai/blocs/chapter/chapter_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_event.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_bloc.dart';
+import 'package:teachme_ai/blocs/settings/settings_bloc.dart';
+import 'package:teachme_ai/blocs/settings/settings_event.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/firebase_options.dart';
 import 'package:teachme_ai/models/chapter.dart';
-import 'package:teachme_ai/models/course.dart';
 import 'package:teachme_ai/pages/add_course_page.dart';
 import 'package:teachme_ai/pages/auth_page.dart';
 import 'package:teachme_ai/pages/chapter_page.dart';
@@ -23,16 +24,20 @@ import 'package:teachme_ai/pages/profile_page.dart';
 import 'package:teachme_ai/pages/signup_page.dart';
 import 'package:teachme_ai/pages/splash_page.dart';
 import 'package:teachme_ai/pages/subscription_page.dart';
-import 'package:teachme_ai/repositories/fake_course_repository.dart';
 import 'package:teachme_ai/repositories/generate_course_repository.dart';
 import 'package:teachme_ai/repositories/google_tts_repository.dart';
-import 'package:teachme_ai/services/fake_course_service.dart';
+import 'package:teachme_ai/repositories/hive_course_repository.dart';
+import 'package:teachme_ai/repositories/hive_settings_repository.dart';
 import 'package:teachme_ai/services/gemini_api_service.dart';
 import 'package:teachme_ai/services/google_tts_service.dart';
+import 'package:teachme_ai/services/hive_course_service.dart';
+import 'package:teachme_ai/services/hive_service.dart';
+import 'package:teachme_ai/services/hive_settings_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await HiveService.init();
   runApp(const MainApp());
 }
 
@@ -41,14 +46,20 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FakeCourseRepository fakeCourseRepository = FakeCourseRepository(
+    /*FakeCourseRepository courseRepository = FakeCourseRepository(
       courseService: FakeCourseService(),
+    );*/
+    HiveCourseRepository courseRepository = HiveCourseRepository(
+      HiveCourseService(),
+    );
+    HiveSettingsRepository settingsRepository = HiveSettingsRepository(
+      HiveSettingsService(),
     );
     return MultiBlocProvider(
       providers: [
         BlocProvider<CourseBloc>(
           create: (context) =>
-              CourseBloc(courseRepository: fakeCourseRepository)
+              CourseBloc(courseRepository: courseRepository)
                 ..add(CourseFetchEvent()),
         ),
         BlocProvider<AuthBloc>(
@@ -61,11 +72,16 @@ class MainApp extends StatelessWidget {
               aiApiService: GeminiApiService(),
             ),
             ttsRepository: GoogleTtsRepository(GoogleTtsService()),
+            settingsRepository: settingsRepository,
           ),
         ),
         BlocProvider<ChapterBloc>(
+          create: (context) => ChapterBloc(courseRepository: courseRepository),
+        ),
+        BlocProvider<SettingsBloc>(
           create: (context) =>
-              ChapterBloc(courseRepository: fakeCourseRepository),
+              SettingsBloc(HiveSettingsRepository(HiveSettingsService()))
+                ..add(SettingsInitialEvent()),
         ),
       ],
       child: MaterialApp(
@@ -92,8 +108,8 @@ class MainApp extends StatelessWidget {
           "/addCourse": (context) => const AddCoursePage(),
           "/profile": (context) => const ProfilePage(),
           "/course": (context) {
-            final course = ModalRoute.of(context)?.settings.arguments;
-            return CoursePage(course: course as Course);
+            final courseId = ModalRoute.of(context)?.settings.arguments;
+            return CoursePage(courseId: courseId as String);
           },
           "/chapter": (context) {
             final chapter = ModalRoute.of(context)?.settings.arguments;

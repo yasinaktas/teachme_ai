@@ -1,17 +1,29 @@
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 import 'package:teachme_ai/models/question.dart';
 
-class Chapter extends Equatable {
-  final String id;
-  final String courseId;
-  final String title;
-  final String description;
-  final String content;
-  final String transcript;
-  final List<Question> questions;
-  bool isCompleted;
+part 'chapter.g.dart';
 
-  Chapter({
+@HiveType(typeId: 1)
+class Chapter extends Equatable {
+  @HiveField(0)
+  final String id;
+  @HiveField(1)
+  final String courseId;
+  @HiveField(2)
+  final String title;
+  @HiveField(3)
+  final String description;
+  @HiveField(4)
+  final String content;
+  @HiveField(5)
+  final String transcript;
+  @HiveField(6)
+  final List<Question> questions;
+  @HiveField(7)
+  final bool isCompleted;
+
+  const Chapter({
     required this.id,
     required this.courseId,
     required this.title,

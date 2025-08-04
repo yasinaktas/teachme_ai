@@ -57,6 +57,35 @@ class DrawerContent extends StatelessWidget {
           Spacer(),
           Divider(color: AppColors.secondarySurfaceColor),
           ListTile(
+            leading: Icon(
+              Icons.privacy_tip_outlined,
+              color: AppColors.secondaryColor,
+            ),
+            title: Text(
+              "Privacy Policy",
+              style: GoogleFonts.quicksand(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.article_outlined,
+              color: AppColors.secondaryColor,
+            ),
+            title: Text(
+              "Terms and Conditions",
+              style: GoogleFonts.quicksand(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            onTap: () {},
+          ),
+          Divider(color: AppColors.secondarySurfaceColor),
+          ListTile(
             leading: Icon(Icons.logout, color: AppColors.secondaryColor),
             title: Text(
               "Logout",

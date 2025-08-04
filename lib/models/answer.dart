@@ -1,8 +1,18 @@
+import 'package:hive/hive.dart';
+
+part 'answer.g.dart';
+
+@HiveType(typeId: 3)
 class Answer {
+  @HiveField(0)
   final String id;
+  @HiveField(1)
   final String questionId;
+  @HiveField(2)
   final String answerText;
+  @HiveField(3)
   final bool isCorrect;
+  @HiveField(4)
   int givenAnswer;
 
   Answer({

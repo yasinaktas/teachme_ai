@@ -269,3 +269,28 @@ Proje kısa tanımı: Arka tarafta Yapay zeka kullanarak kişiye özel eğitim i
     + helper klasörü içine generate_random_id dosyasını ekledim
     + blocs içine chapter klasörünü ekledim
     + chapter_bloc, chapter_state ve chapter event dosyalarını oluşturdum
+
+3 Ağustos 2025 22.45
+    + course, chapter, question ve answer dosyalarına @HiveType ve @HiveField eklendi
+    + Bu dosyalara ayrıca "part 'modelName.g.dart'" kısımları da eklendi
+    + Terminalde "flutter pub run build_runner build" çalıştırdım
+
+4 Ağustos 2025 09.00
+    + service içine hive_service dosyasını ekledim
+    + main'de HiveService.init() çağırdım
+
+4 Ağustos 2025 12.15
+    + i_settings_service ve hive_settings_service dosyalarını oluşturdum
+    + i_settings_repository ve hive_settings_service dosyalarını oluşturdum
+    + settings_bloc, setting_evet ve settings_state dosyalarını oluşturdum
+    + mainde settings_bloc'u MultiBlocProvider'a ekledim
+    + AddCoursePage language'ı hive'den çekilecek şekle getirdim
+    + hive_course_service ve hive_course_repository dosyalarını oluşturdum
+    + maindeki fake_course_repository ve fake_course_service'leri hive_course_repository ve hive_course_service ile değiştirdim
+    + Course progress değişimini yaptım, dinleme işlemi tamamlanınca chapter tamamnlanıyor
+    + HomePage'deki searchBar işlemini tamamladım
+    
+4 Ağustos 2025 18.00
+    + Backendi heroku adlı platforma taşıdım
+
+4 Ağustos 2025 20.15

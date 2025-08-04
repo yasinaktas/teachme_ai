@@ -37,3 +37,7 @@ class AuthStateChanged extends AuthEvent {
   @override
   List<Object?> get props => [uid];
 }
+
+class GoSignup extends AuthEvent{}
+
+class GoLogin extends AuthEvent{}

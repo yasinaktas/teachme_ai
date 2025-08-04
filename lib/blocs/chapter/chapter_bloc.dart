@@ -22,10 +22,12 @@ class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
     on<SetAudioTotalTime>(_onSetAudioTotalTime);
     on<UpdateAudioCurrentTime>(_onUpdateAudioCurrentTime);
     on<AnswerToggle>(_onAnswerToggle);
+    on<Completed>(_onCompleted);
 
     _playerStateSub = _audioPlayer.playerStateStream.listen((state) {
       if (state.processingState == ProcessingState.completed) {
         add(PauseAudio());
+        add(Completed());
       }
     });
 
@@ -109,7 +111,12 @@ class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
   }
 
   void _onLoadChapter(LoadChapter event, Emitter<ChapterState> emit) {
-    emit(state.copyWith(chapter: event.chapter));
+    emit(
+      state.copyWith(
+        chapter: event.chapter,
+        isCompleted: event.chapter.isCompleted,
+      ),
+    );
   }
 
   @override
@@ -119,5 +126,9 @@ class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
     _playerStateSub.cancel();
     _audioPlayer.dispose();
     return super.close();
+  }
+
+  Future<void> _onCompleted(Completed event, Emitter<ChapterState> emit) async {
+    emit(state.copyWith(isCompleted: true));
   }
 }

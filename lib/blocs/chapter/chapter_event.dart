@@ -42,3 +42,6 @@ class AnswerToggle extends ChapterEvent {
   final bool isSelected;
   AnswerToggle(this.questionId, this.answerId, this.isSelected);
 }
+
+class Completed extends ChapterEvent {
+}

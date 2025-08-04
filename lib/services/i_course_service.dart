@@ -9,4 +9,6 @@ abstract interface class ICourseService {
   Future<void> updateCourse(Course course);
 
   Future<void> updateChapter(Chapter chapter);
+
+  Future<void> deleteCourse(String courseId);
 }

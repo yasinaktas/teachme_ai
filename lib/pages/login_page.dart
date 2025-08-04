@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is Authenticated) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -34,7 +34,9 @@ class _LoginPageState extends State<LoginPage> {
           ).showSnackBar(SnackBar(content: Text(state.message)));
         }
       },
-      child: Scaffold(
+      builder: (context, state) {
+        bool isActive = state is! AuthLoading;
+        return Scaffold(
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -51,6 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 8.0),
                 TextField(
+                  enabled: isActive,
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
@@ -73,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 8.0),
                 TextField(
+                  enabled: isActive,
                   controller: _passwordController,
                   keyboardType: TextInputType.visiblePassword,
                   obscureText: !_isPasswordVisible,
@@ -105,12 +109,10 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                //const SizedBox(height: 8.0),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    //style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                    onPressed: () {},
+                    onPressed: !isActive ? null : () {},
                     child: Text(
                       "Forgot password?",
                       style: GoogleFonts.quicksand(
@@ -124,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: !isActive ? null : () {
                           final email = _emailController.text.trim();
                           final password = _passwordController.text.trim();
                           context.read<AuthBloc>().add(
@@ -176,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: !isActive ? null : () {},
                         style: OutlinedButton.styleFrom(
                           padding: EdgeInsets.symmetric(vertical: 16.0),
                           shape: RoundedRectangleBorder(
@@ -213,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: !isActive ? null : () {},
                         style: OutlinedButton.styleFrom(
                           padding: EdgeInsets.symmetric(vertical: 16.0),
                           shape: RoundedRectangleBorder(
@@ -272,7 +274,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-      ),
+      );}
     );
   }
 }

@@ -6,6 +6,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_bloc.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_event.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_state.dart';
+import 'package:teachme_ai/blocs/course/course_bloc.dart';
+import 'package:teachme_ai/blocs/course/course_event.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
@@ -68,6 +70,7 @@ class ChapterPageState extends State<ChapterPage> {
   Widget build(BuildContext context) {
     final chapter = widget.chapter;
     return Scaffold(
+      extendBody: true,
       appBar: AppBar(
         backgroundColor: AppColors.backgroundColor,
         scrolledUnderElevation: 0,
@@ -81,7 +84,18 @@ class ChapterPageState extends State<ChapterPage> {
         color: AppColors.backgroundColor,
         child: SizedBox(
           height: 56,
-          child: BlocBuilder<ChapterBloc, ChapterState>(
+          child: BlocConsumer<ChapterBloc, ChapterState>(
+            listenWhen: (previous, current) {
+              return previous.isCompleted != current.isCompleted;
+            },
+            listener: (context, state) {
+              if (state.isCompleted) {
+                final updatedChapter = chapter.copyWith(isCompleted: true);
+                context.read<CourseBloc>().add(
+                  ChapterUpdateEvent(updatedChapter),
+                );
+              }
+            },
             builder: (context, state) {
               final currentSeconds = state.progress;
               final totalSeconds = _durationFromString(
@@ -131,7 +145,6 @@ class ChapterPageState extends State<ChapterPage> {
                         size: 32,
                       ),
                       onPressed: () {
-                        //context.read<ChapterBloc>().add( ToggleAudioPlayPause(!state.isPlaying),);
                         if (state.isPlaying) {
                           context.read<ChapterBloc>().add(PauseAudio());
                         } else {
@@ -150,6 +163,16 @@ class ChapterPageState extends State<ChapterPage> {
 
       body: CustomScrollView(
         slivers: [
+          SliverToBoxAdapter(
+            child: Text(
+              "Chapter Summary",
+              style: GoogleFonts.quicksand(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+              ),
+            ).withPadding(),
+          ),
           SliverToBoxAdapter(child: ChapterPageChapterCard(chapter: chapter)),
           SliverToBoxAdapter(
             child: Text(

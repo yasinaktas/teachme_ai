@@ -19,7 +19,8 @@ class Authenticated extends AuthState {
   List<Object?> get props => [uid];
 }
 
-class Unauthenticated extends AuthState {}
+class Unauthenticated extends AuthState {
+}
 
 class AuthError extends AuthState {
   final String message;

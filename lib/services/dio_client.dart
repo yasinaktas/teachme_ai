@@ -11,7 +11,8 @@ class DioClient {
   DioClient._internal() {
     dio = Dio(
       BaseOptions(
-        baseUrl: "http://192.168.1.3:8001",
+        //baseUrl: "http://192.168.1.3:8001",
+        baseUrl: "https://teachmeai-8f494e051a11.herokuapp.com",
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 10),
         headers: {'Content-Type': 'application/json'},

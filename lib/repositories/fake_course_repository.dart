@@ -9,35 +9,10 @@ class FakeCourseRepository implements ICourseRepository {
   FakeCourseRepository({required this.courseService});
 
   @override
-  Future<void> addChapter(Chapter chapter) {
-    throw UnimplementedError();
-  }
-
-  @override
   Future<void> addCourse(Course course) async{
     await courseService.addCourse(course);
   }
-
-  @override
-  Future<void> deleteChapter(String chapterId) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> deleteCourse(String courseId) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Chapter>> getChaptersByCourseId(String courseId) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Course> getCourseById(String courseId) {
-    throw UnimplementedError();
-  }
-
+  
   @override
   Future<List<Course>> getCourses(){
     return courseService.fetchCourses();
@@ -51,5 +26,10 @@ class FakeCourseRepository implements ICourseRepository {
   @override
   Future<void> updateCourse(Course course) {
     return courseService.updateCourse(course);
+  }
+  
+  @override
+  Future<void> deleteCourse(String courseId) {
+    return courseService.deleteCourse(courseId);
   }
 }

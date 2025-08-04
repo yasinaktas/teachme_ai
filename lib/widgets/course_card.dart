@@ -21,7 +21,7 @@ class CourseCard extends StatelessWidget {
 
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, "/course", arguments: course);
+          Navigator.pushNamed(context, "/course", arguments: course.id);
         },
         borderRadius: BorderRadius.circular(AppDimensions.listCardRadius),
         child: Padding(
