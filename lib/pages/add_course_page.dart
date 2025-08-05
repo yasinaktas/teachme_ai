@@ -58,19 +58,22 @@ class _AddCoursePageState extends State<AddCoursePage> {
       listener: (context, state) {
         _descriptionController.text = state.course.description;
         _titleController.text = state.course.title;
-        if (state.errorMessage != null) {
+        /*if (state.errorMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.errorMessage!),
               backgroundColor: Colors.red,
             ),
           );
-        }
+        }*/
         if (state.isCourseGenerated) {
           Navigator.of(context).pop();
         }
       },
       builder: (context, state) {
+        bool isLoading = state.chapterLoadingStatus.values.any(
+          (status) => status.isGenerating,
+        );
         return Scaffold(
           appBar: AppBar(
             scrolledUnderElevation: 0,
@@ -81,7 +84,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
             ),
             actions: [
               Visibility(
-                visible: state.isLoadingCourse,
+                visible: isLoading,
                 child: SizedBox(
                   width: 16,
                   height: 16,
@@ -473,9 +476,9 @@ class _AddCoursePageState extends State<AddCoursePage> {
                             child: Column(
                               children: state.course.chapters.map((chapter) {
                                 final status =
-                                    state.chapterLoadingStatus[chapter];
+                                    state.chapterLoadingStatus[chapter.id]!;
                                 return ListTile(
-                                  leading: status?.generationResultCode == 1
+                                  leading: status.generationResultCode == 1
                                       ? CircleAvatar(
                                           backgroundColor: Colors.green,
                                           radius: 12,
@@ -509,13 +512,26 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                       ),
                                     ),
                                   ),
-                                  trailing: status?.generationResultCode == 1
+                                  trailing: status.generationResultCode == 1
                                       ? SizedBox.shrink()
-                                      : SizedBox(
+                                      : status.generationResultCode == 0
+                                      ? SizedBox(
                                           width: 16,
                                           height: 16,
                                           child: CircularProgressIndicator(
                                             strokeWidth: 2,
+                                            color: AppColors.primaryColor,
+                                          ),
+                                        )
+                                      : IconButton(
+                                          padding: EdgeInsets.zero,
+                                          onPressed: () {
+                                            context
+                                                .read<GenerateCourseBloc>()
+                                                .add(GenerateChapter(chapter));
+                                          },
+                                          icon: Icon(
+                                            Icons.refresh,
                                             color: AppColors.primaryColor,
                                           ),
                                         ),
@@ -532,7 +548,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
                         Row(
                           children: [
                             TextButton(
-                              onPressed: state.lockTop && state.lockBottom
+                              onPressed: isLoading
                                   ? null
                                   : () {
                                       context.read<GenerateCourseBloc>().add(

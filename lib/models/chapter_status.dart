@@ -1,4 +1,5 @@
 class ChapterStatus {
+  final bool isGenerating;
   final bool isContentGenerated;
   final bool isTranscriptGenerated;
   final bool isQuestionsGenerated;
@@ -6,6 +7,7 @@ class ChapterStatus {
   final int generationResultCode;
 
   ChapterStatus({
+    this.isGenerating = false,
     this.isContentGenerated = false,
     this.isTranscriptGenerated = false,
     this.isQuestionsGenerated = false,
@@ -14,6 +16,7 @@ class ChapterStatus {
   });
 
   ChapterStatus copyWith({
+    bool? isGenerating,
     bool? isContentGenerated,
     bool? isTranscriptGenerated,
     bool? isQuestionsGenerated,
@@ -21,6 +24,7 @@ class ChapterStatus {
     int? generationResultCode,
   }) {
     return ChapterStatus(
+      isGenerating: isGenerating ?? this.isGenerating,
       isContentGenerated: isContentGenerated ?? this.isContentGenerated,
       isTranscriptGenerated:
           isTranscriptGenerated ?? this.isTranscriptGenerated,

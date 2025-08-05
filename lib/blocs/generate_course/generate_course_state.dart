@@ -1,4 +1,3 @@
-import 'package:teachme_ai/models/chapter.dart';
 import 'package:teachme_ai/models/chapter_status.dart';
 import 'package:teachme_ai/models/course.dart';
 
@@ -10,7 +9,7 @@ class GenerateCourseState {
   final bool lockBottom;
   final bool isLoadingChapterTitles;
   final bool isLoadingCourse;
-  final Map<Chapter, ChapterStatus> chapterLoadingStatus;
+  final Map<String, ChapterStatus> chapterLoadingStatus;
   final bool isCourseGenerated;
   final String? errorMessage;
 
@@ -35,7 +34,7 @@ class GenerateCourseState {
     bool? lockBottom,
     bool? isLoadingChapterTitles,
     bool? isLoadingCourse,
-    Map<Chapter, ChapterStatus>? chapterLoadingStatus,
+    Map<String, ChapterStatus>? chapterLoadingStatus,
     bool? isCourseGenerated,
     String? errorMessage,
   }) {

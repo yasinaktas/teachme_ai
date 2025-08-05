@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_event.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_state.dart';
@@ -51,6 +51,7 @@ class GenerateCourseBloc
     on<RemoveSubtitle>(_onRemoveSubtitle);
     on<ToggleGenerateQuestions>(_onToggleGenerateQuestions);
     on<GenerateChapterTitles>(_onGenerateChapterTitles);
+    on<GenerateChapter>(_onGenerateChapter);
     on<GenerateCourse>(_onGenerateCourse);
     on<Clear>(_onClear);
 
@@ -249,7 +250,294 @@ class GenerateCourseBloc
     }
   }
 
+  Future<DtoChapterContent> _generateCourseContent(
+    Chapter chapter,
+    String title,
+    String language,
+    List<String> subtitles,
+  ) async {
+    final ApiResult<DtoChapterContent> apiResultGeneratedContent =
+        await generateCourseRepository.getGeneratedChapterContent(
+          title,
+          language,
+          chapter.title,
+          subtitles,
+        );
+    if (apiResultGeneratedContent is Success) {
+      return (apiResultGeneratedContent as Success).data;
+    } else {
+      final errorResult =
+          apiResultGeneratedContent as Failure<DtoChapterContent>;
+      throw Exception("Failed to generate content: ${errorResult.message}");
+    }
+  }
+
+  Future<DtoChapterTranscript> _generateCourseTranscript(
+    Chapter chapter,
+    String title,
+    String language,
+    List<String> subtitles,
+    String content,
+  ) async {
+    final ApiResult<DtoChapterTranscript> apiResultGeneratedTranscript =
+        await generateCourseRepository.getGeneratedChapterTranscript(
+          title,
+          language,
+          chapter.title,
+          subtitles,
+          content,
+        );
+    if (apiResultGeneratedTranscript is Success) {
+      return (apiResultGeneratedTranscript as Success).data;
+    } else {
+      final errorResult =
+          apiResultGeneratedTranscript as Failure<DtoChapterTranscript>;
+      throw Exception("Failed to generate transcript: ${errorResult.message}");
+    }
+  }
+
+  Future<List<Question>> _generateCourseQuestions(
+    Chapter chapter,
+    String title,
+    String language,
+    String content,
+  ) async {
+    final ApiResult<DtoChapterQuestions> apiResultGeneratedQuestions =
+        await generateCourseRepository.generateChapterQuestions(
+          title,
+          language,
+          chapter.title,
+          content,
+        );
+    if (apiResultGeneratedQuestions is Success) {
+      final List<DtoQuestion> dtoQuestions =
+          (apiResultGeneratedQuestions as Success).data.questions;
+      final List<Question> questions = dtoQuestions.map((dtoQuestion) {
+        final String questionId = GenerateRandomId.generateRandomUUID();
+        final List<DtoAnswer> dtoAnswers = dtoQuestion.answers;
+        final List<Answer> answers = dtoAnswers.map((dtoAnswer) {
+          final String id = GenerateRandomId.generateRandomUUID();
+          return Answer(
+            id: id,
+            questionId: questionId,
+            answerText: dtoAnswer.text,
+            isCorrect: dtoAnswer.isCorrect,
+          );
+        }).toList();
+        return Question(
+          id: questionId,
+          chapterId: chapter.id,
+          questionText: dtoQuestion.questionText,
+          answers: answers,
+        );
+      }).toList();
+      return questions;
+    } else {
+      final errorResult =
+          apiResultGeneratedQuestions as Failure<DtoChapterQuestions>;
+      throw Exception("Failed to generate questions: ${errorResult.message}");
+    }
+  }
+
+  Future<ApiResult<String>> _generateCourseAudio(
+    Chapter chapter,
+    String transcript,
+  ) async {
+    final language = AppLanguages.languages.firstWhere(
+      (lang) => lang.name == state.course.language,
+    );
+    return await ttsRepository.generateSpeech(
+      transcript,
+      language.languageCode,
+      language.voiceName,
+      chapter.id,
+    );
+  }
+
+  Future<void> _onGenerateChapter(
+    GenerateChapter event,
+    Emitter<GenerateCourseState> emit,
+  ) async {
+    final chapter = event.chapter;
+    final title = state.course.title;
+    final language = state.course.language;
+    final subtitles = state.course.chapters.map((c) => c.title).toList();
+    debugPrint(
+      "Generating chapter: ${chapter.title}, title: $title, language: $language, subtitles: $subtitles",
+    );
+    emit(
+      state.copyWith(
+        chapterLoadingStatus: {
+          ...state.chapterLoadingStatus,
+          chapter.id: ChapterStatus(
+            isGenerating: true,
+            isContentGenerated: false,
+            isTranscriptGenerated: false,
+            isQuestionsGenerated: false,
+            isAudioGenerated: false,
+            generationResultCode: 0,
+          ),
+        },
+      ),
+    );
+
+    try {
+      final dtoContent = await _generateCourseContent(
+        chapter,
+        title,
+        language,
+        subtitles,
+      );
+      if (dtoContent is Failure<DtoChapterContent>) {
+        emit(
+          state.copyWith(
+            errorMessage:
+                "Failed to generate content for ${chapter.title}: ${(dtoContent as Failure).message}",
+            chapterLoadingStatus: {
+              ...state.chapterLoadingStatus,
+              chapter.id: ChapterStatus(generationResultCode: -1),
+            },
+          ),
+        );
+        return;
+      }
+      final dtoTranscript = await _generateCourseTranscript(
+        chapter,
+        title,
+        language,
+        subtitles,
+        dtoContent.content,
+      );
+      if (dtoTranscript is Failure<DtoChapterTranscript>) {
+        emit(
+          state.copyWith(
+            errorMessage:
+                "Failed to generate transcript for ${chapter.title}: ${(dtoTranscript as Failure).message}",
+            chapterLoadingStatus: {
+              ...state.chapterLoadingStatus,
+              chapter.id: ChapterStatus(generationResultCode: -2),
+            },
+          ),
+        );
+        return;
+      }
+      List<Question> questions = [];
+      if (state.generateQuestions) {
+        final dtoQuestions = await _generateCourseQuestions(
+          chapter,
+          title,
+          language,
+          dtoContent.content,
+        );
+        if (dtoQuestions is Failure<DtoChapterQuestions>) {
+          emit(
+            state.copyWith(
+              errorMessage:
+                  "Failed to generate questions for ${chapter.title}: ${(dtoQuestions as Failure).message}",
+              chapterLoadingStatus: {
+                ...state.chapterLoadingStatus,
+                chapter.id: ChapterStatus(generationResultCode: -3),
+              },
+            ),
+          );
+          return;
+        }
+        questions = dtoQuestions;
+      }
+      final dtoAudio = await _generateCourseAudio(
+        chapter,
+        dtoTranscript.transcript,
+      );
+      if (dtoAudio is Failure) {
+        emit(
+          state.copyWith(
+            errorMessage:
+                "Failed to generate audio for ${chapter.title}: ${(dtoAudio as Failure).message}",
+            chapterLoadingStatus: {
+              ...state.chapterLoadingStatus,
+              chapter.id: ChapterStatus(generationResultCode: -4),
+            },
+          ),
+        );
+        return;
+      }
+
+      final generatedChapter = chapter.copyWith(
+        content: dtoContent.content,
+        transcript: dtoTranscript.transcript,
+        description: dtoContent.chapterShortDescription,
+        questions: questions,
+      );
+
+      final updatedChapters = state.course.chapters.map((c) {
+        return c.id == chapter.id ? generatedChapter : c;
+      }).toList();
+
+      final updatedStatus = {
+        ...state.chapterLoadingStatus,
+        chapter.id: ChapterStatus(
+          isContentGenerated: true,
+          isTranscriptGenerated: true,
+          isQuestionsGenerated: state.generateQuestions,
+          isAudioGenerated: true,
+          generationResultCode: 1,
+        ),
+      };
+
+      final isAllDone = updatedStatus.values.every(
+        (status) => status.generationResultCode == 1,
+      );
+
+      emit(
+        state.copyWith(
+          chapterLoadingStatus: updatedStatus,
+          course: state.course.copyWith(chapters: updatedChapters),
+          isLoadingCourse: !isAllDone,
+          isCourseGenerated: isAllDone,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: "Failed to generate ${chapter.title}: $e",
+          chapterLoadingStatus: {
+            ...state.chapterLoadingStatus,
+            chapter.id: ChapterStatus(generationResultCode: -1),
+          },
+        ),
+      );
+    }
+  }
+
   Future<void> _onGenerateCourse(
+    GenerateCourse event,
+    Emitter<GenerateCourseState> emit,
+  ) async {
+    if (state.course.title.isEmpty) {
+      emit(state.copyWith(errorMessage: "Title cannot be empty"));
+      return;
+    }
+
+    if (state.course.chapters.isEmpty) {
+      emit(state.copyWith(errorMessage: "Chapter titles cannot be empty"));
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        isLoadingCourse: true,
+        isCourseGenerated: false,
+        errorMessage: null,
+        lockBottom: true,
+      ),
+    );
+
+    for (final chapter in state.course.chapters) {
+      add(GenerateChapter(chapter));
+    }
+  }
+
+  /*Future<void> _onGenerateCourse(
     GenerateCourse event,
     Emitter<GenerateCourseState> emit,
   ) async {
@@ -468,7 +756,7 @@ class GenerateCourseBloc
         errorMessage: null,
       ),
     );
-  }
+  }*/
 
   void _onClear(Clear event, Emitter<GenerateCourseState> emit) {
     emit(
@@ -488,6 +776,7 @@ class GenerateCourseBloc
         isLoadingCourse: false,
         isCourseGenerated: false,
         errorMessage: null,
+        chapterLoadingStatus: {},
       ),
     );
   }

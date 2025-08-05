@@ -1,3 +1,5 @@
+import 'package:teachme_ai/models/chapter.dart';
+
 abstract class GenerateCourseEvent {}
 
 class SelectLanguage extends GenerateCourseEvent {
@@ -53,6 +55,47 @@ class RemoveSubtitle extends GenerateCourseEvent {
 }
 
 class GenerateChapterTitles extends GenerateCourseEvent {}
+
+class GenerateChapterContent extends GenerateCourseEvent {
+  final Chapter chapter;
+  final String title;
+  final String language;
+  final List<String> subtitles;
+
+  GenerateChapterContent(this.chapter, this.title, this.language, this.subtitles);
+}
+
+class GenerateChapterTranscript extends GenerateCourseEvent {
+  final Chapter chapter;
+  final String title;
+  final String language;
+  final List<String> subtitles;
+  final String content;
+
+  GenerateChapterTranscript(this.chapter, this.title, this.language, this.subtitles, this.content);
+}
+
+class GenerateChapterQuestions extends GenerateCourseEvent {
+  final Chapter chapter;
+  final String title;
+  final String language;
+  final String content;
+
+  GenerateChapterQuestions(this.chapter, this.title, this.language, this.content);
+}
+
+class GenerateChapterAudio extends GenerateCourseEvent {
+  final Chapter chapter;
+  final String transcript;
+
+  GenerateChapterAudio(this.chapter, this.transcript,);
+}
+
+class GenerateChapter extends GenerateCourseEvent {
+  final Chapter chapter;
+
+  GenerateChapter(this.chapter);
+}
 
 class GenerateCourse extends GenerateCourseEvent {}
 

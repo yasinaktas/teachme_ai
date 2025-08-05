@@ -27,14 +27,14 @@ class HomePage extends StatelessWidget {
             previous.isCourseGenerated != current.isCourseGenerated;
       },
       listener: (context, state) {
-        if (state.errorMessage != null) {
+        /*if (state.errorMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.errorMessage!),
               backgroundColor: Colors.red,
             ),
           );
-        }
+        }*/
         if (state.isCourseGenerated) {
           context.read<GenerateCourseBloc>().add(Clear());
           context.read<CourseBloc>().add(CourseAddEvent(state.course));
@@ -47,6 +47,9 @@ class HomePage extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        final isLoading = state.chapterLoadingStatus.values.any(
+          (status) => status.isGenerating,
+        );
         return GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
@@ -54,7 +57,7 @@ class HomePage extends StatelessWidget {
           child: Scaffold(
             body: CustomScrollView(
               slivers: [
-                if (state.isLoadingCourse)
+                if (isLoading)
                   SliverToBoxAdapter(
                     child: Card(
                       color: AppColors.cardColor,
