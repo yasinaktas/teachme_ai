@@ -297,3 +297,9 @@ Proje kısa tanımı: Arka tarafta Yapay zeka kullanarak kişiye özel eğitim i
     + flutter_html paketini ekledim
     + cloud_firestore paketini ekledim
     + Firestore'da proje oluşturdum
+
+5 Ağustos 2025 18.00
+    + Runner/info.pliste ekleme yaptım
+        <key>NSLocalNetworkUsageDescription</key>
+        <string>This app needs access to your local network to function properly.</string>
+    + AuthStateChange'de hive_settings güncelledim

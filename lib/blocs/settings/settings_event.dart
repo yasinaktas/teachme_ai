@@ -2,11 +2,9 @@ abstract class SettingsEvent {}
 
 class SettingsInitialEvent extends SettingsEvent {}
 
-class GetLanguageEvent extends SettingsEvent {
-}
+class GetLanguageEvent extends SettingsEvent {}
 
-class GetUsernameEvent extends SettingsEvent {
-}
+class GetUsernameEvent extends SettingsEvent {}
 
 class SetLanguageEvent extends SettingsEvent {
   final String language;
@@ -18,4 +16,20 @@ class SetUsernameEvent extends SettingsEvent {
   final String username;
 
   SetUsernameEvent(this.username);
+}
+
+class GetEmailEvent extends SettingsEvent {}
+
+class SetEmailEvent extends SettingsEvent {
+  final String email;
+
+  SetEmailEvent(this.email);
+}
+
+class GetUserIdEvent extends SettingsEvent {}
+
+class SetUserIdEvent extends SettingsEvent {
+  final String userId;
+
+  SetUserIdEvent(this.userId);
 }

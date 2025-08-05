@@ -23,4 +23,24 @@ class HiveSettingsService implements ISettingsService {
   Future<void> setUsername(String username) async {
     _settingsBox.put("username", username);
   }
+
+  @override
+  Future<String> getEmail() async {
+    return _settingsBox.get("email", defaultValue: "");
+  }
+
+  @override
+  Future<void> setEmail(String email) async {
+    return _settingsBox.put("email", email);
+  }
+
+  @override
+  Future<String> getUserId() async {
+    return _settingsBox.get("userId", defaultValue: "");
+  }
+
+  @override
+  Future<void> setUserId(String userId) async {
+    return _settingsBox.put("userId", userId);
+  }
 }

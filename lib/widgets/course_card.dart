@@ -73,13 +73,14 @@ class CourseCard extends StatelessWidget {
                         width: 52,
                         height: 52,
                         child: CircularProgressIndicator(
-                          value:
-                              course.chapters.fold(
-                                0,
-                                (value, chapter) =>
-                                    value += chapter.isCompleted ? 1 : 0,
-                              ) /
-                              course.chapters.length,
+                          value: course.chapters.isEmpty
+                              ? 0
+                              : course.chapters.fold(
+                                      0,
+                                      (value, chapter) =>
+                                          value += chapter.isCompleted ? 1 : 0,
+                                    ) /
+                                    course.chapters.length,
                           backgroundColor: AppColors.primaryShadowColor,
                           color: AppColors.primaryColor,
                           strokeWidth: 4.0,

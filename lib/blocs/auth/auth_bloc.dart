@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teachme_ai/repositories/i_settings_repository.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,17 +10,39 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
+  final ISettingsRepository _settingsRepository;
   StreamSubscription<User?>? _authSubscription;
 
-  AuthBloc(this._firebaseAuth, this._firestore) : super(AuthInitial()) {
+  AuthBloc(this._firebaseAuth, this._firestore, this._settingsRepository)
+    : super(AuthInitial()) {
     _authSubscription = _firebaseAuth.authStateChanges().listen((user) {
       add(AuthStateChanged(user?.uid));
     });
 
-    on<AppStarted>((event, emit) {
+    on<AppStarted>((event, emit) async {
       final user = _firebaseAuth.currentUser;
       if (user != null) {
-        emit(Authenticated(user.uid));
+        final uid = user.uid;
+
+        try {
+          final doc = await _firestore.collection('users').doc(uid).get();
+          if (doc.exists) {
+            final data = doc.data()!;
+            final username = data['username'] ?? '';
+            final email = data['email'] ?? '';
+
+            if (username.isEmpty || email.isEmpty) {
+              emit(Unauthenticated());
+            } else {
+              emit(Authenticated(uid: uid, username: username, email: email));
+            }
+          } else {
+            emit(Unauthenticated());
+          }
+        } catch (e) {
+          debugPrint('Error fetching user data: $e');
+          emit(Unauthenticated());
+        }
       } else {
         emit(Unauthenticated());
       }
@@ -63,13 +86,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<SignOutRequested>((event, emit) async {
+      _settingsRepository.setUsername('');
+      _settingsRepository.setEmail('');
+      _settingsRepository.setUserId('');
       await _firebaseAuth.signOut();
     });
 
-    on<AuthStateChanged>((event, emit) {
+    on<AuthStateChanged>((event, emit) async {
       if (event.uid != null) {
-        debugPrint("User is authenticated with UID: ${event.uid}");
-        emit(Authenticated(event.uid!));
+        final uid = event.uid!;
+
+        try {
+          final doc = await _firestore.collection('users').doc(uid).get();
+          if (doc.exists) {
+            final data = doc.data()!;
+            final username = data['username'] ?? '';
+            final email = data['email'] ?? '';
+
+            if (username.isEmpty || email.isEmpty) {
+              emit(Unauthenticated());
+            } else {
+              await _settingsRepository.setUsername(username);
+              await _settingsRepository.setEmail(email);
+              await _settingsRepository.setUserId(uid);
+              emit(Authenticated(uid: uid, username: username, email: email));
+            }
+          } else {
+            emit(Unauthenticated());
+          }
+        } catch (e) {
+          debugPrint('Error fetching user data: $e');
+          emit(Unauthenticated());
+        }
       } else {
         debugPrint("User is unauthenticated");
         emit(Unauthenticated());

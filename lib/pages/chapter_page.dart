@@ -13,6 +13,7 @@ import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/models/chapter.dart';
 import 'package:teachme_ai/widgets/chapter_page_chapter_card copy.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class ChapterPage extends StatefulWidget {
   final Chapter chapter;
@@ -81,7 +82,7 @@ class ChapterPageState extends State<ChapterPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: AppColors.backgroundColor,
+        color: Colors.transparent,
         child: SizedBox(
           height: 56,
           child: BlocConsumer<ChapterBloc, ChapterState>(
@@ -194,8 +195,13 @@ class ChapterPageState extends State<ChapterPage> {
                 ),
               ),
               margin: EdgeInsets.zero,
-              child:
-                  Text(
+              child: Html(data: chapter.content).withPadding(
+                EdgeInsets.symmetric(
+                  horizontal: AppDimensions.pagePadding,
+                  vertical: AppDimensions.pagePadding,
+                ),
+              ),
+              /*Text(
                     chapter.content,
                     style: GoogleFonts.quicksand(
                       fontSize: 14,
@@ -207,7 +213,7 @@ class ChapterPageState extends State<ChapterPage> {
                       horizontal: AppDimensions.pagePadding,
                       vertical: AppDimensions.pagePadding,
                     ),
-                  ),
+                  ),*/
             ).withPadding(),
           ),
           if (chapter.questions.isNotEmpty)
@@ -299,7 +305,8 @@ class ChapterPageState extends State<ChapterPage> {
             child: SizedBox(
               height:
                   MediaQuery.of(context).padding.bottom +
-                  AppDimensions.pagePadding,
+                  AppDimensions.pagePadding +
+                  80,
             ),
           ),
         ],

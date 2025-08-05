@@ -7,6 +7,8 @@ import 'package:teachme_ai/blocs/course/course_state.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_bloc.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_event.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_state.dart';
+import 'package:teachme_ai/blocs/settings/settings_bloc.dart';
+import 'package:teachme_ai/blocs/settings/settings_state.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
@@ -93,26 +95,32 @@ class HomePage extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: Row(
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Hello,",
-                            style: GoogleFonts.quicksand(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.secondaryColor,
-                            ),
-                          ),
-                          Text(
-                            "Guest",
-                            style: GoogleFonts.quicksand(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.blackColor,
-                            ),
-                          ),
-                        ],
+                      BlocBuilder<SettingsBloc, SettingsState>(
+                        builder: (context, state) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Hello,",
+                                style: GoogleFonts.quicksand(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.secondaryColor,
+                                ),
+                              ),
+                              Text(
+                                state.username.isNotEmpty
+                                    ? state.username
+                                    : "Guest",
+                                style: GoogleFonts.quicksand(
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.blackColor,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                       const Spacer(),
                       Image.asset("assets/images/panda3.png", height: 80),

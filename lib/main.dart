@@ -63,7 +63,7 @@ class MainApp extends StatelessWidget {
         ),
         BlocProvider<AuthBloc>(
           create: (context) =>
-              AuthBloc(FirebaseAuth.instance, FirebaseFirestore.instance)
+              AuthBloc(FirebaseAuth.instance, FirebaseFirestore.instance,settingsRepository)
                 ..add(AppStarted()),
         ),
         BlocProvider<GenerateCourseBloc>(

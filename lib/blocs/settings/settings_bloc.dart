@@ -8,12 +8,16 @@ import 'package:teachme_ai/repositories/i_settings_repository.dart';
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final ISettingsRepository _settingsRepository;
   SettingsBloc(this._settingsRepository)
-    : super(SettingsState(username: "", language: "")) {
+    : super(SettingsState(username: "", language: "", email: "", userId: "")) {
     on<SettingsInitialEvent>(_onSettingsInitialEvent);
     on<GetLanguageEvent>(_onGetLanguageEvent);
     on<GetUsernameEvent>(_onGetUsernameEvent);
     on<SetLanguageEvent>(_onSetLanguageEvent);
     on<SetUsernameEvent>(_onSetUsernameEvent);
+    on<GetEmailEvent>(_onGetEmailEvent);
+    on<SetEmailEvent>(_onSetEmailEvent);
+    on<GetUserIdEvent>(_onGetUserIdEvent);
+    on<SetUserIdEvent>(_onSetUserIdEvent);
   }
 
   Future<void> _onSettingsInitialEvent(
@@ -22,7 +26,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     final username = await _settingsRepository.getUsername();
     final language = await _settingsRepository.getLanguage();
-    emit(state.copyWith(username: username, language: language));
+    final email = await _settingsRepository.getEmail();
+    final userId = await _settingsRepository.getUserId();
+    emit(
+      state.copyWith(
+        username: username,
+        language: language,
+        email: email,
+        userId: userId,
+      ),
+    );
   }
 
   Future<void> _onGetLanguageEvent(
@@ -55,5 +68,37 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     await _settingsRepository.setUsername(event.username);
     emit(state.copyWith(username: event.username));
+  }
+
+  Future<void> _onGetEmailEvent(
+    GetEmailEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    final email = await _settingsRepository.getEmail();
+    emit(state.copyWith(email: email));
+  }
+
+  Future<void> _onSetEmailEvent(
+    SetEmailEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    await _settingsRepository.setEmail(event.email);
+    emit(state.copyWith(email: event.email));
+  }
+
+  Future<void> _onGetUserIdEvent(
+    GetUserIdEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    final userId = await _settingsRepository.getUserId();
+    emit(state.copyWith(userId: userId));
+  }
+
+  Future<void> _onSetUserIdEvent(
+    SetUserIdEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    await _settingsRepository.setUserId(event.userId);
+    emit(state.copyWith(userId: event.userId));
   }
 }

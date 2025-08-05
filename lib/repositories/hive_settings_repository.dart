@@ -25,4 +25,24 @@ class HiveSettingsRepository implements ISettingsRepository {
   Future<void> setUsername(String username) async {
     await _settingsService.setUsername(username);
   }
+
+  @override
+  Future<String> getEmail() async {
+    return _settingsService.getEmail();
+  }
+
+  @override
+  Future<void> setEmail(String email) async {
+    return _settingsService.setEmail(email);
+  }
+
+  @override
+  Future<String> getUserId() async {
+    return _settingsService.getUserId();
+  }
+
+  @override
+  Future<void> setUserId(String userId) async {
+    return _settingsService.setUserId(userId);
+  }
 }
