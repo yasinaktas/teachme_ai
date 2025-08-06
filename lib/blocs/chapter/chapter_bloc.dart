@@ -160,18 +160,14 @@ class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
   ) async {
     emit(state.copyWith(isLoadingAudio: true));
     emit(state.copyWith(isAudioExists: false));
-    //debugPrint("1");
     try {
       final chapter = state.chapter;
-      //debugPrint("2");
       if (chapter != null) {
-        //debugPrint("3");
         final courses = await courseRepository.getCourses();
         final course = courses.firstWhere((c) => c.id == chapter.courseId);
         final language = AppLanguages.languages.firstWhere(
           (lang) => lang.name == course.language,
         );
-        //debugPrint("4");
         final dir = await getApplicationDocumentsDirectory();
         final audioFilePath = "${dir.path}/${state.chapter!.id}.mp3";
         final apiResultAudio = await ttsRepository.generateSpeech(
@@ -180,20 +176,15 @@ class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
           language.voiceName,
           chapter.id,
         );
-        //debugPrint("5");
         if (apiResultAudio is Failure) {
-          //debugPrint("6: ${(apiResultAudio as Failure).message}");
           emit(state.copyWith(isAudioExists: false, isLoadingAudio: false));
           return;
         } else {
-          //debugPrint("7");
           await _audioPlayer.setFilePath(audioFilePath);
-          //debugPrint("9");
           emit(state.copyWith(isAudioExists: true));
         }
       }
     } catch (e) {
-      //debugPrint("8: ${e.toString()}");
       emit(state.copyWith(isAudioExists: false, isLoadingAudio: false));
     }
   }
