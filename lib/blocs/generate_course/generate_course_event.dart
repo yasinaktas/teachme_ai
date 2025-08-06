@@ -62,7 +62,12 @@ class GenerateChapterContent extends GenerateCourseEvent {
   final String language;
   final List<String> subtitles;
 
-  GenerateChapterContent(this.chapter, this.title, this.language, this.subtitles);
+  GenerateChapterContent(
+    this.chapter,
+    this.title,
+    this.language,
+    this.subtitles,
+  );
 }
 
 class GenerateChapterTranscript extends GenerateCourseEvent {
@@ -72,7 +77,13 @@ class GenerateChapterTranscript extends GenerateCourseEvent {
   final List<String> subtitles;
   final String content;
 
-  GenerateChapterTranscript(this.chapter, this.title, this.language, this.subtitles, this.content);
+  GenerateChapterTranscript(
+    this.chapter,
+    this.title,
+    this.language,
+    this.subtitles,
+    this.content,
+  );
 }
 
 class GenerateChapterQuestions extends GenerateCourseEvent {
@@ -81,14 +92,19 @@ class GenerateChapterQuestions extends GenerateCourseEvent {
   final String language;
   final String content;
 
-  GenerateChapterQuestions(this.chapter, this.title, this.language, this.content);
+  GenerateChapterQuestions(
+    this.chapter,
+    this.title,
+    this.language,
+    this.content,
+  );
 }
 
 class GenerateChapterAudio extends GenerateCourseEvent {
   final Chapter chapter;
   final String transcript;
 
-  GenerateChapterAudio(this.chapter, this.transcript,);
+  GenerateChapterAudio(this.chapter, this.transcript);
 }
 
 class GenerateChapter extends GenerateCourseEvent {
@@ -100,3 +116,10 @@ class GenerateChapter extends GenerateCourseEvent {
 class GenerateCourse extends GenerateCourseEvent {}
 
 class Clear extends GenerateCourseEvent {}
+
+class ReorderChapters extends GenerateCourseEvent {
+  int oldIndex;
+  int newIndex;
+
+  ReorderChapters(this.oldIndex, this.newIndex);
+}

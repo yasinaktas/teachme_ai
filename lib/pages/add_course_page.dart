@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:reorderables/reorderables.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_bloc.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_event.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_state.dart';
@@ -409,11 +410,21 @@ class _AddCoursePageState extends State<AddCoursePage> {
                             ),
                           ],
                         ).withPadding(),
-                        Wrap(
+                        ReorderableWrap(
                           spacing: 8,
                           runSpacing: 4,
+                          onReorder: (oldIndex, newIndex) {
+                            setState(() {
+                              if (oldIndex < newIndex) newIndex -= 1;
+                              final item = state.course.chapters.removeAt(
+                                oldIndex,
+                              );
+                              state.course.chapters.insert(newIndex, item);
+                            });
+                          },
                           children: state.course.chapters.map((chapter) {
                             return Chip(
+                              key: ValueKey(chapter.id),
                               label: Text(
                                 chapter.title,
                                 softWrap: true,

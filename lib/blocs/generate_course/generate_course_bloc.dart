@@ -52,6 +52,7 @@ class GenerateCourseBloc
     on<GenerateChapterTitles>(_onGenerateChapterTitles);
     on<GenerateChapter>(_onGenerateChapter);
     on<GenerateCourse>(_onGenerateCourse);
+    on<ReorderChapters>(_reOrderChapters);
     on<Clear>(_onClear);
 
     _initializeLanguage();
@@ -926,6 +927,23 @@ class GenerateCourseBloc
         errorMessage: null,
         chapterLoadingStatus: {},
       ),
+    );
+  }
+
+  void _reOrderChapters(
+    ReorderChapters event,
+    Emitter<GenerateCourseState> emit,
+  ) async {
+    if (event.oldIndex == event.newIndex) return;
+    if (event.oldIndex < event.newIndex) {
+      event.newIndex -= 1;
+    }
+    final updatedChapters = List<Chapter>.from(state.course.chapters);
+    final chapter = updatedChapters.removeAt(event.oldIndex);
+    updatedChapters.insert(event.newIndex, chapter);
+
+    emit(
+      state.copyWith(course: state.course.copyWith(chapters: updatedChapters)),
     );
   }
 }
