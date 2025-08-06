@@ -45,9 +45,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /*FakeCourseRepository courseRepository = FakeCourseRepository(
-      courseService: FakeCourseService(),
-    );*/
     HiveCourseRepository courseRepository = HiveCourseRepository(
       HiveCourseService(),
     );

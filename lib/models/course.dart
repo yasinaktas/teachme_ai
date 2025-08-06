@@ -19,9 +19,9 @@ class Course extends Equatable {
   @HiveField(5)
   final List<Chapter> chapters;
   @HiveField(6)
-  bool isCompleted;
+  final bool isCompleted;
 
-  Course({
+  const Course({
     required this.id,
     required this.title,
     required this.description,

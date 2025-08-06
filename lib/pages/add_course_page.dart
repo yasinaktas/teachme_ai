@@ -525,11 +525,19 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                         )
                                       : IconButton(
                                           padding: EdgeInsets.zero,
-                                          onPressed: () {
-                                            context
-                                                .read<GenerateCourseBloc>()
-                                                .add(GenerateChapter(chapter));
-                                          },
+                                          onPressed: isLoading
+                                              ? null
+                                              : () {
+                                                  context
+                                                      .read<
+                                                        GenerateCourseBloc
+                                                      >()
+                                                      .add(
+                                                        GenerateChapter(
+                                                          chapter,
+                                                        ),
+                                                      );
+                                                },
                                           icon: Icon(
                                             Icons.refresh,
                                             color: AppColors.primaryColor,
