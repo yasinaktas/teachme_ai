@@ -1,18 +1,25 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_event.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_state.dart';
+import 'package:teachme_ai/constants/app_languages.dart';
+import 'package:teachme_ai/repositories/api_result.dart';
 import 'package:teachme_ai/repositories/i_course_repository.dart';
+import 'package:teachme_ai/repositories/i_tts_repository.dart';
 
 class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   final ICourseRepository courseRepository;
+  final ITtsRepository ttsRepository;
   late final StreamSubscription _positionSub;
   late final StreamSubscription _durationSub;
   late final StreamSubscription _playerStateSub;
 
-  ChapterBloc({required this.courseRepository}) : super(ChapterState()) {
+  ChapterBloc({required this.courseRepository, required this.ttsRepository})
+    : super(ChapterState()) {
     on<LoadChapter>(_onLoadChapter);
     on<LoadAudio>(_onLoadAudio);
     on<PlayAudio>(_onPlayAudio);
@@ -23,6 +30,7 @@ class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
     on<UpdateAudioCurrentTime>(_onUpdateAudioCurrentTime);
     on<AnswerToggle>(_onAnswerToggle);
     on<Completed>(_onCompleted);
+    on<DownloadAudio>(_onDownloadAudio);
 
     _playerStateSub = _audioPlayer.playerStateStream.listen((state) {
       if (state.processingState == ProcessingState.completed) {
@@ -45,12 +53,56 @@ class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
     });
   }
 
-  Future<void> _onLoadAudio(LoadAudio event, Emitter<ChapterState> emit) async {
-    await _audioPlayer.setFilePath(event.audioFilePath);
+  void _onLoadChapter(LoadChapter event, Emitter<ChapterState> emit) {
+    emit(
+      state.copyWith(
+        chapter: event.chapter,
+        isCompleted: event.chapter.isCompleted,
+        isPlaying: false,
+        progress: 0.0,
+      ),
+    );
+  }
 
-    final duration = _audioPlayer.duration;
-    if (duration != null) {
-      emit(state.copyWith(totalTime: duration.toString().split('.').first));
+  Future _onAnswerToggle(AnswerToggle event, Emitter<ChapterState> emit) async {
+    final currentState = state;
+    final updatedChapter = currentState.chapter!.copyWith(
+      questions: currentState.chapter!.questions.map((question) {
+        if (question.id == event.questionId) {
+          return question.copyWith(
+            answers: question.answers.map((answer) {
+              if (answer.id != event.answerId) return answer;
+              return answer.copyWith(givenAnswer: event.isSelected ? 1 : 0);
+            }).toList(),
+          );
+        }
+        return question;
+      }).toList(),
+    );
+
+    emit(currentState.copyWith(chapter: updatedChapter));
+
+    await courseRepository.updateChapter(updatedChapter);
+  }
+
+  Future<void> _onLoadAudio(LoadAudio event, Emitter<ChapterState> emit) async {
+    emit(state.copyWith(isLoadingAudio: true, isAudioExists: false));
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final audioFilePath = "${dir.path}/${state.chapter!.id}.mp3";
+      if (await File(audioFilePath).exists()) {
+        await _audioPlayer.setFilePath(audioFilePath);
+        final duration = _audioPlayer.duration;
+        if (duration != null) {
+          emit(state.copyWith(isAudioExists: true));
+        } else {
+          emit(state.copyWith(isAudioExists: false, isLoadingAudio: false));
+        }
+      } else {
+        throw Exception("Audio file not found");
+      }
+    } catch (e) {
+      emit(state.copyWith(isAudioExists: false, isLoadingAudio: false));
     }
   }
 
@@ -89,34 +141,8 @@ class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
     emit(state.copyWith(currentTime: event.currentTime));
   }
 
-  Future _onAnswerToggle(AnswerToggle event, Emitter<ChapterState> emit) async {
-    final currentState = state;
-    final updatedChapter = currentState.chapter!.copyWith(
-      questions: currentState.chapter!.questions.map((question) {
-        if (question.id == event.questionId) {
-          return question.copyWith(
-            answers: question.answers.map((answer) {
-              if (answer.id != event.answerId) return answer;
-              return answer.copyWith(givenAnswer: event.isSelected ? 1 : 0);
-            }).toList(),
-          );
-        }
-        return question;
-      }).toList(),
-    );
-
-    emit(currentState.copyWith(chapter: updatedChapter));
-
-    await courseRepository.updateChapter(updatedChapter);
-  }
-
-  void _onLoadChapter(LoadChapter event, Emitter<ChapterState> emit) {
-    emit(
-      state.copyWith(
-        chapter: event.chapter,
-        isCompleted: event.chapter.isCompleted,
-      ),
-    );
+  Future<void> _onCompleted(Completed event, Emitter<ChapterState> emit) async {
+    emit(state.copyWith(isCompleted: true));
   }
 
   @override
@@ -128,7 +154,47 @@ class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
     return super.close();
   }
 
-  Future<void> _onCompleted(Completed event, Emitter<ChapterState> emit) async {
-    emit(state.copyWith(isCompleted: true));
+  Future<void> _onDownloadAudio(
+    DownloadAudio event,
+    Emitter<ChapterState> emit,
+  ) async {
+    emit(state.copyWith(isLoadingAudio: true));
+    emit(state.copyWith(isAudioExists: false));
+    //debugPrint("1");
+    try {
+      final chapter = state.chapter;
+      //debugPrint("2");
+      if (chapter != null) {
+        //debugPrint("3");
+        final courses = await courseRepository.getCourses();
+        final course = courses.firstWhere((c) => c.id == chapter.courseId);
+        final language = AppLanguages.languages.firstWhere(
+          (lang) => lang.name == course.language,
+        );
+        //debugPrint("4");
+        final dir = await getApplicationDocumentsDirectory();
+        final audioFilePath = "${dir.path}/${state.chapter!.id}.mp3";
+        final apiResultAudio = await ttsRepository.generateSpeech(
+          chapter.transcript,
+          language.languageCode,
+          language.voiceName,
+          chapter.id,
+        );
+        //debugPrint("5");
+        if (apiResultAudio is Failure) {
+          //debugPrint("6: ${(apiResultAudio as Failure).message}");
+          emit(state.copyWith(isAudioExists: false, isLoadingAudio: false));
+          return;
+        } else {
+          //debugPrint("7");
+          await _audioPlayer.setFilePath(audioFilePath);
+          //debugPrint("9");
+          emit(state.copyWith(isAudioExists: true));
+        }
+      }
+    } catch (e) {
+      //debugPrint("8: ${e.toString()}");
+      emit(state.copyWith(isAudioExists: false, isLoadingAudio: false));
+    }
   }
 }

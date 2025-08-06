@@ -67,6 +67,7 @@ class CoursePage extends StatelessWidget {
                             context: context,
                             builder: (context) {
                               return AlertDialog(
+                                backgroundColor: AppColors.backgroundColor,
                                 title: Text('Delete Course'),
                                 content: Text(
                                   'Are you sure you want to delete this course?',

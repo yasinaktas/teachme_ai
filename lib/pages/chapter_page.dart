@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_bloc.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_event.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_state.dart';
@@ -28,33 +26,7 @@ class ChapterPageState extends State<ChapterPage> {
   void initState() {
     super.initState();
     context.read<ChapterBloc>().add(LoadChapter(widget.chapter));
-    _loadAudioFromFile();
-  }
-
-  Future<void> _loadAudioFromFile() async {
-    try {
-      final dir = await getApplicationDocumentsDirectory();
-      final audioFilePath = "${dir.path}/${widget.chapter.id}.mp3";
-      if (await File(audioFilePath).exists()) {
-        if (!mounted) return;
-        context.read<ChapterBloc>().add(LoadAudio(audioFilePath));
-      } else {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              "Audio file not found for chapter ${widget.chapter.id}",
-            ),
-          ),
-        );
-        throw Exception("Audio file not found");
-      }
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Error loading audio: $e")));
-    }
+    context.read<ChapterBloc>().add(LoadAudio());
   }
 
   Duration _durationFromString(String timeString) {
@@ -102,7 +74,6 @@ class ChapterPageState extends State<ChapterPage> {
               final totalSeconds = _durationFromString(
                 state.totalTime,
               ).inSeconds.toDouble();
-
               return Card(
                 color: AppColors.blackColor,
                 margin: EdgeInsets.zero,
@@ -113,15 +84,21 @@ class ChapterPageState extends State<ChapterPage> {
                   children: [
                     const SizedBox(width: 24),
                     Text(
-                      state.currentTime,
+                      state.isAudioExists ? state.currentTime : "--:--",
                       style: const TextStyle(color: Colors.white),
                     ),
                     const SizedBox(width: 0),
                     Expanded(
                       child: Slider(
                         min: 0,
-                        max: totalSeconds > 0 ? totalSeconds : 1,
-                        value: currentSeconds.clamp(0, totalSeconds),
+                        max: !state.isAudioExists
+                            ? 1
+                            : totalSeconds > 0
+                            ? totalSeconds
+                            : 1,
+                        value: state.isAudioExists
+                            ? currentSeconds.clamp(0, totalSeconds)
+                            : 0,
                         inactiveColor: Colors.white,
                         activeColor: AppColors.primaryColor,
                         thumbColor: AppColors.primaryColor,
@@ -135,13 +112,56 @@ class ChapterPageState extends State<ChapterPage> {
                     ),
                     const SizedBox(width: 0),
                     Text(
-                      state.totalTime,
+                      state.isAudioExists ? state.totalTime : "--:--",
                       style: const TextStyle(color: Colors.white),
                     ),
                     const SizedBox(width: 0),
-                    IconButton(
+                    state.isAudioExists
+                        ? IconButton(
+                            onPressed: () {
+                              if (state.isPlaying) {
+                                context.read<ChapterBloc>().add(PauseAudio());
+                              } else {
+                                context.read<ChapterBloc>().add(PlayAudio());
+                              }
+                            },
+                            icon: Icon(
+                              state.isPlaying ? Icons.pause : Icons.play_arrow,
+                              color: Colors.white,
+                              size: 32,
+                            ),
+                          )
+                        : state.isLoadingAudio
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                            ),
+                            child: SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: const CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            ),
+                          )
+                        : IconButton(
+                            icon: const Icon(
+                              Icons.download,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                            onPressed: () {
+                              context.read<ChapterBloc>().add(DownloadAudio());
+                            },
+                          ),
+                    /*IconButton(
                       icon: Icon(
-                        state.isPlaying ? Icons.pause : Icons.play_arrow,
+                        !state.isAudioExists
+                            ? Icons.download
+                            : state.isPlaying
+                            ? Icons.pause
+                            : Icons.play_arrow,
                         color: Colors.white,
                         size: 32,
                       ),
@@ -152,7 +172,7 @@ class ChapterPageState extends State<ChapterPage> {
                           context.read<ChapterBloc>().add(PlayAudio());
                         }
                       },
-                    ),
+                    ),*/
                     const SizedBox(width: 8),
                   ],
                 ),
@@ -197,23 +217,10 @@ class ChapterPageState extends State<ChapterPage> {
               margin: EdgeInsets.zero,
               child: Html(data: chapter.content).withPadding(
                 EdgeInsets.symmetric(
-                  horizontal: AppDimensions.pagePadding,
-                  vertical: AppDimensions.pagePadding,
+                  horizontal: AppDimensions.pagePadding / 2,
+                  vertical: AppDimensions.pagePadding / 2,
                 ),
               ),
-              /*Text(
-                    chapter.content,
-                    style: GoogleFonts.quicksand(
-                      fontSize: 14,
-                      color: AppColors.blackColor,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ).withPadding(
-                    EdgeInsets.symmetric(
-                      horizontal: AppDimensions.pagePadding,
-                      vertical: AppDimensions.pagePadding,
-                    ),
-                  ),*/
             ).withPadding(),
           ),
           if (chapter.questions.isNotEmpty)

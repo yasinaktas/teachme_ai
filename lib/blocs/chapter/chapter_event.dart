@@ -8,8 +8,8 @@ class LoadChapter extends ChapterEvent {
 }
 
 class LoadAudio extends ChapterEvent {
-  final String audioFilePath;
-  LoadAudio(this.audioFilePath);
+  /*final String audioFilePath;
+  LoadAudio(this.audioFilePath);*/
 }
 
 class PlayAudio extends ChapterEvent {}
@@ -43,5 +43,6 @@ class AnswerToggle extends ChapterEvent {
   AnswerToggle(this.questionId, this.answerId, this.isSelected);
 }
 
-class Completed extends ChapterEvent {
-}
+class Completed extends ChapterEvent {}
+
+class DownloadAudio extends ChapterEvent {}

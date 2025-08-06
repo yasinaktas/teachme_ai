@@ -54,6 +54,7 @@ class MainApp extends StatelessWidget {
     HiveSettingsRepository settingsRepository = HiveSettingsRepository(
       HiveSettingsService(),
     );
+    GoogleTtsRepository ttsRepository = GoogleTtsRepository(GoogleTtsService());
     return MultiBlocProvider(
       providers: [
         BlocProvider<CourseBloc>(
@@ -62,21 +63,26 @@ class MainApp extends StatelessWidget {
                 ..add(CourseFetchEvent()),
         ),
         BlocProvider<AuthBloc>(
-          create: (context) =>
-              AuthBloc(FirebaseAuth.instance, FirebaseFirestore.instance,settingsRepository)
-                ..add(AppStarted()),
+          create: (context) => AuthBloc(
+            FirebaseAuth.instance,
+            FirebaseFirestore.instance,
+            settingsRepository,
+          )..add(AppStarted()),
         ),
         BlocProvider<GenerateCourseBloc>(
           create: (context) => GenerateCourseBloc(
             generateCourseRepository: GenerateCourseRepository(
               aiApiService: GeminiApiService(),
             ),
-            ttsRepository: GoogleTtsRepository(GoogleTtsService()),
+            ttsRepository: ttsRepository,
             settingsRepository: settingsRepository,
           ),
         ),
         BlocProvider<ChapterBloc>(
-          create: (context) => ChapterBloc(courseRepository: courseRepository),
+          create: (context) => ChapterBloc(
+            courseRepository: courseRepository,
+            ttsRepository: ttsRepository,
+          ),
         ),
         BlocProvider<SettingsBloc>(
           create: (context) =>

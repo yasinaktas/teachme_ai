@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_event.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_state.dart';
-import 'package:teachme_ai/constants/app_languages.dart';
 import 'package:teachme_ai/dto/dto_chapter_content.dart';
 import 'package:teachme_ai/dto/dto_chapter_questions.dart';
 import 'package:teachme_ai/dto/dto_chapter_transcript.dart';
@@ -339,7 +338,7 @@ class GenerateCourseBloc
     }
   }
 
-  Future<ApiResult<String>> _generateCourseAudio(
+  /*Future<ApiResult<String>> _generateCourseAudio(
     Chapter chapter,
     String transcript,
   ) async {
@@ -352,7 +351,7 @@ class GenerateCourseBloc
       language.voiceName,
       chapter.id,
     );
-  }
+  }*/
 
   Future<void> _onGenerateChapter(
     GenerateChapter event,
@@ -401,6 +400,7 @@ class GenerateCourseBloc
         );
         return;
       }
+      await Future.delayed(const Duration(milliseconds: 350));
       final dtoTranscript = await _generateCourseTranscript(
         chapter,
         title,
@@ -421,6 +421,7 @@ class GenerateCourseBloc
         );
         return;
       }
+      await Future.delayed(const Duration(milliseconds: 350));
       List<Question> questions = [];
       if (state.generateQuestions) {
         final dtoQuestions = await _generateCourseQuestions(
@@ -440,28 +441,13 @@ class GenerateCourseBloc
               },
             ),
           );
-          return;
+        } else {
+          questions = dtoQuestions;
         }
-        questions = dtoQuestions;
       }
-      final dtoAudio = await _generateCourseAudio(
-        chapter,
-        dtoTranscript.transcript,
-      );
-      if (dtoAudio is Failure) {
-        emit(
-          state.copyWith(
-            errorMessage:
-                "Failed to generate audio for ${chapter.title}: ${(dtoAudio as Failure).message}",
-            chapterLoadingStatus: {
-              ...state.chapterLoadingStatus,
-              chapter.id: ChapterStatus(generationResultCode: -4),
-            },
-          ),
-        );
-        return;
-      }
-
+      //await Future.delayed(const Duration(milliseconds: 350));
+      //await _generateCourseAudio(chapter, dtoTranscript.transcript);
+      await Future.delayed(const Duration(milliseconds: 350));
       final generatedChapter = chapter.copyWith(
         content: dtoContent.content,
         transcript: dtoTranscript.transcript,
@@ -532,10 +518,172 @@ class GenerateCourseBloc
       ),
     );
 
+    final title = state.course.title;
+    final language = state.course.language;
+    final subtitles = state.course.chapters.map((c) => c.title).toList();
+
+    for (final chapter in state.course.chapters) {
+      emit(
+        state.copyWith(
+          chapterLoadingStatus: {
+            ...state.chapterLoadingStatus,
+            chapter.id: ChapterStatus(
+              isGenerating: true,
+              isContentGenerated: false,
+              isTranscriptGenerated: false,
+              isQuestionsGenerated: false,
+              isAudioGenerated: false,
+              generationResultCode: 0,
+            ),
+          },
+        ),
+      );
+    }
+
+    for (final chapter in state.course.chapters) {
+      try {
+        final dtoContent = await _generateCourseContent(
+          chapter,
+          title,
+          language,
+          subtitles,
+        );
+        if (dtoContent is Failure<DtoChapterContent>) {
+          debugPrint(
+            "Failed to generate content for ${chapter.title}: ${(dtoContent as Failure).message}",
+          );
+          emit(
+            state.copyWith(
+              errorMessage:
+                  "Failed to generate content for ${chapter.title}: ${(dtoContent as Failure).message}",
+              chapterLoadingStatus: {
+                ...state.chapterLoadingStatus,
+                chapter.id: ChapterStatus(generationResultCode: -1),
+              },
+            ),
+          );
+          return;
+        }
+        await Future.delayed(const Duration(milliseconds: 350));
+        final dtoTranscript = await _generateCourseTranscript(
+          chapter,
+          title,
+          language,
+          subtitles,
+          dtoContent.content,
+        );
+        if (dtoTranscript is Failure<DtoChapterTranscript>) {
+          debugPrint(
+            "Failed to generate transcript for ${chapter.title}: ${(dtoTranscript as Failure).message}",
+          );
+          emit(
+            state.copyWith(
+              errorMessage:
+                  "Failed to generate transcript for ${chapter.title}: ${(dtoTranscript as Failure).message}",
+              chapterLoadingStatus: {
+                ...state.chapterLoadingStatus,
+                chapter.id: ChapterStatus(generationResultCode: -2),
+              },
+            ),
+          );
+          return;
+        }
+        await Future.delayed(const Duration(milliseconds: 350));
+        List<Question> questions = [];
+        if (state.generateQuestions) {
+          final dtoQuestions = await _generateCourseQuestions(
+            chapter,
+            title,
+            language,
+            dtoContent.content,
+          );
+          if (dtoQuestions is Failure<DtoChapterQuestions>) {
+            debugPrint(
+              "Failed to generate questions for ${chapter.title}: ${(dtoQuestions as Failure).message}",
+            );
+          } else {
+            questions = dtoQuestions;
+          }
+        }
+        //await Future.delayed(const Duration(milliseconds: 350));
+        //await _generateCourseAudio(chapter, dtoTranscript.transcript);
+        await Future.delayed(const Duration(milliseconds: 350));
+        final generatedChapter = chapter.copyWith(
+          content: dtoContent.content,
+          transcript: dtoTranscript.transcript,
+          description: dtoContent.chapterShortDescription,
+          questions: questions,
+        );
+
+        final updatedChapters = state.course.chapters.map((c) {
+          return c.id == chapter.id ? generatedChapter : c;
+        }).toList();
+
+        final updatedStatus = {
+          ...state.chapterLoadingStatus,
+          chapter.id: ChapterStatus(
+            isContentGenerated: true,
+            isTranscriptGenerated: true,
+            isQuestionsGenerated: state.generateQuestions,
+            isAudioGenerated: true,
+            generationResultCode: 1,
+          ),
+        };
+
+        final isAllDone = updatedStatus.values.every(
+          (status) => status.generationResultCode == 1,
+        );
+
+        emit(
+          state.copyWith(
+            chapterLoadingStatus: updatedStatus,
+            course: state.course.copyWith(chapters: updatedChapters),
+            isLoadingCourse: !isAllDone,
+            isCourseGenerated: isAllDone,
+          ),
+        );
+      } catch (e) {
+        debugPrint("Error generating chapter ${chapter.title}: $e");
+        emit(
+          state.copyWith(
+            errorMessage: "Failed to generate ${chapter.title}: $e",
+            chapterLoadingStatus: {
+              ...state.chapterLoadingStatus,
+              chapter.id: ChapterStatus(generationResultCode: -1),
+            },
+          ),
+        );
+      }
+    }
+  }
+
+  /*Future<void> _onGenerateCourse(
+    GenerateCourse event,
+    Emitter<GenerateCourseState> emit,
+  ) async {
+    if (state.course.title.isEmpty) {
+      emit(state.copyWith(errorMessage: "Title cannot be empty"));
+      return;
+    }
+
+    if (state.course.chapters.isEmpty) {
+      emit(state.copyWith(errorMessage: "Chapter titles cannot be empty"));
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        isLoadingCourse: true,
+        isCourseGenerated: false,
+        errorMessage: null,
+        lockBottom: true,
+      ),
+    );
+
     for (final chapter in state.course.chapters) {
       add(GenerateChapter(chapter));
     }
-  }
+  }*/
 
   /*Future<void> _onGenerateCourse(
     GenerateCourse event,

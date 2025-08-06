@@ -8,6 +8,7 @@ class ChapterState {
   final String totalTime;
   final bool isPlaying;
   final bool isCompleted;
+  final bool isAudioExists;
 
   ChapterState({
     this.chapter,
@@ -17,6 +18,7 @@ class ChapterState {
     this.totalTime = "00:00",
     this.isPlaying = false,
     this.isCompleted = false,
+    this.isAudioExists = true,
   });
 
   ChapterState copyWith({
@@ -27,6 +29,7 @@ class ChapterState {
     String? totalTime,
     bool? isPlaying,
     bool? isCompleted,
+    bool? isAudioExists,
   }) {
     return ChapterState(
       chapter: chapter ?? this.chapter,
@@ -36,6 +39,7 @@ class ChapterState {
       totalTime: totalTime ?? this.totalTime,
       isPlaying: isPlaying ?? this.isPlaying,
       isCompleted: isCompleted ?? this.isCompleted,
+      isAudioExists: isAudioExists ?? this.isAudioExists,
     );
   }
 }
