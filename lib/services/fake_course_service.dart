@@ -160,4 +160,7 @@ class FakeCourseService implements ICourseService {
       _courses.removeWhere((course) => course.id == courseId);
     });
   }
+  
+  @override
+  Stream<List<Course>> get coursesStream => Stream.value(_courses);
 }

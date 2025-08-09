@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +9,7 @@ import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_languages.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
+import 'package:teachme_ai/widgets/top_banner.dart';
 
 class AddCoursePage extends StatefulWidget {
   const AddCoursePage({super.key});
@@ -105,40 +104,11 @@ class _AddCoursePageState extends State<AddCoursePage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Start learning",
-                            style: GoogleFonts.quicksand(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.secondaryColor,
-                            ),
-                          ),
-                          Text(
-                            "In minutes",
-                            style: GoogleFonts.quicksand(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.blackColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.rotationY(math.pi),
-                        child: Image.asset(
-                          "assets/images/balik.png",
-                          height: 80,
-                        ),
-                      ),
-                    ],
-                  ).withPadding(),
+                  TopBanner(
+                    topText: "Start learning",
+                    bottomText: "In minutes",
+                    imagePath: "assets/images/balik.png",
+                  ),
                   Container(
                     color: AppColors.backgroundColor,
                     child: Column(
@@ -199,6 +169,9 @@ class _AddCoursePageState extends State<AddCoursePage> {
                           },
                           decoration: InputDecoration(
                             hintText: "Enter course title",
+                            hintStyle: TextStyle(
+                              color: AppColors.secondaryColor,
+                            ),
                             contentPadding: EdgeInsets.symmetric(
                               horizontal: AppDimensions.pagePadding,
                             ),
@@ -343,6 +316,9 @@ class _AddCoursePageState extends State<AddCoursePage> {
                           },
                           decoration: InputDecoration(
                             hintText: "Course description",
+                            hintStyle: TextStyle(
+                              color: AppColors.secondaryColor,
+                            ),
                             contentPadding: EdgeInsets.symmetric(
                               horizontal: AppDimensions.pagePadding,
                             ),
@@ -376,6 +352,9 @@ class _AddCoursePageState extends State<AddCoursePage> {
                                 },
                                 decoration: InputDecoration(
                                   hintText: "Add subtitle",
+                                  hintStyle: TextStyle(
+                                    color: AppColors.secondaryColor,
+                                  ),
                                   contentPadding: EdgeInsets.symmetric(
                                     horizontal: AppDimensions.pagePadding,
                                   ),
@@ -414,13 +393,16 @@ class _AddCoursePageState extends State<AddCoursePage> {
                           spacing: 8,
                           runSpacing: 4,
                           onReorder: (oldIndex, newIndex) {
-                            setState(() {
+                            context.read<GenerateCourseBloc>().add(
+                              ReorderChapters(oldIndex, newIndex),
+                            );
+                            /*setState(() {
                               if (oldIndex < newIndex) newIndex -= 1;
                               final item = state.course.chapters.removeAt(
                                 oldIndex,
                               );
                               state.course.chapters.insert(newIndex, item);
-                            });
+                            });*/
                           },
                           children: state.course.chapters.map((chapter) {
                             return Chip(

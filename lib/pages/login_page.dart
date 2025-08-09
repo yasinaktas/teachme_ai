@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 48.0),
+                  const SizedBox(height: 32.0),
                   Text(
                     "Your Email",
                     style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
@@ -55,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       hintText: 'Email',
+                      hintStyle: TextStyle(color: AppColors.secondaryColor),
                     ),
                   ),
                   const SizedBox(height: 16.0),
@@ -79,6 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       hintText: 'Password',
+                      hintStyle: TextStyle(color: AppColors.secondaryColor),
                       suffixIcon: Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: IconButton(
@@ -145,100 +147,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24.0),
-                  Row(
-                    children: [
-                      Expanded(flex: 2, child: Container()),
-                      Expanded(flex: 3, child: Divider()),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Text(
-                          "Or",
-                          style: GoogleFonts.quicksand(
-                            color: AppColors.secondaryColor,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                      Expanded(flex: 3, child: Divider()),
-                      Expanded(flex: 2, child: Container()),
-                    ],
-                  ),
-                  const SizedBox(height: 32.0),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: !isActive ? null : () {},
-                          style: OutlinedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(vertical: 16.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                AppDimensions.textFieldRadius,
-                              ),
-                            ),
-                            side: BorderSide(color: AppColors.secondaryColor),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/google_logo.png',
-                                height: 20.0,
-                                width: 20.0,
-                              ),
-                              const SizedBox(width: 8.0),
-                              Text(
-                                "Login with Google",
-                                style: GoogleFonts.quicksand(
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.blackColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16.0),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: !isActive ? null : () {},
-                          style: OutlinedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(vertical: 16.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                AppDimensions.textFieldRadius,
-                              ),
-                            ),
-                            side: BorderSide(color: AppColors.secondaryColor),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/images/apple_logo.png',
-                                height: 20.0,
-                                width: 20.0,
-                              ),
-                              const SizedBox(width: 8.0),
-                              Text(
-                                "Login with Apple",
-                                style: GoogleFonts.quicksand(
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.blackColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 24.0),
+                  const SizedBox(height: 8.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

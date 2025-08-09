@@ -3,8 +3,7 @@ import 'package:teachme_ai/models/course.dart';
 import 'package:teachme_ai/repositories/i_course_repository.dart';
 import 'package:teachme_ai/services/i_course_service.dart';
 
-class HiveCourseRepository implements ICourseRepository{
-
+class HiveCourseRepository implements ICourseRepository {
   final ICourseService _courseService;
 
   HiveCourseRepository(this._courseService);
@@ -28,10 +27,12 @@ class HiveCourseRepository implements ICourseRepository{
   Future<void> updateCourse(Course course) {
     return _courseService.updateCourse(course);
   }
-  
+
   @override
   Future<void> deleteCourse(String courseId) {
     return _courseService.deleteCourse(courseId);
   }
 
+  @override
+  Stream<List<Course>> get coursesStream => _courseService.coursesStream;
 }

@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_event.dart';
 import 'package:teachme_ai/blocs/course/course_state.dart';
+import 'package:teachme_ai/models/course.dart';
 import 'package:teachme_ai/repositories/i_course_repository.dart';
 
 class CourseBloc extends Bloc<CourseEvent, CourseState> {
   final ICourseRepository courseRepository;
+  late final StreamSubscription<List<Course>> _coursesSubscription;
 
   CourseBloc({required this.courseRepository})
     : super(CourseState(courses: [], isLoading: false)) {
@@ -16,6 +18,17 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
     on<CourseUpdateEvent>(_onUpdateCourse);
     on<CourseSearchEvent>(_onSearchCourses);
     on<CourseDeleteEvent>(_onDeleteCourse);
+    on<CoursesUpdatedEvent>(_onCoursesUpdated);
+
+    _coursesSubscription = courseRepository.coursesStream.listen((courses) {
+      add(CoursesUpdatedEvent(courses));
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _coursesSubscription.cancel();
+    return super.close();
   }
 
   Future<void> _onFetchCourses(
@@ -45,7 +58,7 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
     emit(state.copyWith(isLoading: true));
     try {
       await courseRepository.addCourse(event.course);
-      add(CourseFetchEvent());
+      //add(CourseFetchEvent());
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
@@ -79,7 +92,7 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
     emit(state.copyWith(isLoading: true));
     try {
       await courseRepository.updateCourse(event.course);
-      add(CourseFetchEvent());
+      //add(CourseFetchEvent());
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
@@ -109,13 +122,43 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
     }
   }
 
-  Future<void> _onDeleteCourse(CourseDeleteEvent event, Emitter<CourseState> emit) async{
+  Future<void> _onDeleteCourse(
+    CourseDeleteEvent event,
+    Emitter<CourseState> emit,
+  ) async {
     emit(state.copyWith(isLoading: true));
     try {
       await courseRepository.deleteCourse(event.courseId);
-      add(CourseFetchEvent());
+      //add(CourseFetchEvent());
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
+  }
+
+  Future<void> _onCoursesUpdated(
+    CoursesUpdatedEvent event,
+    Emitter<CourseState> emit,
+  ) async {
+    final searchText = state.searchText;
+    final filtered = searchText.isEmpty
+        ? event.courses
+        : event.courses
+              .where(
+                (c) =>
+                    c.title.toLowerCase().contains(searchText.toLowerCase()) ||
+                    c.description.toLowerCase().contains(
+                      searchText.toLowerCase(),
+                    ),
+              )
+              .toList();
+
+    emit(
+      state.copyWith(
+        courses: event.courses,
+        filteredCourses: filtered,
+        isLoading: false,
+        error: null,
+      ),
+    );
   }
 }

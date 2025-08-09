@@ -6,6 +6,7 @@ import 'package:teachme_ai/blocs/auth/auth_event.dart';
 import 'package:teachme_ai/blocs/auth/auth_state.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
+import 'package:teachme_ai/extensions/padding_extension.dart';
 
 class SignupPage extends StatefulWidget {
   final VoidCallback onSwithToLogin;
@@ -38,7 +39,7 @@ class _SignupPageState extends State<SignupPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 48.0),
+                  const SizedBox(height: 32.0),
                   Text(
                     "Your Username",
                     style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
@@ -59,6 +60,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                       ),
                       hintText: 'Username',
+                      hintStyle: TextStyle(color: AppColors.secondaryColor),
                     ),
                   ),
                   const SizedBox(height: 16.0),
@@ -82,6 +84,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                       ),
                       hintText: 'Email',
+                      hintStyle: TextStyle(color: AppColors.secondaryColor),
                     ),
                   ),
                   const SizedBox(height: 16.0),
@@ -106,6 +109,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                       ),
                       hintText: 'Password',
+                      hintStyle: TextStyle(color: AppColors.secondaryColor),
                       suffixIcon: Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: IconButton(
@@ -139,7 +143,7 @@ class _SignupPageState extends State<SignupPage> {
                     children: [
                       Expanded(
                         child: Text(
-                          "8 characters",
+                          "• 8 characters",
                           style: GoogleFonts.quicksand(
                             color: isEightCharacters
                                 ? Colors.green
@@ -150,7 +154,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       Expanded(
                         child: Text(
-                          "Number",
+                          "• Number",
                           style: GoogleFonts.quicksand(
                             color: isNumber
                                 ? Colors.green
@@ -160,13 +164,13 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                       ),
                     ],
-                  ),
+                  ).withPadding(EdgeInsets.only(left: 8.0)),
                   const SizedBox(height: 8.0),
                   Row(
                     children: [
                       Expanded(
                         child: Text(
-                          "Uppercase",
+                          "• Uppercase",
                           style: GoogleFonts.quicksand(
                             color: isUppercase
                                 ? Colors.green
@@ -177,7 +181,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       Expanded(
                         child: Text(
-                          "Special character",
+                          "• Special character",
                           style: GoogleFonts.quicksand(
                             color: isSpecialCharacter
                                 ? Colors.green
@@ -187,46 +191,52 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                       ),
                     ],
-                  ),
+                  ).withPadding(EdgeInsets.only(left: 8.0, top: 4.0)),
                   const SizedBox(height: 32.0),
                   Row(
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: isLoading ? null : () {
-                            final email = _emailController.text.trim();
-                            final password = _passwordController.text.trim();
-                            final username = _usernameController.text.trim();
-            
-                            if (email.isEmpty ||
-                                password.isEmpty ||
-                                username.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("Please fill in all fields"),
-                                ),
-                              );
-                              return;
-                            }
-            
-                            if (!isEightCharacters ||
-                                !isNumber ||
-                                !isUppercase ||
-                                !isSpecialCharacter) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    "Password must meet all requirements",
-                                  ),
-                                ),
-                              );
-                              return;
-                            }
-            
-                            context.read<AuthBloc>().add(
-                              SignUpRequested(email, password, username),
-                            );
-                          },
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  final email = _emailController.text.trim();
+                                  final password = _passwordController.text
+                                      .trim();
+                                  final username = _usernameController.text
+                                      .trim();
+
+                                  if (email.isEmpty ||
+                                      password.isEmpty ||
+                                      username.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          "Please fill in all fields",
+                                        ),
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  if (!isEightCharacters ||
+                                      !isNumber ||
+                                      !isUppercase ||
+                                      !isSpecialCharacter) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          "Password must meet all requirements",
+                                        ),
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  context.read<AuthBloc>().add(
+                                    SignUpRequested(email, password, username),
+                                  );
+                                },
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
                             padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -248,7 +258,7 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 24.0),
+                  const SizedBox(height: 8.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

@@ -155,24 +155,6 @@ class ChapterPageState extends State<ChapterPage> {
                               context.read<ChapterBloc>().add(DownloadAudio());
                             },
                           ),
-                    /*IconButton(
-                      icon: Icon(
-                        !state.isAudioExists
-                            ? Icons.download
-                            : state.isPlaying
-                            ? Icons.pause
-                            : Icons.play_arrow,
-                        color: Colors.white,
-                        size: 32,
-                      ),
-                      onPressed: () {
-                        if (state.isPlaying) {
-                          context.read<ChapterBloc>().add(PauseAudio());
-                        } else {
-                          context.read<ChapterBloc>().add(PlayAudio());
-                        }
-                      },
-                    ),*/
                     const SizedBox(width: 8),
                   ],
                 ),
@@ -208,8 +190,12 @@ class ChapterPageState extends State<ChapterPage> {
           SliverToBoxAdapter(
             child: Card(
               color: AppColors.cardColor,
-              elevation: AppDimensions.cardElevation,
+              elevation: 0,
               shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  color: AppColors.secondaryShadowColor,
+                  width: 0.5,
+                ),
                 borderRadius: BorderRadius.circular(
                   AppDimensions.listCardRadius,
                 ),

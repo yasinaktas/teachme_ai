@@ -7,6 +7,13 @@ class HiveCourseService implements ICourseService {
   final _coursesBox = Hive.box<Course>("courses");
 
   @override
+  Stream<List<Course>> get coursesStream {
+    return _coursesBox.watch().asyncMap((event) {
+      return fetchCourses();
+    });
+  }
+
+  @override
   Future<void> addCourse(Course course) async {
     await _coursesBox.put(course.id, course);
   }

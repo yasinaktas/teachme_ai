@@ -14,6 +14,7 @@ import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/widgets/course_card.dart';
 import 'package:teachme_ai/widgets/subscription_banner.dart';
+import 'package:teachme_ai/widgets/top_banner.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -27,14 +28,6 @@ class HomePage extends StatelessWidget {
             previous.isCourseGenerated != current.isCourseGenerated;
       },
       listener: (context, state) {
-        /*if (state.errorMessage != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.errorMessage!),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }*/
         if (state.isCourseGenerated) {
           context.read<GenerateCourseBloc>().add(Clear());
           context.read<CourseBloc>().add(CourseAddEvent(state.course));
@@ -96,39 +89,18 @@ class HomePage extends StatelessWidget {
                     ).withPadding(),
                   ),
                 SliverToBoxAdapter(
-                  child: Row(
-                    children: [
-                      BlocBuilder<SettingsBloc, SettingsState>(
-                        builder: (context, state) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Hello,",
-                                style: GoogleFonts.quicksand(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.secondaryColor,
-                                ),
-                              ),
-                              Text(
-                                state.username.isNotEmpty
-                                    ? state.username
-                                    : "Guest",
-                                style: GoogleFonts.quicksand(
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.blackColor,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                      const Spacer(),
-                      Image.asset("assets/images/panda3.png", height: 80),
-                    ],
-                  ).withPadding(),
+                  child: BlocBuilder<SettingsBloc, SettingsState>(
+                    builder: (context, state) {
+                      return TopBanner(
+                        topText: "Hello,",
+                        bottomText: state.username.isNotEmpty
+                            ? state.username
+                            : "Guest",
+                        imagePath: "assets/images/panda3.png",
+                        leftToRight: true,
+                      );
+                    },
+                  ),
                 ),
                 SliverToBoxAdapter(
                   child: Card(

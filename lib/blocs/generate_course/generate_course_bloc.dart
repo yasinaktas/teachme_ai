@@ -362,6 +362,7 @@ class GenerateCourseBloc
     final title = state.course.title;
     final language = state.course.language;
     final subtitles = state.course.chapters.map((c) => c.title).toList();
+    const int waitTime = 1000;
     debugPrint(
       "Generating chapter: ${chapter.title}, title: $title, language: $language, subtitles: $subtitles",
     );
@@ -401,7 +402,7 @@ class GenerateCourseBloc
         );
         return;
       }
-      await Future.delayed(const Duration(milliseconds: 350));
+      await Future.delayed(Duration(milliseconds: waitTime));
       final dtoTranscript = await _generateCourseTranscript(
         chapter,
         title,
@@ -422,7 +423,7 @@ class GenerateCourseBloc
         );
         return;
       }
-      await Future.delayed(const Duration(milliseconds: 350));
+      await Future.delayed(Duration(milliseconds: waitTime));
       List<Question> questions = [];
       if (state.generateQuestions) {
         final dtoQuestions = await _generateCourseQuestions(
@@ -446,9 +447,9 @@ class GenerateCourseBloc
           questions = dtoQuestions;
         }
       }
-      //await Future.delayed(const Duration(milliseconds: 350));
+      //await Future.delayed(Duration(milliseconds: waitTime));
       //await _generateCourseAudio(chapter, dtoTranscript.transcript);
-      await Future.delayed(const Duration(milliseconds: 350));
+      await Future.delayed(Duration(milliseconds: waitTime));
       final generatedChapter = chapter.copyWith(
         content: dtoContent.content,
         transcript: dtoTranscript.transcript,
@@ -483,6 +484,7 @@ class GenerateCourseBloc
           isCourseGenerated: isAllDone,
         ),
       );
+      await Future.delayed(Duration(milliseconds: waitTime));
     } catch (e) {
       emit(
         state.copyWith(
@@ -500,6 +502,7 @@ class GenerateCourseBloc
     GenerateCourse event,
     Emitter<GenerateCourseState> emit,
   ) async {
+    const int waitTime = 1000; // milliseconds
     if (state.course.title.isEmpty) {
       emit(state.copyWith(errorMessage: "Title cannot be empty"));
       return;
@@ -543,6 +546,7 @@ class GenerateCourseBloc
 
     for (final chapter in state.course.chapters) {
       try {
+        await Future.delayed(Duration(milliseconds: waitTime));
         final dtoContent = await _generateCourseContent(
           chapter,
           title,
@@ -565,7 +569,7 @@ class GenerateCourseBloc
           );
           return;
         }
-        await Future.delayed(const Duration(milliseconds: 350));
+        await Future.delayed(Duration(milliseconds: waitTime));
         final dtoTranscript = await _generateCourseTranscript(
           chapter,
           title,
@@ -589,7 +593,7 @@ class GenerateCourseBloc
           );
           return;
         }
-        await Future.delayed(const Duration(milliseconds: 350));
+        await Future.delayed(Duration(milliseconds: waitTime));
         List<Question> questions = [];
         if (state.generateQuestions) {
           final dtoQuestions = await _generateCourseQuestions(
@@ -606,9 +610,9 @@ class GenerateCourseBloc
             questions = dtoQuestions;
           }
         }
-        //await Future.delayed(const Duration(milliseconds: 350));
+        //await Future.delayed(Duration(milliseconds: waitTime));
         //await _generateCourseAudio(chapter, dtoTranscript.transcript);
-        await Future.delayed(const Duration(milliseconds: 350));
+        await Future.delayed(Duration(milliseconds: waitTime));
         final generatedChapter = chapter.copyWith(
           content: dtoContent.content,
           transcript: dtoTranscript.transcript,

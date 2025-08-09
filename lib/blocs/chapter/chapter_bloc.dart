@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
@@ -170,6 +171,7 @@ class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
         );
         final dir = await getApplicationDocumentsDirectory();
         final audioFilePath = "${dir.path}/${state.chapter!.id}.mp3";
+        debugPrint(chapter.transcript);
         final apiResultAudio = await ttsRepository.generateSpeech(
           chapter.transcript,
           language.languageCode,

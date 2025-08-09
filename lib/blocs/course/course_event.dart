@@ -29,3 +29,8 @@ class CourseSearchEvent extends CourseEvent {
   final String searchText;
   CourseSearchEvent(this.searchText);
 }
+
+class CoursesUpdatedEvent extends CourseEvent {
+  final List<Course> courses;
+  CoursesUpdatedEvent(this.courses);
+}

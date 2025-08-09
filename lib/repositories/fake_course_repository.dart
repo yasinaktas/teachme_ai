@@ -9,12 +9,12 @@ class FakeCourseRepository implements ICourseRepository {
   FakeCourseRepository({required this.courseService});
 
   @override
-  Future<void> addCourse(Course course) async{
+  Future<void> addCourse(Course course) async {
     await courseService.addCourse(course);
   }
-  
+
   @override
-  Future<List<Course>> getCourses(){
+  Future<List<Course>> getCourses() {
     return courseService.fetchCourses();
   }
 
@@ -27,9 +27,12 @@ class FakeCourseRepository implements ICourseRepository {
   Future<void> updateCourse(Course course) {
     return courseService.updateCourse(course);
   }
-  
+
   @override
   Future<void> deleteCourse(String courseId) {
     return courseService.deleteCourse(courseId);
   }
+
+  @override
+  Stream<List<Course>> get coursesStream => courseService.coursesStream;
 }

@@ -55,9 +55,8 @@ class MainApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<CourseBloc>(
-          create: (context) =>
-              CourseBloc(courseRepository: courseRepository)
-                ..add(CourseFetchEvent()),
+          create: (context) => CourseBloc(courseRepository: courseRepository)
+          ..add(CourseFetchEvent()),
         ),
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(

@@ -7,6 +7,7 @@ import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/widgets/public_course_card.dart';
+import 'package:teachme_ai/widgets/top_banner.dart';
 
 class PublicCoursesPage extends StatelessWidget {
   const PublicCoursesPage({super.key});
@@ -17,33 +18,12 @@ class PublicCoursesPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
-            child: Row(
-              children: [
-                Image.asset("assets/images/tavsan.png", height: 80),
-                const Spacer(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      "Public courses for",
-                      style: GoogleFonts.quicksand(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.secondaryColor,
-                      ),
-                    ),
-                    Text(
-                      "Subscribers",
-                      style: GoogleFonts.quicksand(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.blackColor,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ).withPadding(),
+            child: TopBanner(
+              topText: "Public courses for",
+              bottomText: "Subscribers",
+              imagePath: "assets/images/tavsan.png",
+              leftToRight: false,
+            ),
           ),
           SliverToBoxAdapter(
             child: Card(

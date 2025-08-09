@@ -6,6 +6,7 @@ import 'package:teachme_ai/blocs/auth/auth_state.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_strings.dart';
+import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/pages/login_page.dart';
 import 'package:teachme_ai/pages/signup_page.dart';
 
@@ -74,23 +75,79 @@ class _AuthPageState extends State<AuthPage>
             body: SafeArea(
               child: Column(
                 children: [
-                  const SizedBox(height: 16.0),
-                  TabBar(
-                    controller: tabController,
-                    dividerHeight: 0,
-                    indicatorSize: TabBarIndicatorSize.tab,
-                    indicatorPadding: EdgeInsets.symmetric(horizontal: 32),
-                    indicatorColor: AppColors.primaryDarkColor,
-                    labelColor: AppColors.primaryDarkColor,
-                    unselectedLabelColor: AppColors.secondaryColor,
-                    labelStyle: GoogleFonts.quicksand(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(AppDimensions.pagePadding),
+                      ),
+                      border: Border.all(color: AppColors.primaryShadowColor),
+                      color: AppColors.primarySurfaceColor,
                     ),
-                    tabs: [
-                      Tab(text: "Log in"),
-                      Tab(text: "Sign up"),
-                    ],
+                    padding: EdgeInsets.symmetric(
+                      horizontal: AppDimensions.pagePadding,
+                      vertical: AppDimensions.pagePadding,
+                    ),
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Hello,",
+                              style: GoogleFonts.quicksand(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.secondaryColor,
+                              ),
+                            ),
+                            Text(
+                              "Welcome",
+                              style: GoogleFonts.quicksand(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.blackColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Image.asset(
+                          "assets/images/panda_welcome.png",
+                          height: 80,
+                        ),
+                      ],
+                    ),
+                  ).withPadding(),
+                  const SizedBox(height: 16.0),
+                  Card(
+                    margin: EdgeInsets.zero,
+                    color: AppColors.cardColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.listCardRadius,
+                      ),
+                    ),
+                    child: TabBar(
+                      controller: tabController,
+                      dividerHeight: 0,
+                      indicator: BoxDecoration(),
+                      labelColor: AppColors.primaryDarkColor,
+                      unselectedLabelColor: AppColors.secondaryColor,
+                      labelStyle: GoogleFonts.quicksand(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      labelPadding: EdgeInsets.zero,
+                      tabs: [
+                        Tab(text: "Login"),
+                        Tab(text: "Register"),
+                      ],
+                    ),
+                  ).withPadding(
+                    EdgeInsets.symmetric(
+                      horizontal: AppDimensions.pagePadding,
+                      vertical: 8.0,
+                    ),
                   ),
                   Expanded(
                     child: TabBarView(
