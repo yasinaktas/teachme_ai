@@ -5,7 +5,7 @@ import 'package:teachme_ai/constants/app_strings.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/models/navigation_item.dart';
 import 'package:teachme_ai/pages/drawer_content.dart';
-import 'package:teachme_ai/pages/home_page.dart';
+import 'package:teachme_ai/pages/home/home_page.dart';
 import 'package:teachme_ai/pages/public_courses_page.dart';
 import 'package:teachme_ai/widgets/add_button.dart';
 import 'package:teachme_ai/widgets/custom_bottom_navigation_bar.dart';

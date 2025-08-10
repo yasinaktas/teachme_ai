@@ -48,83 +48,94 @@ class _AddCoursePageState extends State<AddCoursePage> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
+    return BlocListener<GenerateCourseBloc, GenerateCourseState>(
+      listenWhen: (previous, current) {
+        return previous.isCourseGenerated != current.isCourseGenerated;
       },
-      child: Scaffold(
-        appBar: AppBar(
-          scrolledUnderElevation: 0,
-          centerTitle: true,
-          title: Text("New Course", style: AppStyles.textStylePageTitle),
-          actions: [
-            BlocBuilder<GenerateCourseBloc, GenerateCourseState>(
-              buildWhen: (previous, current) {
-                return previous.chapterLoadingStatus !=
-                        current.chapterLoadingStatus ||
-                    previous.isLoadingCourse != current.isLoadingCourse;
-              },
-              builder: (context, state) {
-                bool isLoading = state.chapterLoadingStatus.values.any(
-                  (status) => status.isGenerating,
-                );
-                return Visibility(
-                  visible: isLoading,
-                  child: CircularProgress(),
-                );
-              },
-            ),
-            SizedBox(width: AppDimensions.pagePadding),
-          ],
-        ),
-        body: Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).padding.bottom,
+      listener: (context, state) {
+        if (state.isCourseGenerated) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            scrolledUnderElevation: 0,
+            centerTitle: true,
+            title: Text("New Course", style: AppStyles.textStylePageTitle),
+            actions: [
+              BlocBuilder<GenerateCourseBloc, GenerateCourseState>(
+                buildWhen: (previous, current) {
+                  return previous.chapterLoadingStatus !=
+                          current.chapterLoadingStatus ||
+                      previous.isLoadingCourse != current.isLoadingCourse;
+                },
+                builder: (context, state) {
+                  bool isLoading = state.chapterLoadingStatus.values.any(
+                    (status) => status.isGenerating,
+                  );
+                  return Visibility(
+                    visible: isLoading,
+                    child: CircularProgress(),
+                  );
+                },
+              ),
+              SizedBox(width: AppDimensions.pagePadding),
+            ],
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TopBanner(
-                  topText: "Start learning",
-                  bottomText: "In minutes",
-                  imagePath: "assets/images/balik.png",
-                ),
-                Text(
-                  "Language",
-                  style: AppStyles.textStyleTitleStrong,
-                ).withPadding(),
-                const LanguageSelector(),
-                Text(
-                  "Title",
-                  style: AppStyles.textStyleTitleStrong,
-                ).withPadding(),
-                CourseTitleInput(controller: _titleController),
-                const CourseNext(),
-                const SizedBox(height: 16),
-                const DividerWithText(title: "Continue"),
-                Text(
-                  "Description",
-                  style: AppStyles.textStyleTitleStrong,
-                ).withPadding(),
-                CourseDescriptionInput(controller: _descriptionController),
-                Text(
-                  "Subtitles",
-                  style: AppStyles.textStyleTitleStrong,
-                ).withPadding(),
-                CourseSubtitleInput(controller: _subtitleController),
-                const CourseGeneratedSubtitles(),
-                Text(
-                  "Questions",
-                  style: AppStyles.textStyleTitleStrong,
-                ).withPadding(),
-                const CourseGenerateQuestionsToggle(),
-                const CourseProgress(),
-                const SizedBox(height: 16),
-                const CourseBottomButtons(),
-                const SizedBox(height: 16),
-                SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
-              ],
+          body: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).padding.bottom,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TopBanner(
+                    topText: "Start learning",
+                    bottomText: "In minutes",
+                    imagePath: "assets/images/balik.png",
+                  ),
+                  Text(
+                    "Language",
+                    style: AppStyles.textStyleTitleStrong,
+                  ).withPadding(),
+                  const LanguageSelector(),
+                  Text(
+                    "Title",
+                    style: AppStyles.textStyleTitleStrong,
+                  ).withPadding(),
+                  CourseTitleInput(controller: _titleController),
+                  const CourseNext(),
+                  const SizedBox(height: 16),
+                  const DividerWithText(title: "Continue"),
+                  Text(
+                    "Description",
+                    style: AppStyles.textStyleTitleStrong,
+                  ).withPadding(),
+                  CourseDescriptionInput(controller: _descriptionController),
+                  Text(
+                    "Subtitles",
+                    style: AppStyles.textStyleTitleStrong,
+                  ).withPadding(),
+                  CourseSubtitleInput(controller: _subtitleController),
+                  const CourseGeneratedSubtitles(),
+                  Text(
+                    "Questions",
+                    style: AppStyles.textStyleTitleStrong,
+                  ).withPadding(),
+                  const CourseGenerateQuestionsToggle(),
+                  const CourseProgress(),
+                  const SizedBox(height: 16),
+                  const CourseBottomButtons(),
+                  const SizedBox(height: 16),
+                  SizedBox(height: MediaQuery.of(context).padding.bottom + 16),
+                ],
+              ),
             ),
           ),
         ),
