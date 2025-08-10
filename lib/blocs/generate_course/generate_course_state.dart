@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:teachme_ai/models/chapter_status.dart';
 import 'package:teachme_ai/models/course.dart';
 
-class GenerateCourseState {
+class GenerateCourseState extends Equatable {
   final Course course;
   final String? subtitle;
   final bool generateQuestions;
@@ -13,7 +14,7 @@ class GenerateCourseState {
   final bool isCourseGenerated;
   final String? errorMessage;
 
-  GenerateCourseState({
+  const GenerateCourseState({
     required this.course,
     this.subtitle,
     this.generateQuestions = false,
@@ -52,6 +53,20 @@ class GenerateCourseState {
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    course,
+    subtitle,
+    generateQuestions,
+    lockTop,
+    lockBottom,
+    isLoadingChapterTitles,
+    isLoadingCourse,
+    chapterLoadingStatus,
+    isCourseGenerated,
+    errorMessage,
+  ];
 }
 
 /*class GenerateCourseState {

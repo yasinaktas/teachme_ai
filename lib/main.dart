@@ -15,7 +15,7 @@ import 'package:teachme_ai/blocs/settings/settings_event.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/firebase_options.dart';
 import 'package:teachme_ai/models/chapter.dart';
-import 'package:teachme_ai/pages/add_course_page.dart';
+import 'package:teachme_ai/pages/generate_course/add_course_page.dart';
 import 'package:teachme_ai/pages/auth_page.dart';
 import 'package:teachme_ai/pages/chapter_page.dart';
 import 'package:teachme_ai/pages/course_page.dart';

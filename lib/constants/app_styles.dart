@@ -26,6 +26,15 @@ class AppStyles {
     size: AppDimensions.smallFontSize,
     color: AppColors.primaryColor,
   );
+  static final textStyleNormalPrimaryDark = _base(
+    size: AppDimensions.normalFontSize,
+    color: AppColors.primaryDarkColor,
+  );
+  static final textStyleLargePrimary = _base(
+    size: AppDimensions.largeFontSize,
+    color: AppColors.primaryColor,
+  );
+
   static final textStyleSmallStrong = _base(
     size: AppDimensions.smallFontSize,
     color: AppColors.textColorStrong,
@@ -96,5 +105,11 @@ class AppStyles {
     size: AppDimensions.titleFontSize,
     color: AppColors.textColorOnSurface,
     weight: FontWeight.bold,
+  );
+
+  static final textStylePageTitle = _base(
+    size: AppDimensions.pageTitleFontSize,
+    color: AppColors.textColorStrong,
+    weight: FontWeight.w500,
   );
 }

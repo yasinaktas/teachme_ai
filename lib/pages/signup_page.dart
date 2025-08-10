@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:teachme_ai/blocs/auth/auth_bloc.dart';
 import 'package:teachme_ai/blocs/auth/auth_event.dart';
 import 'package:teachme_ai/blocs/auth/auth_state.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
+import 'package:teachme_ai/constants/app_styles.dart';
+import 'package:teachme_ai/extensions/expanded_extension.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
+import 'package:teachme_ai/widgets/app_elevated_button.dart';
+import 'package:teachme_ai/widgets/app_text_field.dart';
 
 class SignupPage extends StatefulWidget {
   final VoidCallback onSwithToLogin;
@@ -20,7 +23,6 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _isPasswordVisible = false;
   bool isEightCharacters = false;
   bool isNumber = false;
   bool isUppercase = false;
@@ -30,8 +32,11 @@ class _SignupPageState extends State<SignupPage> {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         final isLoading = state is AuthLoading;
-        return Scaffold(
-          body: SingleChildScrollView(
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppDimensions.pagePadding,
@@ -40,93 +45,31 @@ class _SignupPageState extends State<SignupPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 32.0),
-                  Text(
-                    "Your Username",
-                    style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
-                  ),
+                  Text("Your Username", style: AppStyles.textStyleNormalStrong),
                   const SizedBox(height: 8.0),
-                  TextField(
-                    enabled: !isLoading,
+                  AppTextField(
                     controller: _usernameController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 12.0,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          AppDimensions.textFieldRadius,
-                        ),
-                      ),
-                      hintText: 'Username',
-                      hintStyle: TextStyle(color: AppColors.secondaryColor),
-                    ),
+                    hintText: "Username",
+                    isEnabled: !isLoading,
                   ),
                   const SizedBox(height: 16.0),
-                  Text(
-                    "Your Email",
-                    style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
-                  ),
+                  Text("Your Email", style: AppStyles.textStyleNormalStrong),
                   const SizedBox(height: 8.0),
-                  TextField(
-                    enabled: !isLoading,
+                  AppTextField(
                     controller: _emailController,
+                    hintText: "Email",
+                    isEnabled: !isLoading,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 12.0,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          AppDimensions.textFieldRadius,
-                        ),
-                      ),
-                      hintText: 'Email',
-                      hintStyle: TextStyle(color: AppColors.secondaryColor),
-                    ),
                   ),
                   const SizedBox(height: 16.0),
-                  Text(
-                    "Your Password",
-                    style: GoogleFonts.quicksand(fontWeight: FontWeight.bold),
-                  ),
+                  Text("Your Password", style: AppStyles.textStyleNormalStrong),
                   const SizedBox(height: 8.0),
-                  TextField(
-                    enabled: !isLoading,
+                  AppTextField(
                     controller: _passwordController,
+                    hintText: "Password",
+                    isPassword: true,
+                    isEnabled: !isLoading,
                     keyboardType: TextInputType.visiblePassword,
-                    obscureText: !_isPasswordVisible,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 12.0,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          AppDimensions.textFieldRadius,
-                        ),
-                      ),
-                      hintText: 'Password',
-                      hintStyle: TextStyle(color: AppColors.secondaryColor),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
-                          icon: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: AppColors.secondaryShadowColor,
-                          ),
-                        ),
-                      ),
-                    ),
                     onChanged: (value) {
                       setState(() {
                         isEightCharacters = value.length >= 8;
@@ -144,130 +87,96 @@ class _SignupPageState extends State<SignupPage> {
                       Expanded(
                         child: Text(
                           "• 8 characters",
-                          style: GoogleFonts.quicksand(
+                          style: AppStyles.textStyleNormalWeak.copyWith(
                             color: isEightCharacters
                                 ? Colors.green
                                 : AppColors.secondaryColor,
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                       Expanded(
                         child: Text(
                           "• Number",
-                          style: GoogleFonts.quicksand(
+                          style: AppStyles.textStyleNormalWeak.copyWith(
                             color: isNumber
                                 ? Colors.green
                                 : AppColors.secondaryColor,
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                     ],
-                  ).withPadding(EdgeInsets.only(left: 8.0)),
+                  ).withPadding(const EdgeInsets.only(left: 8.0)),
                   const SizedBox(height: 8.0),
                   Row(
                     children: [
                       Expanded(
                         child: Text(
                           "• Uppercase",
-                          style: GoogleFonts.quicksand(
+                          style: AppStyles.textStyleNormalWeak.copyWith(
                             color: isUppercase
                                 ? Colors.green
                                 : AppColors.secondaryColor,
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                       Expanded(
                         child: Text(
                           "• Special character",
-                          style: GoogleFonts.quicksand(
+                          style: AppStyles.textStyleNormalWeak.copyWith(
                             color: isSpecialCharacter
                                 ? Colors.green
                                 : AppColors.secondaryColor,
-                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                     ],
-                  ).withPadding(EdgeInsets.only(left: 8.0, top: 4.0)),
+                  ).withPadding(const EdgeInsets.only(left: 8.0, top: 4.0)),
                   const SizedBox(height: 32.0),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: isLoading
-                              ? null
-                              : () {
-                                  final email = _emailController.text.trim();
-                                  final password = _passwordController.text
-                                      .trim();
-                                  final username = _usernameController.text
-                                      .trim();
+                  AppElevatedButton(
+                    isActive: !isLoading,
+                    text: "Register",
+                    backgroundColor: AppColors.primaryDarkColor,
+                    radius: AppDimensions.buttonRadiusMedium,
+                    onPressed: () {
+                      final email = _emailController.text.trim();
+                      final password = _passwordController.text.trim();
+                      final username = _usernameController.text.trim();
 
-                                  if (email.isEmpty ||
-                                      password.isEmpty ||
-                                      username.isEmpty) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          "Please fill in all fields",
-                                        ),
-                                      ),
-                                    );
-                                    return;
-                                  }
+                      if (email.isEmpty ||
+                          password.isEmpty ||
+                          username.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Please fill in all fields")),
+                        );
+                        return;
+                      }
 
-                                  if (!isEightCharacters ||
-                                      !isNumber ||
-                                      !isUppercase ||
-                                      !isSpecialCharacter) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          "Password must meet all requirements",
-                                        ),
-                                      ),
-                                    );
-                                    return;
-                                  }
-
-                                  context.read<AuthBloc>().add(
-                                    SignUpRequested(email, password, username),
-                                  );
-                                },
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            padding: EdgeInsets.symmetric(vertical: 16.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                AppDimensions.textFieldRadius,
-                              ),
-                            ),
-                            backgroundColor: AppColors.primaryDarkColor,
-                          ),
-                          child: Text(
-                            "Register",
-                            style: GoogleFonts.quicksand(
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                      if (!isEightCharacters ||
+                          !isNumber ||
+                          !isUppercase ||
+                          !isSpecialCharacter) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "Password must meet all requirements",
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
+                        );
+                        return;
+                      }
+
+                      context.read<AuthBloc>().add(
+                        SignUpRequested(email, password, username),
+                      );
+                    },
+                  ).asExpanded(),
                   const SizedBox(height: 8.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         "Have an account?",
-                        style: GoogleFonts.quicksand(
-                          color: AppColors.secondaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: AppStyles.textStyleNormalLight,
                       ),
                       TextButton(
                         onPressed: () {
@@ -275,10 +184,7 @@ class _SignupPageState extends State<SignupPage> {
                         },
                         child: Text(
                           "Log in",
-                          style: GoogleFonts.quicksand(
-                            color: AppColors.primaryDarkColor,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: AppStyles.textStyleNormalPrimaryDark,
                         ),
                       ),
                     ],

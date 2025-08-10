@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:teachme_ai/blocs/course/course_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_state.dart';
-import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
+import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
+import 'package:teachme_ai/extensions/sliver_box_extension.dart';
 import 'package:teachme_ai/widgets/public_course_card.dart';
+import 'package:teachme_ai/widgets/search_card.dart';
 import 'package:teachme_ai/widgets/top_banner.dart';
 
 class PublicCoursesPage extends StatelessWidget {
@@ -17,58 +18,20 @@ class PublicCoursesPage extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(
-            child: TopBanner(
-              topText: "Public courses for",
-              bottomText: "Subscribers",
-              imagePath: "assets/images/tavsan.png",
-              leftToRight: false,
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Card(
-              margin: EdgeInsets.zero,
-              color: AppColors.cardColor,
-              elevation: AppDimensions.cardElevation,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(
-                  AppDimensions.searchBarRadius,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 2.0,
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.search, color: AppColors.secondaryColor),
-                    hintText: 'Search public courses',
-                    hintStyle: TextStyle(
-                      color: AppColors.secondaryColor,
-                      fontSize: 14,
-                    ),
-                    labelStyle: TextStyle(
-                      color: AppColors.secondaryColor,
-                      fontSize: 14,
-                    ),
-
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-            ).withPadding(),
-          ),
-          SliverToBoxAdapter(
-            child: Text(
-              "Public Courses",
-              style: GoogleFonts.quicksand(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
-            ).withPadding(),
-          ),
+          TopBanner(
+            topText: "Public courses for",
+            bottomText: "Subscribers",
+            imagePath: "assets/images/tavsan.png",
+            leftToRight: false,
+          ).asSliverBox(),
+          SearchCard(
+            hintText: "Search public courses",
+            onSearchChanged: (value) {},
+          ).withPadding().asSliverBox(),
+          Text(
+            "Public Courses",
+            style: AppStyles.textStyleTitleStrong,
+          ).withPadding().asSliverBox(),
           BlocBuilder<CourseBloc, CourseState>(
             builder: (context, state) {
               if (state.isLoading) {
@@ -92,7 +55,7 @@ class PublicCoursesPage extends StatelessWidget {
                   child: Center(
                     child: Text(
                       'No courses available',
-                      style: TextStyle(color: AppColors.secondaryColor),
+                      style: AppStyles.textStyleNormal,
                     ),
                   ),
                 );
@@ -115,13 +78,11 @@ class PublicCoursesPage extends StatelessWidget {
               }
             },
           ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height:
-                  MediaQuery.of(context).padding.bottom +
-                  AppDimensions.pagePadding,
-            ),
-          ),
+          SizedBox(
+            height:
+                MediaQuery.of(context).padding.bottom +
+                AppDimensions.pagePadding,
+          ).asSliverBox(),
         ],
       ),
     );

@@ -7,9 +7,15 @@ class AppDimensions {
   static const double listCardElevation = 0.5;
   static const double textFieldRadius = 12.0;
   static const double stepButtonRadius = 4.0;
-  static const double buttonHeight = 44.0;
 
+  static const double buttonHeight = 48.0;
+  static const double textFieldHeight = 52.0;
   static const double cardHeightMin = 56.0;
+
+  static const double buttonRadiusTiny = 4.0;
+  static const double buttonRadiusSmall = 8.0;
+  static const double buttonRadiusMedium = 12.0;
+  static const double buttonRadiusLarge = 16.0;
 
   static const double radiusTiny = 4.0;
   static const double radiusSmall = 8.0;
@@ -22,6 +28,7 @@ class AppDimensions {
   static const double normalFontSize = 14.0;
   static const double largeFontSize = 16.0;
   static const double titleFontSize = 18.0;
+  static const double pageTitleFontSize = 22.0;
   static const double headerFontSize = 28.0;
   static const double iconSizeSmall = 20.0;
   static const double iconSizeMedium = 24.0;

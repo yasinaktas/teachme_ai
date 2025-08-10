@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
+import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_strings.dart';
+import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/models/navigation_item.dart';
 import 'package:teachme_ai/pages/drawer_content.dart';
 import 'package:teachme_ai/pages/home_page.dart';
@@ -32,10 +33,7 @@ class _HostPageState extends State<HostPage> {
       appBar: AppBar(
         scrolledUnderElevation: 0,
         centerTitle: true,
-        title: Text(
-          AppStrings.appName,
-          style: GoogleFonts.quicksand(fontWeight: FontWeight.w500),
-        ),
+        title: Text(AppStrings.appName, style: AppStyles.textStylePageTitle),
         actions: [
           IconButton(
             onPressed: () {
@@ -53,11 +51,13 @@ class _HostPageState extends State<HostPage> {
       extendBody: true,
       bottomNavigationBar: Container(
         margin: EdgeInsets.only(
-          bottom: MediaQuery.of(context).padding.bottom + 16,
+          bottom:
+              MediaQuery.of(context).padding.bottom + AppDimensions.pagePadding,
         ),
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppDimensions.pagePadding,
+        ),
         child: Row(
-          spacing: 16,
           children: [
             Expanded(
               child: SizedBox(
@@ -73,6 +73,7 @@ class _HostPageState extends State<HostPage> {
                 ),
               ),
             ),
+            const SizedBox(width: AppDimensions.pagePadding),
             AddButton(
               onPressed: () {
                 Navigator.pushNamed(context, "/addCourse");
