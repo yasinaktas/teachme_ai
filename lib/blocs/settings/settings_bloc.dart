@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/settings/settings_event.dart';
 import 'package:teachme_ai/blocs/settings/settings_state.dart';
-import 'package:teachme_ai/repositories/i_settings_repository.dart';
+import 'package:teachme_ai/repositories/interfaces/i_settings_repository.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final ISettingsRepository _settingsRepository;

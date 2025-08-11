@@ -5,16 +5,16 @@ import 'package:teachme_ai/blocs/course/course_state.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
-import 'package:teachme_ai/pages/home/widgets/course_card.dart';
+import 'package:teachme_ai/widgets/public_course_card.dart';
 
-class HomeCourseList extends StatelessWidget {
-  const HomeCourseList({super.key});
+class PublicCoursesList extends StatelessWidget {
+  const PublicCoursesList({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CourseBloc, CourseState>(
       builder: (context, state) {
-        if (state.filteredCourses.isEmpty) {
+        if (state.courses.isEmpty) {
           return SliverFillRemaining(
             hasScrollBody: false,
             child: Center(
@@ -32,11 +32,20 @@ class HomeCourseList extends StatelessWidget {
             ),
           );
         } else {
-          return SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              final course = state.filteredCourses[index];
-              return CourseCard(course: course);
-            }, childCount: state.filteredCourses.length),
+          return SliverPadding(
+            padding: const EdgeInsets.all(AppDimensions.pagePadding),
+            sliver: SliverGrid.builder(
+              itemCount: state.courses.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: AppDimensions.pagePadding,
+                crossAxisSpacing: AppDimensions.pagePadding,
+              ),
+              itemBuilder: (context, index) {
+                final course = state.courses[index];
+                return PublicCourseCard(course: course);
+              },
+            ),
           );
         }
       },

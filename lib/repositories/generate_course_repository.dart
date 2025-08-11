@@ -3,8 +3,8 @@ import 'package:teachme_ai/dto/dto_chapter_questions.dart';
 import 'package:teachme_ai/dto/dto_chapter_transcript.dart';
 import 'package:teachme_ai/dto/dto_subtitles.dart';
 import 'package:teachme_ai/repositories/api_result.dart';
-import 'package:teachme_ai/repositories/i_generate_course_repository.dart';
-import 'package:teachme_ai/services/i_ai_api_service.dart';
+import 'package:teachme_ai/repositories/interfaces/i_generate_course_repository.dart';
+import 'package:teachme_ai/services/interfaces/i_ai_api_service.dart';
 
 class GenerateCourseRepository implements IGenerateCourseRepository {
   final IAiApiService _aiApiService;

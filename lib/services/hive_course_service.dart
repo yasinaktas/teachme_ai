@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:teachme_ai/models/chapter.dart';
 import 'package:teachme_ai/models/course.dart';
-import 'package:teachme_ai/services/i_course_service.dart';
+import 'package:teachme_ai/services/interfaces/i_course_service.dart';
 
 class HiveCourseService implements ICourseService {
   final _coursesBox = Hive.box<Course>("courses");

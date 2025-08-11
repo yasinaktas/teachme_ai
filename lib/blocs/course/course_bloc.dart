@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_event.dart';
 import 'package:teachme_ai/blocs/course/course_state.dart';
 import 'package:teachme_ai/models/course.dart';
-import 'package:teachme_ai/repositories/i_course_repository.dart';
+import 'package:teachme_ai/repositories/interfaces/i_course_repository.dart';
 
 class CourseBloc extends Bloc<CourseEvent, CourseState> {
   final ICourseRepository courseRepository;

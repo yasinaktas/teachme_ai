@@ -5,17 +5,17 @@ import 'package:teachme_ai/blocs/generate_course/generate_course_state.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
-import 'package:teachme_ai/pages/generate_course/widgets/course_bottom_buttons.dart';
-import 'package:teachme_ai/pages/generate_course/widgets/course_description_input.dart';
-import 'package:teachme_ai/pages/generate_course/widgets/course_generate_questions_toggle.dart';
-import 'package:teachme_ai/pages/generate_course/widgets/course_generated_subtitles.dart';
-import 'package:teachme_ai/pages/generate_course/widgets/course_next.dart';
-import 'package:teachme_ai/pages/generate_course/widgets/course_progress.dart';
-import 'package:teachme_ai/pages/generate_course/widgets/course_subtitle_input.dart';
-import 'package:teachme_ai/pages/generate_course/widgets/course_title_input.dart';
+import 'package:teachme_ai/pages/generate_course_page/widgets/course_bottom_buttons.dart';
+import 'package:teachme_ai/pages/generate_course_page/widgets/course_description_input.dart';
+import 'package:teachme_ai/pages/generate_course_page/widgets/course_generate_questions_toggle.dart';
+import 'package:teachme_ai/pages/generate_course_page/widgets/course_generated_subtitles.dart';
+import 'package:teachme_ai/pages/generate_course_page/widgets/course_next.dart';
+import 'package:teachme_ai/pages/generate_course_page/widgets/course_progress.dart';
+import 'package:teachme_ai/pages/generate_course_page/widgets/course_subtitle_input.dart';
+import 'package:teachme_ai/pages/generate_course_page/widgets/course_title_input.dart';
 import 'package:teachme_ai/widgets/circular_progress.dart';
 import 'package:teachme_ai/widgets/divider_with_text.dart';
-import 'package:teachme_ai/pages/generate_course/widgets/language_selector.dart';
+import 'package:teachme_ai/pages/generate_course_page/widgets/language_selector.dart';
 import 'package:teachme_ai/widgets/top_banner.dart';
 
 class AddCoursePage extends StatefulWidget {

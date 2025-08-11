@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
+import 'package:teachme_ai/widgets/list_card.dart';
 
 class AppExpansionTile extends StatelessWidget {
   final String title;
@@ -18,23 +19,25 @@ class AppExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionTile(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppDimensions.listCardRadius),
+    return ListCard(
+      child: ExpansionTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.listCardRadius),
+        ),
+        collapsedShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.listCardRadius),
+        ),
+        leading: Padding(
+          padding: const EdgeInsets.only(right: 4.0),
+          child: Icon(leadingIcon, color: AppColors.secondaryColor),
+        ),
+        title: Text(title, style: AppStyles.textStyleNormalLight),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4.0),
+          child: Text(subtitle, style: AppStyles.textStyleNormalStrong),
+        ),
+        children: children ?? [],
       ),
-      collapsedShape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppDimensions.listCardRadius),
-      ),
-      leading: Padding(
-        padding: const EdgeInsets.only(right: 4.0),
-        child: Icon(leadingIcon, color: AppColors.secondaryColor),
-      ),
-      title: Text(title, style: AppStyles.textStyleNormalLight),
-      subtitle: Padding(
-        padding: const EdgeInsets.only(top: 4.0),
-        child: Text(subtitle, style: AppStyles.textStyleLargeStrong),
-      ),
-      children: children ?? [],
     );
   }
 }

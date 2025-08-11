@@ -6,7 +6,7 @@ import 'package:teachme_ai/dto/dto_chapter_transcript.dart';
 import 'package:teachme_ai/dto/dto_subtitles.dart';
 import 'package:teachme_ai/repositories/api_result.dart';
 import 'package:teachme_ai/services/dio_client.dart';
-import 'package:teachme_ai/services/i_ai_api_service.dart';
+import 'package:teachme_ai/services/interfaces/i_ai_api_service.dart';
 import 'package:dio/dio.dart';
 
 class GeminiApiService implements IAiApiService {

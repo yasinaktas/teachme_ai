@@ -1,5 +1,5 @@
-import 'package:teachme_ai/repositories/i_settings_repository.dart';
-import 'package:teachme_ai/services/i_settings_service.dart';
+import 'package:teachme_ai/repositories/interfaces/i_settings_repository.dart';
+import 'package:teachme_ai/services/interfaces/i_settings_service.dart';
 
 class HiveSettingsRepository implements ISettingsRepository {
   final ISettingsService _settingsService;

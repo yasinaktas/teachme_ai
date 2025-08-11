@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_bloc.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_state.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
-import 'package:teachme_ai/extensions/sliver_box_extension.dart';
 import 'package:teachme_ai/widgets/loading_bar.dart';
 
 class HomeGeneratingCourse extends StatelessWidget {
@@ -18,9 +17,7 @@ class HomeGeneratingCourse extends StatelessWidget {
         );
         return Visibility(
           visible: isLoading,
-          child: LoadingBar(
-            title: "Generating course...",
-          ).withPadding().asSliverBox(),
+          child: LoadingBar(title: "Generating course...").withPadding(),
         );
       },
     );

@@ -1,7 +1,7 @@
 import 'package:teachme_ai/models/chapter.dart';
 import 'package:teachme_ai/models/course.dart';
-import 'package:teachme_ai/repositories/i_course_repository.dart';
-import 'package:teachme_ai/services/i_course_service.dart';
+import 'package:teachme_ai/repositories/interfaces/i_course_repository.dart';
+import 'package:teachme_ai/services/interfaces/i_course_service.dart';
 
 class FakeCourseRepository implements ICourseRepository {
   late final ICourseService courseService;

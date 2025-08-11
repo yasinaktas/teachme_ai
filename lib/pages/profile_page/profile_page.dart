@@ -6,7 +6,6 @@ import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/widgets/app_expansion_tile.dart';
-import 'package:teachme_ai/widgets/list_card.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -29,30 +28,24 @@ class ProfilePage extends StatelessWidget {
                 "My Information",
                 style: AppStyles.textStyleTitleStrong,
               ).withPadding(),
-              ListCard(
-                child: AppExpansionTile(
-                  leadingIcon: Icons.person_outline,
-                  title: "Username",
-                  subtitle: state.username,
-                ),
+              AppExpansionTile(
+                leadingIcon: Icons.person_outline,
+                title: "Username",
+                subtitle: state.username,
               ).withPadding(),
-              ListCard(
-                child: AppExpansionTile(
-                  leadingIcon: Icons.email_outlined,
-                  title: "Email",
-                  subtitle: state.email,
-                ),
+              AppExpansionTile(
+                leadingIcon: Icons.email_outlined,
+                title: "Email",
+                subtitle: state.email,
               ).withPadding(),
               Text(
                 "My Preferences",
                 style: AppStyles.textStyleTitleStrong,
               ).withPadding(),
-              ListCard(
-                child: AppExpansionTile(
-                  leadingIcon: Icons.language_outlined,
-                  title: "Language",
-                  subtitle: state.language,
-                ),
+              AppExpansionTile(
+                leadingIcon: Icons.language_outlined,
+                title: "Language",
+                subtitle: state.language,
               ).withPadding(),
             ],
           ),

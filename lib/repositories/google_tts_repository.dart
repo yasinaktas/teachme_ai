@@ -1,6 +1,6 @@
 import 'package:teachme_ai/repositories/api_result.dart';
-import 'package:teachme_ai/repositories/i_tts_repository.dart';
-import 'package:teachme_ai/services/i_tts_service.dart';
+import 'package:teachme_ai/repositories/interfaces/i_tts_repository.dart';
+import 'package:teachme_ai/services/interfaces/i_tts_service.dart';
 
 class GoogleTtsRepository implements ITtsRepository{
   final ITtsService _ttsService;

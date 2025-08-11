@@ -8,9 +8,9 @@ import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/extensions/sliver_box_extension.dart';
-import 'package:teachme_ai/pages/course/widgets/chapter_card.dart';
-import 'package:teachme_ai/pages/course/widgets/delete_course_popup.dart';
-import 'package:teachme_ai/widgets/course_page_course_card.dart';
+import 'package:teachme_ai/pages/course_page/widgets/chapter_card.dart';
+import 'package:teachme_ai/pages/course_page/widgets/delete_course_popup.dart';
+import 'package:teachme_ai/pages/course_page/widgets/course_page_course_card.dart';
 
 class CoursePage extends StatelessWidget {
   final String courseId;

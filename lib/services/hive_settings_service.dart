@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:teachme_ai/services/i_settings_service.dart';
+import 'package:teachme_ai/services/interfaces/i_settings_service.dart';
 
 class HiveSettingsService implements ISettingsService {
   final Box<dynamic> _settingsBox = Hive.box<dynamic>('settings');

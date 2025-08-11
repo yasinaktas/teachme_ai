@@ -7,7 +7,7 @@ import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/expanded_extension.dart';
-import 'package:teachme_ai/extensions/padding_extension.dart';
+import 'package:teachme_ai/pages/auth_page/widgets/password_policy.dart';
 import 'package:teachme_ai/widgets/app_elevated_button.dart';
 import 'package:teachme_ai/widgets/app_text_field.dart';
 
@@ -20,13 +20,30 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  late final TextEditingController _emailController;
+  late final TextEditingController _usernameController;
+  late final TextEditingController _passwordController;
   bool isEightCharacters = false;
   bool isNumber = false;
   bool isUppercase = false;
   bool isSpecialCharacter = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _usernameController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
@@ -82,55 +99,12 @@ class _SignupPageState extends State<SignupPage> {
                     },
                   ),
                   const SizedBox(height: 16.0),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "• 8 characters",
-                          style: AppStyles.textStyleNormalWeak.copyWith(
-                            color: isEightCharacters
-                                ? Colors.green
-                                : AppColors.secondaryColor,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          "• Number",
-                          style: AppStyles.textStyleNormalWeak.copyWith(
-                            color: isNumber
-                                ? Colors.green
-                                : AppColors.secondaryColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ).withPadding(const EdgeInsets.only(left: 8.0)),
-                  const SizedBox(height: 8.0),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          "• Uppercase",
-                          style: AppStyles.textStyleNormalWeak.copyWith(
-                            color: isUppercase
-                                ? Colors.green
-                                : AppColors.secondaryColor,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          "• Special character",
-                          style: AppStyles.textStyleNormalWeak.copyWith(
-                            color: isSpecialCharacter
-                                ? Colors.green
-                                : AppColors.secondaryColor,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ).withPadding(const EdgeInsets.only(left: 8.0, top: 4.0)),
+                  PasswordPolicy(
+                    isEightCharacters: isEightCharacters,
+                    isNumber: isNumber,
+                    isUppercase: isUppercase,
+                    isSpecialCharacter: isSpecialCharacter,
+                  ),
                   const SizedBox(height: 32.0),
                   AppElevatedButton(
                     isActive: !isLoading,

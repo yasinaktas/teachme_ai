@@ -9,9 +9,9 @@ import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/extensions/sliver_box_extension.dart';
-import 'package:teachme_ai/pages/home/widgets/home_course_list.dart';
-import 'package:teachme_ai/pages/home/widgets/home_generating_course.dart';
-import 'package:teachme_ai/pages/home/widgets/home_top_bar.dart';
+import 'package:teachme_ai/pages/home_page/widgets/home_course_list.dart';
+import 'package:teachme_ai/pages/home_page/widgets/home_generating_course.dart';
+import 'package:teachme_ai/pages/home_page/widgets/home_top_bar.dart';
 import 'package:teachme_ai/widgets/search_card.dart';
 import 'package:teachme_ai/widgets/subscription_banner.dart';
 

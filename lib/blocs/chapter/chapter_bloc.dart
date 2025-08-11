@@ -8,8 +8,8 @@ import 'package:teachme_ai/blocs/chapter/chapter_event.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_state.dart';
 import 'package:teachme_ai/constants/app_languages.dart';
 import 'package:teachme_ai/repositories/api_result.dart';
-import 'package:teachme_ai/repositories/i_course_repository.dart';
-import 'package:teachme_ai/repositories/i_tts_repository.dart';
+import 'package:teachme_ai/repositories/interfaces/i_course_repository.dart';
+import 'package:teachme_ai/repositories/interfaces/i_tts_repository.dart';
 
 class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
   final AudioPlayer _audioPlayer = AudioPlayer();

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:teachme_ai/repositories/i_settings_repository.dart';
+import 'package:teachme_ai/repositories/interfaces/i_settings_repository.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

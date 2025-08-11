@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:teachme_ai/repositories/api_result.dart';
 import 'package:teachme_ai/services/dio_client.dart';
-import 'package:teachme_ai/services/i_tts_service.dart';
+import 'package:teachme_ai/services/interfaces/i_tts_service.dart';
 
 class GoogleTtsService implements ITtsService {
   final Dio _dio = DioClient().dio;

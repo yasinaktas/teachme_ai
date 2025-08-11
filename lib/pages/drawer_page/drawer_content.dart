@@ -6,7 +6,7 @@ import 'package:teachme_ai/blocs/auth/auth_event.dart';
 import 'package:teachme_ai/blocs/auth/auth_state.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
-import 'package:teachme_ai/widgets/drawer_list_tile.dart';
+import 'package:teachme_ai/pages/drawer_page/widgets/drawer_list_tile.dart';
 
 class DrawerContent extends StatelessWidget {
   const DrawerContent({super.key});
@@ -58,31 +58,37 @@ class DrawerContent extends StatelessWidget {
                 icon: FontAwesomeIcons.crown,
                 iconColor: Colors.orangeAccent,
                 iconSize: AppDimensions.iconSizeSmall,
+                onTap: () {},
               ),
               DrawerListTile(
                 title: "My Profile",
                 icon: Icons.person_outline,
                 iconColor: AppColors.primaryColor,
+                onTap: () {},
               ),
               DrawerListTile(
                 title: "My Statistics",
                 icon: Icons.bar_chart_outlined,
                 iconColor: AppColors.primaryColor,
+                onTap: () {},
               ),
               const Spacer(),
               DrawerListTile(
                 title: "Settings",
                 icon: Icons.settings_outlined,
                 hasDivider: true,
+                onTap: () {},
               ),
               DrawerListTile(
                 title: "Privacy Policy",
                 icon: Icons.privacy_tip_outlined,
                 hasDivider: true,
+                onTap: () {},
               ),
               DrawerListTile(
                 title: "Terms and Conditions",
                 icon: Icons.article_outlined,
+                onTap: () {},
               ),
               DrawerListTile(
                 title: "Logout",

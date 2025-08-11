@@ -8,9 +8,9 @@ import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/extensions/sliver_box_extension.dart';
 import 'package:teachme_ai/models/chapter.dart';
-import 'package:teachme_ai/pages/chapter/widgets/audio_bar.dart';
-import 'package:teachme_ai/pages/chapter/widgets/question_list.dart';
-import 'package:teachme_ai/widgets/chapter_page_chapter_card copy.dart';
+import 'package:teachme_ai/pages/chapter_page/widgets/audio_bar.dart';
+import 'package:teachme_ai/pages/chapter_page/widgets/question_list.dart';
+import 'package:teachme_ai/pages/chapter_page/widgets/chapter_page_chapter_card%20copy.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:teachme_ai/widgets/list_card.dart';
 

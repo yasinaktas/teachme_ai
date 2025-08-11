@@ -14,9 +14,9 @@ import 'package:teachme_ai/models/chapter_status.dart';
 import 'package:teachme_ai/models/course.dart';
 import 'package:teachme_ai/models/question.dart';
 import 'package:teachme_ai/repositories/api_result.dart';
-import 'package:teachme_ai/repositories/i_generate_course_repository.dart';
-import 'package:teachme_ai/repositories/i_settings_repository.dart';
-import 'package:teachme_ai/repositories/i_tts_repository.dart';
+import 'package:teachme_ai/repositories/interfaces/i_generate_course_repository.dart';
+import 'package:teachme_ai/repositories/interfaces/i_settings_repository.dart';
+import 'package:teachme_ai/repositories/interfaces/i_tts_repository.dart';
 
 class GenerateCourseBloc
     extends Bloc<GenerateCourseEvent, GenerateCourseState> {
