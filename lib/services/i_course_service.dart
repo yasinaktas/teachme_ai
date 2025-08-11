@@ -6,6 +6,8 @@ abstract interface class ICourseService {
 
   Future<List<Course>> fetchCourses();
 
+  Future<Course> getCourseById(String courseId);
+
   Future<void> addCourse(Course course);
 
   Future<void> updateCourse(Course course);

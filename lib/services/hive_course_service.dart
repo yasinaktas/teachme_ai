@@ -49,4 +49,14 @@ class HiveCourseService implements ICourseService {
   Future<void> deleteCourse(String courseId) {
     return _coursesBox.delete(courseId);
   }
+
+  @override
+  Future<Course> getCourseById(String courseId) async {
+    final course = _coursesBox.get(courseId);
+    if (course != null) {
+      return course;
+    } else {
+      throw Exception("Course not found");
+    }
+  }
 }

@@ -91,15 +91,25 @@ class AppStyles {
     color: AppColors.textColorOnSurface,
     weight: FontWeight.bold,
   );
+  static final textStyleNormalOnSurfaceThin = _base(
+    size: AppDimensions.normalFontSize,
+    color: AppColors.textColorOnSurface,
+    weight: FontWeight.w500,
+  );
   static final textStyleNormalOnSurface = _base(
     size: AppDimensions.normalFontSize,
     color: AppColors.textColorOnSurface,
-    weight: FontWeight.bold,
+    weight: FontWeight.w500,
   );
   static final textStyleLargeOnSurface = _base(
     size: AppDimensions.largeFontSize,
     color: AppColors.textColorOnSurface,
     weight: FontWeight.bold,
+  );
+  static final textStyleLargeOnSurfaceThin = _base(
+    size: AppDimensions.largeFontSize,
+    color: AppColors.textColorOnSurface,
+    weight: FontWeight.w500,
   );
   static final textStyleTitleOnSurface = _base(
     size: AppDimensions.titleFontSize,

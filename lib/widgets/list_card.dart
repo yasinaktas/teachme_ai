@@ -7,12 +7,14 @@ class ListCard extends StatelessWidget {
   final Function()? onTap;
   final Color? color;
   final double? elevation;
+  final bool? hasBorder;
   const ListCard({
     super.key,
     this.child,
     this.onTap,
     this.color,
     this.elevation,
+    this.hasBorder = false,
   });
 
   @override
@@ -22,6 +24,9 @@ class ListCard extends StatelessWidget {
       color: color ?? AppColors.cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppDimensions.listCardRadius),
+        side: hasBorder == true
+            ? BorderSide(color: AppColors.secondaryShadowColor, width: 0.5)
+            : BorderSide.none,
       ),
       elevation: elevation ?? AppDimensions.listCardElevation,
       child: InkWell(

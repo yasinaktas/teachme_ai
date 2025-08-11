@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
+import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/models/course.dart';
+import 'package:teachme_ai/widgets/list_card.dart';
 
 class CoursePageCourseCard extends StatelessWidget {
   final Course course;
@@ -11,14 +12,15 @@ class CoursePageCourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.zero,
+    final completedChaptersCount = course.chapters.fold(
+      0,
+      (value, chapter) => value += chapter.isCompleted ? 1 : 0,
+    );
+    final createDate = course.createdAt.toLocal().toIso8601String().split(
+      'T',
+    )[0];
+    return ListCard(
       color: AppColors.primaryColor,
-      elevation: AppDimensions.listCardElevation,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppDimensions.listCardRadius),
-      ),
-
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -26,29 +28,21 @@ class CoursePageCourseCard extends StatelessWidget {
             ListTile(
               title: Text(
                 course.title,
-                style: GoogleFonts.quicksand(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
-                ),
+                style: AppStyles.textStyleTitleOnSurface,
               ),
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
                   course.description,
-                  style: GoogleFonts.quicksand(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
+                  style: AppStyles.textStyleNormalOnSurfaceThin,
                 ),
               ),
             ),
             Divider(
-              color: Colors.white,
+              color: AppColors.textColorOnSurface,
               thickness: 0.5,
-              indent: 8,
-              endIndent: 8,
+              indent: AppDimensions.pagePadding / 2,
+              endIndent: AppDimensions.pagePadding / 2,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -56,32 +50,32 @@ class CoursePageCourseCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Row(
-                      spacing: 4,
+                      spacing: 8,
                       children: [
                         Icon(
                           Icons.calendar_today,
-                          color: Colors.white,
-                          size: 20,
+                          color: AppColors.textColorOnSurface,
+                          size: AppDimensions.iconSizeSmall,
                         ),
                         Text(
-                          " ${course.createdAt.toLocal().toIso8601String().split('T')[0]}",
-                          style: TextStyle(color: Colors.white),
+                          " $createDate",
+                          style: AppStyles.textStyleNormalOnSurfaceThin,
                         ),
                       ],
                     ),
                   ),
                   Expanded(
                     child: Row(
-                      spacing: 4,
+                      spacing: 8,
                       children: [
                         Icon(
                           Icons.book_outlined,
-                          color: Colors.white,
-                          size: 20,
+                          color: AppColors.textColorOnSurface,
+                          size: AppDimensions.iconSizeSmall,
                         ),
                         Text(
-                          "${course.chapters.fold(0, (value, chapter) => value += chapter.isCompleted ? 1 : 0)} / ${course.chapters.length} chapters",
-                          style: TextStyle(color: Colors.white),
+                          "$completedChaptersCount / ${course.chapters.length} chapters",
+                          style: AppStyles.textStyleNormalOnSurfaceThin,
                         ),
                       ],
                     ),

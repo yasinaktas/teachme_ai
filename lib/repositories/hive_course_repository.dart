@@ -35,4 +35,9 @@ class HiveCourseRepository implements ICourseRepository {
 
   @override
   Stream<List<Course>> get coursesStream => _courseService.coursesStream;
+
+  @override
+  Future<Course> getCourse(String courseId) async {
+    return _courseService.getCourseById(courseId);
+  }
 }

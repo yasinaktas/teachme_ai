@@ -3,7 +3,8 @@ import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 
 class CircularProgress extends StatelessWidget {
-  const CircularProgress({super.key});
+  final Color? color;
+  const CircularProgress({super.key, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class CircularProgress extends StatelessWidget {
       height: AppDimensions.circularProgressSizeSmall,
       child: CircularProgressIndicator(
         strokeWidth: 2.0,
-        color: AppColors.primaryColor,
+        color: color ?? AppColors.primaryColor,
       ),
     );
   }

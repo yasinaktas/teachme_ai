@@ -1,10 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:hive/hive.dart';
 import 'package:teachme_ai/models/answer.dart';
 
 part 'question.g.dart';
 
 @HiveType(typeId: 2)
-class Question {
+class Question extends Equatable {
   @HiveField(0)
   final String id;
   @HiveField(1)
@@ -14,9 +15,9 @@ class Question {
   @HiveField(3)
   final List<Answer> answers;
   @HiveField(4)
-  int answerResult;
+  final int answerResult;
 
-  Question({
+  const Question({
     required this.id,
     required this.chapterId,
     required this.questionText,
@@ -39,4 +40,13 @@ class Question {
       answerResult: answerResult ?? this.answerResult,
     );
   }
+
+  @override
+  List<Object?> get props => [
+    id,
+    chapterId,
+    questionText,
+    answers,
+    answerResult,
+  ];
 }

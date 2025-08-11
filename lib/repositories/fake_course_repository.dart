@@ -35,4 +35,9 @@ class FakeCourseRepository implements ICourseRepository {
 
   @override
   Stream<List<Course>> get coursesStream => courseService.coursesStream;
+  
+  @override
+  Future<Course> getCourse(String courseId)async {
+    return courseService.getCourseById(courseId);
+  }
 }

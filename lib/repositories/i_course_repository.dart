@@ -4,6 +4,7 @@ import 'package:teachme_ai/models/course.dart';
 abstract interface class ICourseRepository {
   Stream<List<Course>> get coursesStream;
   Future<List<Course>> getCourses();
+  Future<Course> getCourse(String courseId);
   Future<void> addCourse(Course course);
   Future<void> updateCourse(Course course);
   Future<void> updateChapter(Chapter chapter);

@@ -58,7 +58,6 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
     emit(state.copyWith(isLoading: true));
     try {
       await courseRepository.addCourse(event.course);
-      //add(CourseFetchEvent());
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
@@ -92,7 +91,6 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
     emit(state.copyWith(isLoading: true));
     try {
       await courseRepository.updateCourse(event.course);
-      //add(CourseFetchEvent());
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
@@ -129,7 +127,6 @@ class CourseBloc extends Bloc<CourseEvent, CourseState> {
     emit(state.copyWith(isLoading: true));
     try {
       await courseRepository.deleteCourse(event.courseId);
-      //add(CourseFetchEvent());
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }

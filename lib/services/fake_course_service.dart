@@ -163,4 +163,13 @@ class FakeCourseService implements ICourseService {
   
   @override
   Stream<List<Course>> get coursesStream => Stream.value(_courses);
+  
+  @override
+  Future<Course> getCourseById(String courseId) async{
+    final course = _courses.firstWhere(
+      (course) => course.id == courseId,
+      orElse: () => throw Exception("Course not found"),
+    );
+    return Future.value(course);
+  }
 }
