@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teachme_ai/repositories/auth_repository.dart';
 import 'package:teachme_ai/repositories/interfaces/i_settings_repository.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
@@ -11,10 +12,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
   final ISettingsRepository _settingsRepository;
+  final AuthRepository _authRepository;
   StreamSubscription<User?>? _authSubscription;
 
-  AuthBloc(this._firebaseAuth, this._firestore, this._settingsRepository)
-    : super(AuthInitial()) {
+  AuthBloc(
+    this._firebaseAuth,
+    this._firestore,
+    this._settingsRepository,
+    this._authRepository,
+  ) : super(AuthInitial()) {
     _authSubscription = _firebaseAuth.authStateChanges().listen((user) {
       add(AuthStateChanged(user?.uid));
     });
@@ -34,6 +40,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             if (username.isEmpty || email.isEmpty) {
               emit(Unauthenticated());
             } else {
+              await _authRepository.getCustomJwt();
               emit(Authenticated(uid: uid, username: username, email: email));
             }
           } else {
@@ -55,6 +62,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           email: event.email,
           password: event.password,
         );
+        final user = _firebaseAuth.currentUser;
+        if (user != null) {
+          await _authRepository.getCustomJwt();
+        }
       } on FirebaseAuthException catch (e) {
         emit(AuthError(e.message ?? "Login failed"));
         emit(Unauthenticated());
@@ -78,6 +89,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             'email': event.email,
             'createdAt': FieldValue.serverTimestamp(),
           });
+          await _authRepository.getCustomJwt();
         }
       } on FirebaseAuthException catch (e) {
         emit(AuthError(e.message ?? "Signup failed"));
@@ -89,6 +101,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       _settingsRepository.setUsername('');
       _settingsRepository.setEmail('');
       _settingsRepository.setUserId('');
+      await _authRepository.deleteStoredJwt();
       await _firebaseAuth.signOut();
     });
 
@@ -109,6 +122,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               await _settingsRepository.setUsername(username);
               await _settingsRepository.setEmail(email);
               await _settingsRepository.setUserId(uid);
+              await _authRepository.getCustomJwt();
               emit(Authenticated(uid: uid, username: username, email: email));
             }
           } else {

@@ -23,6 +23,7 @@ import 'package:teachme_ai/pages/host_page/host_page.dart';
 import 'package:teachme_ai/pages/profile_page/profile_page.dart';
 import 'package:teachme_ai/pages/splash_page/splash_page.dart';
 import 'package:teachme_ai/pages/subscription_page/subscription_page.dart';
+import 'package:teachme_ai/repositories/auth_repository.dart';
 import 'package:teachme_ai/repositories/generate_course_repository.dart';
 import 'package:teachme_ai/repositories/google_tts_repository.dart';
 import 'package:teachme_ai/repositories/hive_course_repository.dart';
@@ -52,17 +53,20 @@ class MainApp extends StatelessWidget {
       HiveSettingsService(),
     );
     GoogleTtsRepository ttsRepository = GoogleTtsRepository(GoogleTtsService());
+    AuthRepository authRepository = AuthRepository();
     return MultiBlocProvider(
       providers: [
         BlocProvider<CourseBloc>(
-          create: (context) => CourseBloc(courseRepository: courseRepository)
-          ..add(CourseFetchEvent()),
+          create: (context) =>
+              CourseBloc(courseRepository: courseRepository)
+                ..add(CourseFetchEvent()),
         ),
         BlocProvider<AuthBloc>(
           create: (context) => AuthBloc(
             FirebaseAuth.instance,
             FirebaseFirestore.instance,
             settingsRepository,
+            authRepository,
           )..add(AppStarted()),
         ),
         BlocProvider<GenerateCourseBloc>(
