@@ -22,6 +22,11 @@ class AppStyles {
   static final textStyleTitle = _base(size: AppDimensions.titleFontSize);
   static final textStyleHeader = _base(size: AppDimensions.headerFontSize);
 
+  static final textStyleHeaderOnSuface = _base(
+    size: AppDimensions.headerFontSize,
+    color: AppColors.textColorOnSurface,
+  );
+
   static final textStyleSmallPrimary = _base(
     size: AppDimensions.smallFontSize,
     color: AppColors.primaryColor,

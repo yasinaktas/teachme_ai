@@ -4,6 +4,8 @@ import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/models/course.dart';
+import 'package:teachme_ai/pages/home_page/widgets/course_completion_progress.dart';
+import 'package:teachme_ai/widgets/icon_forward.dart';
 import 'package:teachme_ai/widgets/list_card.dart';
 
 class CourseCard extends StatelessWidget {
@@ -43,48 +45,8 @@ class CourseCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              trailing: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColors.secondaryShadowColor,
-                    width: 2.0,
-                  ),
-                ),
-                child: Icon(
-                  Icons.keyboard_arrow_right,
-                  size: AppDimensions.iconSizeMedium,
-                  color: AppColors.secondaryShadowColor,
-                ),
-              ),
-              leading: Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: Stack(
-                  children: [
-                    SizedBox(
-                      width: AppDimensions.circularProgressSizeLarge,
-                      height: AppDimensions.circularProgressSizeLarge,
-                      child: CircularProgressIndicator(
-                        value: course.chapters.isEmpty
-                            ? 0
-                            : completedChaptersCount / course.chapters.length,
-                        backgroundColor: AppColors.primaryShadowColor,
-                        color: AppColors.primaryColor,
-                        strokeWidth: 4.0,
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "${(completedChaptersCount / course.chapters.length * 100).toStringAsFixed(0)}%",
-                          style: AppStyles.textStyleSmallPrimary,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              trailing: const IconForward(),
+              leading: CourseCompletionProgress(course: course),
             ),
             Divider(
               color: AppColors.secondaryShadowColor,

@@ -46,3 +46,5 @@ class AnswerToggle extends ChapterEvent {
 class Completed extends ChapterEvent {}
 
 class DownloadAudio extends ChapterEvent {}
+
+class ReleaseAudio extends ChapterEvent {}

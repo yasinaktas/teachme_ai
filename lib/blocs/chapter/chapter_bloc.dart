@@ -32,6 +32,7 @@ class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
     on<AnswerToggle>(_onAnswerToggle);
     on<Completed>(_onCompleted);
     on<DownloadAudio>(_onDownloadAudio);
+    on<ReleaseAudio>(_onReleaseAudio);
 
     _playerStateSub = _audioPlayer.playerStateStream.listen((state) {
       if (state.processingState == ProcessingState.completed) {
@@ -188,6 +189,25 @@ class ChapterBloc extends Bloc<ChapterEvent, ChapterState> {
       }
     } catch (e) {
       emit(state.copyWith(isAudioExists: false, isLoadingAudio: false));
+    }
+  }
+
+  Future<void> _onReleaseAudio(
+    ReleaseAudio event,
+    Emitter<ChapterState> emit,
+  ) async {
+    try {
+      await _audioPlayer.stop();
+      emit(
+        state.copyWith(
+          isPlaying: false,
+          progress: 0,
+          currentTime: "00:00",
+          isAudioExists: false,
+        ),
+      );
+    } catch (e) {
+      debugPrint("Error releasing audio: $e");
     }
   }
 }

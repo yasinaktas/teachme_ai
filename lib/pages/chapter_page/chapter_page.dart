@@ -23,63 +23,81 @@ class ChapterPage extends StatefulWidget {
 }
 
 class ChapterPageState extends State<ChapterPage> {
+  late ChapterBloc _chapterBloc;
   @override
   void initState() {
     super.initState();
-    context.read<ChapterBloc>().add(LoadChapter(widget.chapter));
-    context.read<ChapterBloc>().add(LoadAudio());
+    _chapterBloc = context.read<ChapterBloc>();
+    _chapterBloc.add(LoadChapter(widget.chapter));
+    _chapterBloc.add(LoadAudio());
+  }
+
+  Future<bool> _onPopInvokedWithResult(bool didPop, Object? result) async {
+    if (didPop) {
+      _chapterBloc.add(ReleaseAudio());
+    }
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     final chapter = widget.chapter;
-    return Scaffold(
-      extendBody: true,
-      appBar: AppBar(
-        backgroundColor: AppColors.backgroundColor,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: Text("Enjoy Learning", style: AppStyles.textStylePageTitle),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.transparent,
-        child: AudioBar(chapter: chapter),
-      ),
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: _onPopInvokedWithResult,
+      child: Scaffold(
+        extendBody: true,
+        appBar: AppBar(
+          backgroundColor: AppColors.backgroundColor,
+          scrolledUnderElevation: 0,
+          centerTitle: true,
+          title: Text("Enjoy Learning", style: AppStyles.textStylePageTitle),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.transparent,
+          child: AudioBar(chapter: chapter),
+        ),
 
-      body: CustomScrollView(
-        slivers: [
-          Text(
-            "Chapter Summary",
-            style: AppStyles.textStyleTitleStrong,
-          ).withPadding().asSliverBox(),
-          SliverToBoxAdapter(child: ChapterPageChapterCard(chapter: chapter)),
-          Text(
-            "Content",
-            style: AppStyles.textStyleTitleStrong,
-          ).withPadding().asSliverBox(),
-          ListCard(
-            hasBorder: true,
-            elevation: 0,
-            child: Html(data: chapter.content).withPadding(
-              const EdgeInsets.symmetric(
-                horizontal: AppDimensions.pagePadding / 2,
-                vertical: AppDimensions.pagePadding / 2,
-              ),
-            ),
-          ).withPadding().asSliverBox(),
-          if (chapter.questions.isNotEmpty)
+        body: CustomScrollView(
+          slivers: [
             Text(
-              "Questions",
+              "Chapter Summary",
               style: AppStyles.textStyleTitleStrong,
             ).withPadding().asSliverBox(),
-          QuestionList(chapter: chapter),
-          SizedBox(
-            height:
-                MediaQuery.of(context).padding.bottom +
-                AppDimensions.pagePadding +
-                80,
-          ).asSliverBox(),
-        ],
+            SliverToBoxAdapter(child: ChapterPageChapterCard(chapter: chapter)),
+            Text(
+              "Content",
+              style: AppStyles.textStyleTitleStrong,
+            ).withPadding().asSliverBox(),
+            ListCard(
+              hasBorder: true,
+              elevation: 0,
+              child: /*HtmlWithLatex(htmlWithLatex: chapter.content).withPadding(
+                const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.pagePadding / 2,
+                  vertical: AppDimensions.pagePadding / 2,
+                ),
+              ),*/ Html(data: chapter.content).withPadding(
+                const EdgeInsets.symmetric(
+                  horizontal: AppDimensions.pagePadding / 2,
+                  vertical: AppDimensions.pagePadding / 2,
+                ),
+              ),
+            ).withPadding().asSliverBox(),
+            if (chapter.questions.isNotEmpty)
+              Text(
+                "Questions",
+                style: AppStyles.textStyleTitleStrong,
+              ).withPadding().asSliverBox(),
+            QuestionList(chapter: chapter),
+            SizedBox(
+              height:
+                  MediaQuery.of(context).padding.bottom +
+                  AppDimensions.pagePadding +
+                  80,
+            ).asSliverBox(),
+          ],
+        ),
       ),
     );
   }

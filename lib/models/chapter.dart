@@ -57,5 +57,14 @@ class Chapter extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, courseId];
+  List<Object?> get props => [
+    id,
+    courseId,
+    title,
+    description,
+    content,
+    transcript,
+    questions,
+    isCompleted,
+  ];
 }

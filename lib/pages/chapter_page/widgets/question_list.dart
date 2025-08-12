@@ -30,7 +30,7 @@ class QuestionList extends StatelessWidget {
             leading: IconNumber(index: index),
             title: Text(
               question.questionText,
-              style: AppStyles.textStyleNormalLight,
+              style: AppStyles.textStyleNormalWeak,
             ),
             children: question.answers
                 .map(

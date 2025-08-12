@@ -6,9 +6,9 @@ import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/models/navigation_item.dart';
 import 'package:teachme_ai/pages/drawer_page/drawer_content.dart';
 import 'package:teachme_ai/pages/home_page/home_page.dart';
-import 'package:teachme_ai/pages/public_courses_page.dart';
 import 'package:teachme_ai/pages/host_page/widgets/add_button.dart';
 import 'package:teachme_ai/pages/host_page/widgets/custom_bottom_navigation_bar.dart';
+import 'package:teachme_ai/pages/public_courses_page/public_courses_page.dart';
 
 class HostPage extends StatefulWidget {
   const HostPage({super.key});

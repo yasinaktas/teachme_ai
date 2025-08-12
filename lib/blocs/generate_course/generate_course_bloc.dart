@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_event.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_state.dart';
@@ -363,9 +362,6 @@ class GenerateCourseBloc
     final language = state.course.language;
     final subtitles = state.course.chapters.map((c) => c.title).toList();
     const int waitTime = 1000;
-    debugPrint(
-      "Generating chapter: ${chapter.title}, title: $title, language: $language, subtitles: $subtitles",
-    );
     emit(
       state.copyWith(
         chapterLoadingStatus: {
@@ -502,6 +498,35 @@ class GenerateCourseBloc
     GenerateCourse event,
     Emitter<GenerateCourseState> emit,
   ) async {
+    if (state.course.title.isEmpty) {
+      emit(state.copyWith(errorMessage: "Title cannot be empty"));
+      return;
+    }
+
+    if (state.course.chapters.isEmpty) {
+      emit(state.copyWith(errorMessage: "Chapter titles cannot be empty"));
+      return;
+    }
+
+    emit(
+      state.copyWith(
+        isLoadingCourse: true,
+        isCourseGenerated: false,
+        errorMessage: null,
+        lockBottom: true,
+      ),
+    );
+
+    for (final chapter in state.course.chapters) {
+      add(GenerateChapter(chapter));
+      Future.delayed(Duration(milliseconds: 1000));
+    }
+  }
+
+  /*Future<void> _onGenerateCourse(
+    GenerateCourse event,
+    Emitter<GenerateCourseState> emit,
+  ) async {
     const int waitTime = 1000;
     if (state.course.title.isEmpty) {
       emit(state.copyWith(errorMessage: "Title cannot be empty"));
@@ -554,9 +579,6 @@ class GenerateCourseBloc
           subtitles,
         );
         if (dtoContent is Failure<DtoChapterContent>) {
-          debugPrint(
-            "Failed to generate content for ${chapter.title}: ${(dtoContent as Failure).message}",
-          );
           emit(
             state.copyWith(
               errorMessage:
@@ -578,9 +600,6 @@ class GenerateCourseBloc
           dtoContent.content,
         );
         if (dtoTranscript is Failure<DtoChapterTranscript>) {
-          debugPrint(
-            "Failed to generate transcript for ${chapter.title}: ${(dtoTranscript as Failure).message}",
-          );
           emit(
             state.copyWith(
               errorMessage:
@@ -603,9 +622,16 @@ class GenerateCourseBloc
             dtoContent.content,
           );
           if (dtoQuestions is Failure<DtoChapterQuestions>) {
-            debugPrint(
-              "Failed to generate questions for ${chapter.title}: ${(dtoQuestions as Failure).message}",
-            );
+            /*emit(
+              state.copyWith(
+                errorMessage:
+                    "Failed to generate questions for ${chapter.title}: ${(dtoQuestions as Failure).message}",
+                chapterLoadingStatus: {
+                  ...state.chapterLoadingStatus,
+                  chapter.id: ChapterStatus(generationResultCode: -3),
+                },
+              ),
+            );*/
           } else {
             questions = dtoQuestions;
           }
@@ -648,7 +674,6 @@ class GenerateCourseBloc
           ),
         );
       } catch (e) {
-        debugPrint("Error generating chapter ${chapter.title}: $e");
         emit(
           state.copyWith(
             errorMessage: "Failed to generate ${chapter.title}: $e",
@@ -660,7 +685,7 @@ class GenerateCourseBloc
         );
       }
     }
-  }
+  }*/
 
   void _onClear(Clear event, Emitter<GenerateCourseState> emit) {
     emit(
