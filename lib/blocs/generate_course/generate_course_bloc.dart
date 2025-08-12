@@ -53,6 +53,7 @@ class GenerateCourseBloc
     on<GenerateCourse>(_onGenerateCourse);
     on<ReorderChapters>(_reOrderChapters);
     on<Clear>(_onClear);
+    on<SelectDetailLevel>(_onSelectDetailLevel);
 
     _initializeLanguage();
   }
@@ -725,5 +726,9 @@ class GenerateCourseBloc
     emit(
       state.copyWith(course: state.course.copyWith(chapters: updatedChapters)),
     );
+  }
+
+  void _onSelectDetailLevel(SelectDetailLevel event, Emitter<GenerateCourseState> emit) {
+    emit(state.copyWith(detailLevel: event.detailLevel));
   }
 }

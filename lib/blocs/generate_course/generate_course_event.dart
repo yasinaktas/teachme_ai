@@ -1,3 +1,4 @@
+import 'package:teachme_ai/enums/course_detail_level.dart';
 import 'package:teachme_ai/models/chapter.dart';
 
 abstract class GenerateCourseEvent {}
@@ -6,6 +7,12 @@ class SelectLanguage extends GenerateCourseEvent {
   final String language;
 
   SelectLanguage(this.language);
+}
+
+class SelectDetailLevel extends GenerateCourseEvent {
+  final CourseDetailLevel detailLevel;
+
+  SelectDetailLevel(this.detailLevel);
 }
 
 class SetTitle extends GenerateCourseEvent {

@@ -7,6 +7,7 @@ import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_bottom_buttons.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_description_input.dart';
+import 'package:teachme_ai/pages/generate_course_page/widgets/course_detail_level_selector.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_generate_questions_toggle.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_generated_subtitles.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_next.dart';
@@ -100,16 +101,22 @@ class _AddCoursePageState extends State<AddCoursePage> {
                     bottomText: "In minutes",
                     imagePath: "assets/images/balik.png",
                   ),
+
+                  Text(
+                    "Title",
+                    style: AppStyles.textStyleTitleStrong,
+                  ).withPadding(),
+                  CourseTitleInput(controller: _titleController),
                   Text(
                     "Language",
                     style: AppStyles.textStyleTitleStrong,
                   ).withPadding(),
                   const LanguageSelector(),
                   Text(
-                    "Title",
+                    "Detail Level",
                     style: AppStyles.textStyleTitleStrong,
                   ).withPadding(),
-                  CourseTitleInput(controller: _titleController),
+                  const CourseDetailLevelSelector().withPadding(),
                   const CourseNext(),
                   const SizedBox(height: 16),
                   const DividerWithText(title: "Continue"),
