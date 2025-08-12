@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_event.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
+import 'package:teachme_ai/widgets/app_alert_dialog.dart';
 
 class DeleteCoursePopup extends StatelessWidget {
   final String courseId;
@@ -29,28 +30,16 @@ class DeleteCoursePopup extends StatelessWidget {
           showDialog(
             context: context,
             builder: (context) {
-              return AlertDialog(
-                backgroundColor: AppColors.backgroundColor,
-                title: Text('Delete Course'),
-                content: Text('Are you sure you want to delete this course?'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Cancel'),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      BlocProvider.of<CourseBloc>(
-                        context,
-                      ).add(CourseDeleteEvent(courseId));
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                    },
-                    child: Text('Delete'),
-                  ),
-                ],
+              return AppAlertDialog(
+                title: "Delete Course",
+                content: "Are you sure you want to delete this course?",
+                actionButtonText: "Delete",
+                onActionButtonPressed: () {
+                  BlocProvider.of<CourseBloc>(
+                    context,
+                  ).add(CourseDeleteEvent(courseId));
+                  Navigator.of(context).pop();
+                },
               );
             },
           );

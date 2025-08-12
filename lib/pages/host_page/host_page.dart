@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teachme_ai/blocs/auth/auth_bloc.dart';
+import 'package:teachme_ai/blocs/auth/auth_state.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_strings.dart';
@@ -29,62 +32,74 @@ class _HostPageState extends State<HostPage> {
   ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: Text(AppStrings.appName, style: AppStyles.textStylePageTitle),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/profile");
-            },
-            icon: CircleAvatar(
-              backgroundColor: AppColors.secondarySurfaceColor,
-              child: Icon(Icons.person, color: AppColors.secondaryColor),
-            ),
-          ),
-        ],
-        actionsPadding: const EdgeInsets.only(right: 8.0),
-      ),
-      drawer: DrawerContent(),
-      extendBody: true,
-      bottomNavigationBar: Container(
-        margin: EdgeInsets.only(
-          bottom:
-              MediaQuery.of(context).padding.bottom + AppDimensions.pagePadding,
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppDimensions.pagePadding,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: SizedBox(
-                height: 60,
-                child: CustomBottomNavigationBar(
-                  items: _navigationItems,
-                  selectedIndex: _selectedIndex,
-                  onItemSelected: (value) {
-                    setState(() {
-                      _selectedIndex = value;
-                    });
-                  },
-                ),
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is Unauthenticated) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil("/auth", (route) => false);
+          });
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          scrolledUnderElevation: 0,
+          centerTitle: true,
+          title: Text(AppStrings.appName, style: AppStyles.textStylePageTitle),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/profile");
+              },
+              icon: CircleAvatar(
+                backgroundColor: AppColors.secondarySurfaceColor,
+                child: Icon(Icons.person, color: AppColors.secondaryColor),
               ),
             ),
-            const SizedBox(width: AppDimensions.pagePadding),
-            AddButton(
-              onPressed: () {
-                Navigator.pushNamed(context, "/addCourse");
-              },
-            ),
           ],
+          actionsPadding: const EdgeInsets.only(right: 8.0),
         ),
-      ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _navigationItems.map((item) => item.page).toList(),
+        drawer: DrawerContent(),
+        extendBody: true,
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.only(
+            bottom:
+                MediaQuery.of(context).padding.bottom +
+                AppDimensions.pagePadding,
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.pagePadding,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 60,
+                  child: CustomBottomNavigationBar(
+                    items: _navigationItems,
+                    selectedIndex: _selectedIndex,
+                    onItemSelected: (value) {
+                      setState(() {
+                        _selectedIndex = value;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(width: AppDimensions.pagePadding),
+              AddButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/addCourse");
+                },
+              ),
+            ],
+          ),
+        ),
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: _navigationItems.map((item) => item.page).toList(),
+        ),
       ),
     );
   }
