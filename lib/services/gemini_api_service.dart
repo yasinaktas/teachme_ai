@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart'
-    hide Options;
 import 'package:teachme_ai/dto/dto_chapter_content.dart';
 import 'package:teachme_ai/dto/dto_chapter_questions.dart';
 import 'package:teachme_ai/dto/dto_chapter_transcript.dart';
@@ -12,7 +10,6 @@ import 'package:dio/dio.dart';
 
 class GeminiApiService implements IAiApiService {
   final Dio _dio = DioClient().dio;
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   @override
   Future<ApiResult<DtoSubtitles>> generateSubtitlesAndDescription(
@@ -20,12 +17,9 @@ class GeminiApiService implements IAiApiService {
     String language,
   ) async {
     try {
-      final token = await _storage.read(key: 'custom_jwt');
-      if (token == null) throw Exception("No stored JWT");
       final response = await _dio.post(
         '/generateSubtitles',
         data: {'title': title, 'language': language},
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
 
       if (response.statusCode == 200) {
@@ -53,8 +47,6 @@ class GeminiApiService implements IAiApiService {
     List<String> chapterTitles,
   ) async {
     try {
-      final token = await _storage.read(key: 'custom_jwt');
-      if (token == null) throw Exception("No stored JWT");
       final response = await _dio.post(
         '/generateChapterContent',
         data: {
@@ -63,7 +55,6 @@ class GeminiApiService implements IAiApiService {
           'chapter_title': chapterTitle,
           'chapter_titles': chapterTitles,
         },
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
 
       if (response.statusCode == 200) {
@@ -90,8 +81,6 @@ class GeminiApiService implements IAiApiService {
     String content,
   ) async {
     try {
-      final token = await _storage.read(key: 'custom_jwt');
-      if (token == null) throw Exception("No stored JWT");
       final response = await _dio.post(
         '/generateChapterTranscript',
         data: {
@@ -101,7 +90,6 @@ class GeminiApiService implements IAiApiService {
           'chapter_titles': chapterTitles,
           'content': content,
         },
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
 
       if (response.statusCode == 200) {
@@ -127,8 +115,6 @@ class GeminiApiService implements IAiApiService {
     String content,
   ) async {
     try {
-      final token = await _storage.read(key: 'custom_jwt');
-      if (token == null) throw Exception("No stored JWT");
       final response = await _dio.post(
         '/generateChapterQuiz',
         data: {
@@ -137,7 +123,6 @@ class GeminiApiService implements IAiApiService {
           'chapter_title': chapterTitle,
           'content': content,
         },
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
 
       if (response.statusCode == 200) {

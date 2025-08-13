@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:teachme_ai/services/auth_interceptor.dart';
 
 class DioClient {
   static final DioClient _instance = DioClient._internal();
@@ -17,5 +18,6 @@ class DioClient {
         headers: {'Content-Type': 'application/json'},
       ),
     );
+    dio.interceptors.add(AuthInterceptor());
   }
 }
