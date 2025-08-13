@@ -67,13 +67,11 @@ class CourseProgress extends StatelessWidget {
                             )
                           : IconButton(
                               padding: EdgeInsets.zero,
-                              onPressed: isLoading
-                                  ? null
-                                  : () {
-                                      context.read<GenerateCourseBloc>().add(
-                                        GenerateChapter(chapter),
-                                      );
-                                    },
+                              onPressed: () {
+                                context.read<GenerateCourseBloc>().add(
+                                  GenerateChapter(chapter),
+                                );
+                              },
                               icon: Icon(
                                 Icons.refresh,
                                 color: AppColors.primaryColor,

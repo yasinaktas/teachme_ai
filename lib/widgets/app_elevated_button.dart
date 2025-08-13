@@ -33,7 +33,7 @@ class AppElevatedButton extends StatelessWidget {
           ),
           backgroundColor: backgroundColor ?? AppColors.primaryColor,
         ),
-        child: Text(text, style: AppStyles.textStyleNormalOnSurface),
+        child: Text(text, style: AppStyles.textStyleOnButton),
       ),
     );
   }

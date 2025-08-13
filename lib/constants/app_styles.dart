@@ -127,4 +127,10 @@ class AppStyles {
     color: AppColors.textColorStrong,
     weight: FontWeight.w500,
   );
+
+  static final textStyleOnButton = _base(
+    size: AppDimensions.largeFontSize,
+    color: AppColors.textColorOnSurface,
+    weight: FontWeight.bold,
+  );
 }

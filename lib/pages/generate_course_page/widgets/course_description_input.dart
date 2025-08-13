@@ -40,7 +40,7 @@ class _CourseDescriptionInputState extends State<CourseDescriptionInput> {
       },
       buildWhen: (previous, current) {
         return previous.course.description != current.course.description ||
-            previous.lockTop != current.lockTop;
+            previous.lockBottom != current.lockBottom;
       },
       builder: (context, state) {
         return AppTextField(
