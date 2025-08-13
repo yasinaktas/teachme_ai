@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:teachme_ai/exceptions/course_not_found_error.dart';
 import 'package:teachme_ai/models/chapter.dart';
 import 'package:teachme_ai/models/course.dart';
 import 'package:teachme_ai/services/interfaces/i_course_service.dart';
@@ -37,7 +38,7 @@ class HiveCourseService implements ICourseService {
         return _coursesBox.put(course.id, updatedCourse);
       }
     }
-    throw Exception("Course or Chapter not found");
+    throw CourseNotFoundErrorException();
   }
 
   @override
@@ -56,7 +57,7 @@ class HiveCourseService implements ICourseService {
     if (course != null) {
       return course;
     } else {
-      throw Exception("Course not found");
+      throw CourseNotFoundErrorException();
     }
   }
 }

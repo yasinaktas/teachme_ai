@@ -20,8 +20,7 @@ class SplashPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: AppColors.backgroundColor,
         extendBody: true,
-        appBar:
-            AppBar(),
+        appBar: AppBar(),
       ),
     );
   }

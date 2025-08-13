@@ -21,7 +21,6 @@ class GeminiApiService implements IAiApiService {
         '/generateSubtitles',
         data: {'title': title, 'language': language},
       );
-
       if (response.statusCode == 200) {
         final data = response.data;
         final json = data is String ? jsonDecode(data) : data;
@@ -56,7 +55,6 @@ class GeminiApiService implements IAiApiService {
           'chapter_titles': chapterTitles,
         },
       );
-
       if (response.statusCode == 200) {
         final data = response.data;
         final json = data is String ? jsonDecode(data) : data;
@@ -91,7 +89,6 @@ class GeminiApiService implements IAiApiService {
           'content': content,
         },
       );
-
       if (response.statusCode == 200) {
         final data = response.data;
         final json = data is String ? jsonDecode(data) : data;
@@ -124,7 +121,6 @@ class GeminiApiService implements IAiApiService {
           'content': content,
         },
       );
-
       if (response.statusCode == 200) {
         final data = response.data;
         final json = data is String ? jsonDecode(data) : data;

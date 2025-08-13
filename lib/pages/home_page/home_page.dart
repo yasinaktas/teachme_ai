@@ -12,6 +12,7 @@ import 'package:teachme_ai/extensions/sliver_box_extension.dart';
 import 'package:teachme_ai/pages/home_page/widgets/home_course_list.dart';
 import 'package:teachme_ai/pages/home_page/widgets/home_generating_course.dart';
 import 'package:teachme_ai/pages/home_page/widgets/home_top_bar.dart';
+import 'package:teachme_ai/widgets/app_snack_bar.dart';
 import 'package:teachme_ai/widgets/search_card.dart';
 import 'package:teachme_ai/widgets/subscription_banner.dart';
 
@@ -28,11 +29,9 @@ class HomePage extends StatelessWidget {
         if (state.isCourseGenerated) {
           context.read<GenerateCourseBloc>().add(Clear());
           context.read<CourseBloc>().add(CourseAddEvent(state.course));
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text("Course created successfully!"),
-              backgroundColor: Colors.green,
-            ),
+          AppSuccessSnackBar.show(
+            context,
+            message: "Course created successfully!",
           );
         }
       },
