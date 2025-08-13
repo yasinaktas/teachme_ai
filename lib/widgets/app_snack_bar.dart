@@ -21,7 +21,7 @@ class AppSnackBar {
       backgroundColor: backgroundColor,
       elevation: 2,
       showCloseIcon: true,
-      closeIconColor: AppColors.textColorOnSurface,
+      closeIconColor: AppColors.onCardOppositeColor,
       duration: const Duration(seconds: 3),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),

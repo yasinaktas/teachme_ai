@@ -69,7 +69,7 @@ class AudioBar extends StatelessWidget {
                     value: state.isAudioExists
                         ? currentSeconds.clamp(0, totalSeconds)
                         : 0,
-                    inactiveColor: AppColors.textColorOnSurface,
+                    inactiveColor: AppColors.onCardOppositeColor,
                     activeColor: AppColors.primaryColor,
                     thumbColor: AppColors.primaryColor,
                     onChanged: (value) {
@@ -97,7 +97,7 @@ class AudioBar extends StatelessWidget {
                         },
                         icon: Icon(
                           state.isPlaying ? Icons.pause : Icons.play_arrow,
-                          color: AppColors.textColorOnSurface,
+                          color: AppColors.onCardOppositeColor,
                           size: AppDimensions.iconSizeLarge,
                         ),
                       )
@@ -107,13 +107,13 @@ class AudioBar extends StatelessWidget {
                           horizontal: AppDimensions.pagePadding,
                         ),
                         child: const CircularProgress(
-                          color: AppColors.textColorOnSurface,
+                          color: AppColors.onCardOppositeColor,
                         ),
                       )
                     : IconButton(
                         icon: const Icon(
                           Icons.download,
-                          color: AppColors.textColorOnSurface,
+                          color: AppColors.onCardOppositeColor,
                           size: AppDimensions.iconSizeMedium,
                         ),
                         onPressed: () {

@@ -39,7 +39,7 @@ class CoursePageCourseCard extends StatelessWidget {
               ),
             ),
             Divider(
-              color: AppColors.textColorOnSurface,
+              color: AppColors.onCardOppositeColor,
               thickness: 0.5,
               indent: AppDimensions.pagePadding / 2,
               endIndent: AppDimensions.pagePadding / 2,
@@ -54,7 +54,7 @@ class CoursePageCourseCard extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.calendar_today,
-                          color: AppColors.textColorOnSurface,
+                          color: AppColors.onCardOppositeColor,
                           size: AppDimensions.iconSizeSmall,
                         ),
                         Text(
@@ -70,7 +70,7 @@ class CoursePageCourseCard extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.book_outlined,
-                          color: AppColors.textColorOnSurface,
+                          color: AppColors.onCardOppositeColor,
                           size: AppDimensions.iconSizeSmall,
                         ),
                         Text(

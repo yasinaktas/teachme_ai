@@ -39,7 +39,7 @@ class _AppTextFieldState extends State<AppTextField> {
           borderRadius: BorderRadius.circular(AppDimensions.textFieldRadius),
         ),
         hintText: widget.hintText,
-        hintStyle: AppStyles.textStyleLargeLight,
+        hintStyle: AppStyles.textStyleNormalLight,
         suffixIcon: widget.isPassword
             ? Padding(
                 padding: const EdgeInsets.only(right: 8.0),

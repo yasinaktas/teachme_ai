@@ -13,6 +13,8 @@ class AppColors {
   static const blackColor = Color(0xFF000000);
   static const cardColor = Color(0xFFFFFFFF);
   static const cardOppositeColor = Color(0xFF000000);
+  static const onCardColor = Color(0xFF000000);
+  static const onCardOppositeColor = Color(0xFFFFFFFF);
   static final splashColor = blackColor.withAlpha(30);
   static const textColor = Color(0xFF333333);
   static const textColorStrong = Color(0xFF000000);
