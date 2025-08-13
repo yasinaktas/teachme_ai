@@ -21,7 +21,7 @@ class SplashPage extends StatelessWidget {
         backgroundColor: AppColors.backgroundColor,
         extendBody: true,
         appBar:
-            AppBar(), // system navigation bar ve status bar için boş bırakıldı
+            AppBar(),
       ),
     );
   }

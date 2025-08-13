@@ -54,6 +54,7 @@ class GenerateCourseBloc
     on<ReorderChapters>(_reOrderChapters);
     on<Clear>(_onClear);
     on<SelectDetailLevel>(_onSelectDetailLevel);
+    on<SelectKnowledgeLevel>(_onSelectKnowledgeLevel);
 
     _initializeLanguage();
   }
@@ -728,7 +729,17 @@ class GenerateCourseBloc
     );
   }
 
-  void _onSelectDetailLevel(SelectDetailLevel event, Emitter<GenerateCourseState> emit) {
+  void _onSelectDetailLevel(
+    SelectDetailLevel event,
+    Emitter<GenerateCourseState> emit,
+  ) {
     emit(state.copyWith(detailLevel: event.detailLevel));
+  }
+
+  void _onSelectKnowledgeLevel(
+    SelectKnowledgeLevel event,
+    Emitter<GenerateCourseState> emit,
+  ) {
+    emit(state.copyWith(knowledgeLevel: event.knowledgeLevel));
   }
 }

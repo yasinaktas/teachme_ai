@@ -8,6 +8,9 @@ abstract interface class ISettingsRepository {
   Future<String> getLanguage();
   Future<void> setLanguage(String language);
 
+  Future<String> getAppLanguage();
+  Future<void> setAppLanguage(String language);
+
   Future<String> getUserId();
   Future<void> setUserId(String userId);
 }

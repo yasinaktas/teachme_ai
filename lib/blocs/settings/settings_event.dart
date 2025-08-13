@@ -33,3 +33,11 @@ class SetUserIdEvent extends SettingsEvent {
 
   SetUserIdEvent(this.userId);
 }
+
+class GetAppLanguageEvent extends SettingsEvent {}
+
+class SetAppLanguageEvent extends SettingsEvent {
+  final String appLanguage;
+
+  SetAppLanguageEvent(this.appLanguage);
+}

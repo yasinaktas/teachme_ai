@@ -10,13 +10,14 @@ import 'package:teachme_ai/pages/generate_course_page/widgets/course_description
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_detail_level_selector.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_generate_questions_toggle.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_generated_subtitles.dart';
+import 'package:teachme_ai/pages/generate_course_page/widgets/course_knowledge_level_selector.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_next.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_progress.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_subtitle_input.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_title_input.dart';
 import 'package:teachme_ai/widgets/circular_progress.dart';
 import 'package:teachme_ai/widgets/divider_with_text.dart';
-import 'package:teachme_ai/pages/generate_course_page/widgets/language_selector.dart';
+import 'package:teachme_ai/pages/generate_course_page/widgets/course_language_selector.dart';
 import 'package:teachme_ai/widgets/top_banner.dart';
 
 class AddCoursePage extends StatefulWidget {
@@ -111,12 +112,17 @@ class _AddCoursePageState extends State<AddCoursePage> {
                     "Language",
                     style: AppStyles.textStyleTitleStrong,
                   ).withPadding(),
-                  const LanguageSelector(),
+                  const CourseLanguageSelector(),
                   Text(
                     "Detail Level",
                     style: AppStyles.textStyleTitleStrong,
                   ).withPadding(),
                   const CourseDetailLevelSelector().withPadding(),
+                  Text(
+                    "Your Knowledge",
+                    style: AppStyles.textStyleTitleStrong,
+                  ).withPadding(),
+                  const CourseKnowledgeLevelSelector().withPadding(),
                   const CourseNext(),
                   const SizedBox(height: 16),
                   const DividerWithText(title: "Continue"),

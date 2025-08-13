@@ -3,12 +3,14 @@ class SettingsState {
   final String username;
   final String email;
   final String language;
+  final String appLanguage;
 
   SettingsState({
     required this.userId,
     required this.username,
     required this.email,
     required this.language,
+    required this.appLanguage,
   });
 
   SettingsState copyWith({
@@ -16,12 +18,14 @@ class SettingsState {
     String? username,
     String? email,
     String? language,
+    String? appLanguage,
   }) {
     return SettingsState(
       userId: userId ?? this.userId,
       email: email ?? this.email,
       username: username ?? this.username,
       language: language ?? this.language,
+      appLanguage: appLanguage ?? this.appLanguage,
     );
   }
 }

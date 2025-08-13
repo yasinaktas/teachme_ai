@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:teachme_ai/enums/course_detail_level.dart';
+import 'package:teachme_ai/enums/course_knowledge_level.dart';
 import 'package:teachme_ai/models/chapter_status.dart';
 import 'package:teachme_ai/models/course.dart';
 
@@ -15,6 +16,7 @@ class GenerateCourseState extends Equatable {
   final bool isCourseGenerated;
   final String? errorMessage;
   final CourseDetailLevel? detailLevel;
+  final KnowledgeLevel? knowledgeLevel;
 
   const GenerateCourseState({
     required this.course,
@@ -28,6 +30,7 @@ class GenerateCourseState extends Equatable {
     this.isCourseGenerated = false,
     this.errorMessage,
     this.detailLevel = CourseDetailLevel.detailed,
+    this.knowledgeLevel = KnowledgeLevel.beginner,
   });
 
   GenerateCourseState copyWith({
@@ -42,6 +45,7 @@ class GenerateCourseState extends Equatable {
     bool? isCourseGenerated,
     String? errorMessage,
     CourseDetailLevel? detailLevel,
+    KnowledgeLevel? knowledgeLevel,
   }) {
     return GenerateCourseState(
       course: course ?? this.course,
@@ -56,6 +60,7 @@ class GenerateCourseState extends Equatable {
       isCourseGenerated: isCourseGenerated ?? this.isCourseGenerated,
       errorMessage: errorMessage ?? this.errorMessage,
       detailLevel: detailLevel ?? this.detailLevel,
+      knowledgeLevel: knowledgeLevel ?? this.knowledgeLevel,
     );
   }
 
@@ -72,5 +77,6 @@ class GenerateCourseState extends Equatable {
     isCourseGenerated,
     errorMessage,
     detailLevel,
+    knowledgeLevel,
   ];
 }

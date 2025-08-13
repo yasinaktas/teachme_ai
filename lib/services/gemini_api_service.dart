@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'
     hide Options;
 import 'package:teachme_ai/dto/dto_chapter_content.dart';
@@ -20,9 +19,9 @@ class GeminiApiService implements IAiApiService {
     String title,
     String language,
   ) async {
-    final token = await _storage.read(key: 'custom_jwt');
-    if (token == null) throw Exception("No stored JWT");
     try {
+      final token = await _storage.read(key: 'custom_jwt');
+      if (token == null) throw Exception("No stored JWT");
       final response = await _dio.post(
         '/generateSubtitles',
         data: {'title': title, 'language': language},
@@ -90,9 +89,9 @@ class GeminiApiService implements IAiApiService {
     List<String> chapterTitles,
     String content,
   ) async {
-    final token = await _storage.read(key: 'custom_jwt');
-    if (token == null) throw Exception("No stored JWT");
     try {
+      final token = await _storage.read(key: 'custom_jwt');
+      if (token == null) throw Exception("No stored JWT");
       final response = await _dio.post(
         '/generateChapterTranscript',
         data: {
@@ -127,9 +126,9 @@ class GeminiApiService implements IAiApiService {
     String chapterTitle,
     String content,
   ) async {
-    final token = await _storage.read(key: 'custom_jwt');
-    if (token == null) throw Exception("No stored JWT");
     try {
+      final token = await _storage.read(key: 'custom_jwt');
+      if (token == null) throw Exception("No stored JWT");
       final response = await _dio.post(
         '/generateChapterQuiz',
         data: {

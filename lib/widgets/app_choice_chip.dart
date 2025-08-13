@@ -6,6 +6,7 @@ class AppChoiceChip extends StatelessWidget {
   final String text;
   final bool isSelected;
   final bool isEnabled;
+  final Color? backgroundColor;
   final ValueChanged<bool>? onSelected;
 
   const AppChoiceChip({
@@ -13,6 +14,7 @@ class AppChoiceChip extends StatelessWidget {
     required this.text,
     required this.isSelected,
     this.isEnabled = true,
+    this.backgroundColor,
     this.onSelected,
   });
 
@@ -28,14 +30,12 @@ class AppChoiceChip extends StatelessWidget {
           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
         ),
       ),
-      backgroundColor: AppColors.backgroundColor,
-      disabledColor: AppColors.backgroundColor,
+      backgroundColor: backgroundColor ?? AppColors.backgroundColor,
+      disabledColor: backgroundColor ?? AppColors.backgroundColor,
       selectedColor: AppColors.primaryColor,
       showCheckmark: false,
       selected: isSelected,
-      onSelected: isEnabled
-          ? onSelected
-          : null,
+      onSelected: isEnabled ? onSelected : null,
     );
   }
 }

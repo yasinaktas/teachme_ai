@@ -20,9 +20,9 @@ class GoogleTtsService implements ITtsService {
     String voiceName,
     String fileName,
   ) async {
-    final token = await _storage.read(key: 'custom_jwt');
-    if (token == null) throw Exception("No stored JWT");
     try {
+      final token = await _storage.read(key: 'custom_jwt');
+      if (token == null) throw Exception("No stored JWT");
       final response = await _dio.post(
         "/generateSpeech",
         data: {

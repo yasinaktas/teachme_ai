@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/settings/settings_bloc.dart';
 import 'package:teachme_ai/blocs/settings/settings_state.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
+import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
+import 'package:teachme_ai/pages/profile_page/widgets/app_language_selector.dart';
 import 'package:teachme_ai/widgets/app_expansion_tile.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -45,7 +47,11 @@ class ProfilePage extends StatelessWidget {
               AppExpansionTile(
                 leadingIcon: Icons.language_outlined,
                 title: "Language",
-                subtitle: state.language,
+                subtitle: state.appLanguage,
+                children: [
+                  AppLanguageSelector(),
+                  const SizedBox(height: AppDimensions.pagePadding),
+                ],
               ).withPadding(),
             ],
           ),

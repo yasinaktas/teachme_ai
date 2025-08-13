@@ -36,6 +36,7 @@ class AppExpansionTile extends StatelessWidget {
           padding: const EdgeInsets.only(top: 4.0),
           child: Text(subtitle, style: AppStyles.textStyleNormalStrong),
         ),
+        expandedAlignment: Alignment.centerLeft,
         children: children ?? [],
       ),
     );

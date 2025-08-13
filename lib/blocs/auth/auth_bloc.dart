@@ -98,9 +98,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<SignOutRequested>((event, emit) async {
-      _settingsRepository.setUsername('');
-      _settingsRepository.setEmail('');
-      _settingsRepository.setUserId('');
+      await _settingsRepository.setUsername('');
+      await _settingsRepository.setEmail('');
+      await _settingsRepository.setUserId('');
       await _authRepository.deleteStoredJwt();
       await _firebaseAuth.signOut();
     });

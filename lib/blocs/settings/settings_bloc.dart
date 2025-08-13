@@ -8,7 +8,7 @@ import 'package:teachme_ai/repositories/interfaces/i_settings_repository.dart';
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final ISettingsRepository _settingsRepository;
   SettingsBloc(this._settingsRepository)
-    : super(SettingsState(username: "", language: "", email: "", userId: "")) {
+    : super(SettingsState(username: "", language: "", email: "", userId: "", appLanguage: "")) {
     on<SettingsInitialEvent>(_onSettingsInitialEvent);
     on<GetLanguageEvent>(_onGetLanguageEvent);
     on<GetUsernameEvent>(_onGetUsernameEvent);
@@ -18,6 +18,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<SetEmailEvent>(_onSetEmailEvent);
     on<GetUserIdEvent>(_onGetUserIdEvent);
     on<SetUserIdEvent>(_onSetUserIdEvent);
+    on<GetAppLanguageEvent>(_onGetAppLanguageEvent);
+    on<SetAppLanguageEvent>(_onSetAppLanguageEvent);
   }
 
   Future<void> _onSettingsInitialEvent(
@@ -28,12 +30,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     final language = await _settingsRepository.getLanguage();
     final email = await _settingsRepository.getEmail();
     final userId = await _settingsRepository.getUserId();
+    final appLanguage = await _settingsRepository.getAppLanguage();
     emit(
       state.copyWith(
         username: username,
         language: language,
         email: email,
         userId: userId,
+        appLanguage: appLanguage,
       ),
     );
   }
@@ -100,5 +104,21 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     await _settingsRepository.setUserId(event.userId);
     emit(state.copyWith(userId: event.userId));
+  }
+
+  Future<void> _onGetAppLanguageEvent(
+    GetAppLanguageEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    final appLanguage = await _settingsRepository.getAppLanguage();
+    emit(state.copyWith(appLanguage: appLanguage));
+  }
+
+  Future<void> _onSetAppLanguageEvent(
+    SetAppLanguageEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    await _settingsRepository.setAppLanguage(event.appLanguage);
+    emit(state.copyWith(appLanguage: event.appLanguage));
   }
 }

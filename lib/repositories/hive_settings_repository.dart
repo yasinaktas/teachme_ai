@@ -45,4 +45,14 @@ class HiveSettingsRepository implements ISettingsRepository {
   Future<void> setUserId(String userId) async {
     return _settingsService.setUserId(userId);
   }
+  
+  @override
+  Future<String> getAppLanguage() {
+    return _settingsService.getAppLanguage();
+  }
+  
+  @override
+  Future<void> setAppLanguage(String language) {
+    return _settingsService.setAppLanguage(language);
+  }
 }

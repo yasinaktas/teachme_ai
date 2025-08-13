@@ -5,6 +5,16 @@ class HiveSettingsService implements ISettingsService {
   final Box<dynamic> _settingsBox = Hive.box<dynamic>('settings');
 
   @override
+  Future<String> getAppLanguage() async {
+    return _settingsBox.get("app_language", defaultValue: "English");
+  }
+
+  @override
+  Future<void> setAppLanguage(String language) async {
+    _settingsBox.put("app_language", language);
+  }
+
+  @override
   Future<String> getLanguage() async {
     return _settingsBox.get("language", defaultValue: "English");
   }
