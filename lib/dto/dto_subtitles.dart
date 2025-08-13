@@ -8,16 +8,20 @@ String dtoSubtitlesToJson(DtoSubtitles data) => json.encode(data.toJson());
 class DtoSubtitles {
   final List<Subtitle> subtitles;
   final String courseShortDescription;
+  final String courseTitle;
 
-  DtoSubtitles({required this.subtitles, required this.courseShortDescription});
+  DtoSubtitles({required this.subtitles, required this.courseShortDescription,
+    required this.courseTitle});
 
   DtoSubtitles copyWith({
     List<Subtitle>? subtitles,
     String? courseShortDescription,
+    String? courseTitle,
   }) => DtoSubtitles(
     subtitles: subtitles ?? this.subtitles,
     courseShortDescription:
         courseShortDescription ?? this.courseShortDescription,
+    courseTitle: courseTitle ?? this.courseTitle,
   );
 
   factory DtoSubtitles.fromJson(Map<String, dynamic> json) => DtoSubtitles(
@@ -25,11 +29,13 @@ class DtoSubtitles {
       json["subtitles"].map((x) => Subtitle.fromJson(x)),
     ),
     courseShortDescription: json["courseShortDescription"],
+    courseTitle: json["courseTitle"],
   );
 
   Map<String, dynamic> toJson() => {
     "subtitles": List<dynamic>.from(subtitles.map((x) => x.toJson())),
     "courseShortDescription": courseShortDescription,
+    "courseTitle": courseTitle,
   };
 }
 

@@ -40,6 +40,12 @@ class SetChapterTitles extends GenerateCourseEvent {
   SetChapterTitles(this.chapterTitles);
 }
 
+class SetAbout extends GenerateCourseEvent {
+  final String about;
+
+  SetAbout(this.about);
+}
+
 class SetSubtitle extends GenerateCourseEvent {
   final String subtitle;
 

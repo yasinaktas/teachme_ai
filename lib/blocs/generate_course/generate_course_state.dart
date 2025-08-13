@@ -6,12 +6,12 @@ import 'package:teachme_ai/models/course.dart';
 
 class GenerateCourseState extends Equatable {
   final Course course;
+  final String about;
   final String? subtitle;
   final bool generateQuestions;
   final bool lockTop;
   final bool lockBottom;
   final bool isLoadingChapterTitles;
-  final bool isLoadingCourse;
   final Map<String, ChapterStatus> chapterLoadingStatus;
   final bool isCourseGenerated;
   final String? errorMessage;
@@ -20,12 +20,12 @@ class GenerateCourseState extends Equatable {
 
   const GenerateCourseState({
     required this.course,
+    this.about = "",
     this.subtitle,
     this.generateQuestions = false,
     this.lockTop = false,
     this.lockBottom = true,
     this.isLoadingChapterTitles = false,
-    this.isLoadingCourse = false,
     this.chapterLoadingStatus = const {},
     this.isCourseGenerated = false,
     this.errorMessage,
@@ -35,12 +35,12 @@ class GenerateCourseState extends Equatable {
 
   GenerateCourseState copyWith({
     Course? course,
+    String? about,
     String? subtitle,
     bool? generateQuestions,
     bool? lockTop,
     bool? lockBottom,
     bool? isLoadingChapterTitles,
-    bool? isLoadingCourse,
     Map<String, ChapterStatus>? chapterLoadingStatus,
     bool? isCourseGenerated,
     String? errorMessage,
@@ -49,13 +49,13 @@ class GenerateCourseState extends Equatable {
   }) {
     return GenerateCourseState(
       course: course ?? this.course,
+      about: about ?? this.about,
       subtitle: subtitle ?? this.subtitle,
       generateQuestions: generateQuestions ?? this.generateQuestions,
       lockTop: lockTop ?? this.lockTop,
       lockBottom: lockBottom ?? this.lockBottom,
       isLoadingChapterTitles:
           isLoadingChapterTitles ?? this.isLoadingChapterTitles,
-      isLoadingCourse: isLoadingCourse ?? this.isLoadingCourse,
       chapterLoadingStatus: chapterLoadingStatus ?? this.chapterLoadingStatus,
       isCourseGenerated: isCourseGenerated ?? this.isCourseGenerated,
       errorMessage: errorMessage ?? this.errorMessage,
@@ -67,12 +67,12 @@ class GenerateCourseState extends Equatable {
   @override
   List<Object?> get props => [
     course,
+    about,
     subtitle,
     generateQuestions,
     lockTop,
     lockBottom,
     isLoadingChapterTitles,
-    isLoadingCourse,
     chapterLoadingStatus,
     isCourseGenerated,
     errorMessage,

@@ -14,13 +14,10 @@ class GenerateCourseRepository implements IGenerateCourseRepository {
 
   @override
   Future<ApiResult<DtoSubtitles>> getGeneratedSubtitles(
-    String title,
+    String about,
     String language,
   ) async {
-    return await _aiApiService.generateSubtitlesAndDescription(
-      title,
-      language,
-    );
+    return await _aiApiService.generateSubtitlesAndDescription(about, language);
   }
 
   @override

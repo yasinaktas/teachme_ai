@@ -62,6 +62,44 @@ class _SignupPageState extends State<SignupPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 32.0),
+                  /*Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Your Name",
+                              style: AppStyles.textStyleNormalStrong,
+                            ),
+                            const SizedBox(height: 8.0),
+                            AppTextField(
+                              hintText: "Name",
+                              isEnabled: !isLoading,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 16.0),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Your Surname",
+                              style: AppStyles.textStyleNormalStrong,
+                            ),
+                            const SizedBox(height: 8.0),
+                            AppTextField(
+                              hintText: "Surname",
+                              isEnabled: !isLoading,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16.0),*/
                   Text("Your Username", style: AppStyles.textStyleNormalStrong),
                   const SizedBox(height: 8.0),
                   AppTextField(

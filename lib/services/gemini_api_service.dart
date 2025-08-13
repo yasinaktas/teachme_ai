@@ -13,13 +13,13 @@ class GeminiApiService implements IAiApiService {
 
   @override
   Future<ApiResult<DtoSubtitles>> generateSubtitlesAndDescription(
-    String title,
+    String about,
     String language,
   ) async {
     try {
       final response = await _dio.post(
         '/generateSubtitles',
-        data: {'title': title, 'language': language},
+        data: {'about': about, 'language': language},
       );
       if (response.statusCode == 200) {
         final data = response.data;

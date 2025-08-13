@@ -5,6 +5,7 @@ import 'package:teachme_ai/blocs/generate_course/generate_course_state.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
+import 'package:teachme_ai/pages/generate_course_page/widgets/course_about_input.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_bottom_buttons.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_description_input.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_detail_level_selector.dart';
@@ -28,6 +29,7 @@ class AddCoursePage extends StatefulWidget {
 }
 
 class _AddCoursePageState extends State<AddCoursePage> {
+  late TextEditingController _aboutController;
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
   late TextEditingController _subtitleController;
@@ -35,6 +37,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
   @override
   void initState() {
     super.initState();
+    _aboutController = TextEditingController();
     _titleController = TextEditingController();
     _descriptionController = TextEditingController();
     _subtitleController = TextEditingController();
@@ -42,6 +45,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
 
   @override
   void dispose() {
+    _aboutController.dispose();
     _titleController.dispose();
     _descriptionController.dispose();
     _subtitleController.dispose();
@@ -74,14 +78,14 @@ class _AddCoursePageState extends State<AddCoursePage> {
                 buildWhen: (previous, current) {
                   return previous.chapterLoadingStatus !=
                           current.chapterLoadingStatus ||
-                      previous.isLoadingCourse != current.isLoadingCourse;
+                      previous.isLoadingChapterTitles !=
+                          current.isLoadingChapterTitles;
                 },
                 builder: (context, state) {
-                  bool isLoading = state.chapterLoadingStatus.values.any(
-                    (status) => status.isGenerating,
-                  );
+                  bool isLoadingChapters = state.chapterLoadingStatus.values
+                      .any((status) => status.isGenerating);
                   return Visibility(
-                    visible: isLoading,
+                    visible: isLoadingChapters || state.isLoadingChapterTitles,
                     child: CircularProgress(),
                   );
                 },
@@ -102,12 +106,16 @@ class _AddCoursePageState extends State<AddCoursePage> {
                     bottomText: "In minutes",
                     imagePath: "assets/images/balik.png",
                   ),
-
-                  Text(
+                  /*Text(
                     "Title",
                     style: AppStyles.textStyleTitleStrong,
                   ).withPadding(),
-                  CourseTitleInput(controller: _titleController),
+                  CourseTitleInput(controller: _titleController),*/
+                  Text(
+                    "What to learn",
+                    style: AppStyles.textStyleTitleStrong,
+                  ).withPadding(),
+                  CourseAboutInput(controller: _aboutController),
                   Text(
                     "Language",
                     style: AppStyles.textStyleTitleStrong,
@@ -119,13 +127,18 @@ class _AddCoursePageState extends State<AddCoursePage> {
                   ).withPadding(),
                   const CourseDetailLevelSelector().withPadding(),
                   Text(
-                    "Your Knowledge",
+                    "Your knowledge",
                     style: AppStyles.textStyleTitleStrong,
                   ).withPadding(),
                   const CourseKnowledgeLevelSelector().withPadding(),
                   const CourseNext(),
                   const SizedBox(height: 16),
                   const DividerWithText(title: "Continue"),
+                  Text(
+                    "Title",
+                    style: AppStyles.textStyleTitleStrong,
+                  ).withPadding(),
+                  CourseTitleInput(controller: _titleController),
                   Text(
                     "Description",
                     style: AppStyles.textStyleTitleStrong,

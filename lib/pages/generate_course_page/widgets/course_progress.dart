@@ -17,14 +17,13 @@ class CourseProgress extends StatelessWidget {
     return BlocBuilder<GenerateCourseBloc, GenerateCourseState>(
       buildWhen: (previous, current) {
         return previous.course.chapters != current.course.chapters ||
-            previous.isLoadingCourse != current.isLoadingCourse ||
             previous.chapterLoadingStatus != current.chapterLoadingStatus;
       },
       builder: (context, state) {
         bool isLoading = state.chapterLoadingStatus.values.any(
           (status) => status.isGenerating,
         );
-        return state.isLoadingCourse
+        return isLoading
             ? ListCard(
                 child: Column(
                   children: state.course.chapters.map((chapter) {

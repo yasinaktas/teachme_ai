@@ -6,7 +6,7 @@ import 'package:teachme_ai/repositories/api_result.dart';
 
 abstract interface class IGenerateCourseRepository {
   Future<ApiResult<DtoSubtitles>> getGeneratedSubtitles(
-    String title,
+    String about,
     String language,
   );
 

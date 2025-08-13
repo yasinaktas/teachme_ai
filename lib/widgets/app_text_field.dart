@@ -9,6 +9,7 @@ class AppTextField extends StatefulWidget {
   final bool isPassword;
   final bool isEnabled;
   final TextInputType keyboardType;
+  final bool isMultiline;
   final Function(String)? onChanged;
   const AppTextField({
     super.key,
@@ -16,6 +17,7 @@ class AppTextField extends StatefulWidget {
     required this.hintText,
     this.isPassword = false,
     this.isEnabled = true,
+    this.isMultiline = false,
     this.keyboardType = TextInputType.text,
     this.onChanged,
   });
@@ -33,10 +35,18 @@ class _AppTextFieldState extends State<AppTextField> {
       controller: widget.controller ?? TextEditingController(),
       keyboardType: widget.keyboardType,
       obscureText: widget.isPassword && !_isVisible,
+      minLines: widget.isMultiline ? 3 : 1,
+      maxLines: widget.isMultiline ? null : 1,
+      cursorColor: AppColors.primaryColor,
+      style: AppStyles.textStyleNormalWeak,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.textFieldRadius),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.textFieldRadius),
+          borderSide: BorderSide(color: AppColors.primaryColor, width: 1.5),
         ),
         hintText: widget.hintText,
         hintStyle: AppStyles.textStyleNormalLight,
