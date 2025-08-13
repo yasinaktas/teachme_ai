@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_bloc.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_event.dart';
+import 'package:teachme_ai/blocs/course/course_bloc.dart';
+import 'package:teachme_ai/blocs/course/course_state.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
@@ -51,7 +53,20 @@ class ChapterPageState extends State<ChapterPage> {
           backgroundColor: AppColors.backgroundColor,
           scrolledUnderElevation: 0,
           centerTitle: true,
-          title: Text("Enjoy Learning", style: AppStyles.textStylePageTitle),
+          title: BlocBuilder<CourseBloc, CourseState>(
+            builder: (context, state) {
+              final course = state.courses.firstWhere(
+                (course) => course.id == chapter.courseId,
+              );
+              final index = course.chapters.indexWhere(
+                (c) => c.id == chapter.id,
+              );
+              return Text(
+                index != -1 ? "Chapter ${index + 1}" : "Enjoy Learning",
+                style: AppStyles.textStylePageTitle,
+              );
+            },
+          ),
         ),
         bottomNavigationBar: BottomAppBar(
           color: Colors.transparent,
@@ -72,12 +87,7 @@ class ChapterPageState extends State<ChapterPage> {
             ListCard(
               hasBorder: true,
               elevation: 0,
-              child: /*HtmlWithLatex(htmlWithLatex: chapter.content).withPadding(
-                const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.pagePadding / 2,
-                  vertical: AppDimensions.pagePadding / 2,
-                ),
-              ),*/ Html(data: chapter.content).withPadding(
+              child: Html(data: chapter.content).withPadding(
                 const EdgeInsets.symmetric(
                   horizontal: AppDimensions.pagePadding / 2,
                   vertical: AppDimensions.pagePadding / 2,

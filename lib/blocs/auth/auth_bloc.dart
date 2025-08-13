@@ -117,15 +117,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             final email = data['email'] ?? '';
 
             if (username.isEmpty || email.isEmpty) {
+              debugPrint("User document is incomplete");
               emit(Unauthenticated());
             } else {
               await _settingsRepository.setUsername(username);
               await _settingsRepository.setEmail(email);
               await _settingsRepository.setUserId(uid);
               await _authRepository.getCustomJwt();
+              debugPrint("User authenticated: $username, $email");
               emit(Authenticated(uid: uid, username: username, email: email));
             }
           } else {
+            debugPrint("User document does not exist");
             emit(Unauthenticated());
           }
         } catch (e) {

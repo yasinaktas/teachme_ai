@@ -36,6 +36,7 @@ import 'package:teachme_ai/services/hive_settings_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await HiveService.init();
   runApp(const MainApp());
