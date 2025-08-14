@@ -138,8 +138,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     await _settingsRepository.setUsername("");
     await _settingsRepository.setEmail("");
     await _settingsRepository.setUserId("");
-    await _settingsRepository.setLanguage("");
-    await _settingsRepository.setAppLanguage("");
+    await _settingsRepository.setLanguage("English");
+    await _settingsRepository.setAppLanguage("English");
     emit(
       SettingsState(
         username: "",

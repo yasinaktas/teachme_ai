@@ -21,7 +21,7 @@ class CourseProgress extends StatelessWidget {
       },
       builder: (context, state) {
         bool isLoading = state.chapterLoadingStatus.values.any(
-          (status) => status.isGenerating,
+          (status) => status.isGenerating || status.generationResultCode < 0,
         );
         return isLoading
             ? ListCard(

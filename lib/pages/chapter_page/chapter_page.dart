@@ -41,10 +41,11 @@ class ChapterPageState extends State<ChapterPage> {
     return true;
   }
 
+  bool showSummary = false;
+
   @override
   Widget build(BuildContext context) {
     final chapter = widget.chapter;
-    debugPrint(chapter.content);
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: _onPopInvokedWithResult,
@@ -68,33 +69,47 @@ class ChapterPageState extends State<ChapterPage> {
               );
             },
           ),
+          actions: [
+            IconButton(
+              icon: Icon(
+                showSummary ? Icons.expand_less : Icons.expand_more,
+                color: AppColors.onCardColor,
+              ),
+              onPressed: () {
+                setState(() {
+                  showSummary = !showSummary;
+                });
+              },
+            ),
+          ],
         ),
         bottomNavigationBar: BottomAppBar(
           color: Colors.transparent,
           child: AudioBar(chapter: chapter),
         ),
-
         body: CustomScrollView(
           slivers: [
-            Text(
-              "Chapter Summary",
-              style: AppStyles.textStyleTitleStrong,
-            ).withPadding().asSliverBox(),
-            SliverToBoxAdapter(child: ChapterPageChapterCard(chapter: chapter)),
-            Text(
-              "Content",
-              style: AppStyles.textStyleTitleStrong,
-            ).withPadding().asSliverBox(),
+            SliverVisibility(
+              visible: showSummary,
+              sliver: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Chapter Summary",
+                    style: AppStyles.textStyleTitleStrong,
+                  ).withPadding(),
+                  ChapterPageChapterCard(chapter: chapter),
+                  Text(
+                    "Content",
+                    style: AppStyles.textStyleTitleStrong,
+                  ).withPadding(),
+                ],
+              ).asSliverBox(),
+            ),
             ListCard(
               hasBorder: true,
               elevation: 0,
               child: ChapterContent(htmlContent: chapter.content),
-              /*Html(data: chapter.content).withPadding(
-                const EdgeInsets.symmetric(
-                  horizontal: AppDimensions.pagePadding / 2,
-                  vertical: AppDimensions.pagePadding / 2,
-                ),
-              ),*/
             ).withPadding().asSliverBox(),
             if (chapter.questions.isNotEmpty)
               Text(

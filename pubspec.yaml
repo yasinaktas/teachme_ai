@@ -31,6 +31,9 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   flutter_html_table: ^3.0.0
   flutter_html_math: ^3.0.0
+  highlight: ^0.7.0
+  flutter_highlight: ^0.7.0
+  html_unescape: ^2.0.0
   
 
 dev_dependencies:
@@ -60,3 +63,4 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/lotties/

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:teachme_ai/blocs/course/course_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_state.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
@@ -17,18 +18,37 @@ class HomeCourseList extends StatelessWidget {
         if (state.filteredCourses.isEmpty) {
           return SliverFillRemaining(
             hasScrollBody: false,
-            child: Center(
-              child:
-                  Text(
-                    'No courses available',
-                    style: AppStyles.textStyleNormal,
-                  ).withPadding(
-                    EdgeInsets.only(
-                      bottom:
-                          MediaQuery.of(context).padding.bottom +
-                          AppDimensions.pagePadding,
-                    ),
-                  ),
+            child: Stack(
+              children: [
+                Center(
+                  child:
+                      Text(
+                        "No courses found",
+                        style: AppStyles.textStyleNormalLight,
+                      ).withPadding(
+                        EdgeInsets.only(
+                          bottom:
+                              MediaQuery.of(context).padding.bottom +
+                              AppDimensions.pagePadding,
+                        ),
+                      ),
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child:
+                      Lottie.asset(
+                        "assets/lotties/arrow_blue.json",
+                        width: 100,
+                        height: 100,
+                      ).withPadding(
+                        EdgeInsets.only(
+                          bottom:
+                              MediaQuery.of(context).padding.bottom +
+                              AppDimensions.pagePadding,
+                        ),
+                      ),
+                ),
+              ],
             ),
           );
         } else {
