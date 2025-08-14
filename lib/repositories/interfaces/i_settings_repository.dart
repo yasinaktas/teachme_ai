@@ -1,3 +1,4 @@
+
 abstract interface class ISettingsRepository {
   Future<String> getUsername();
   Future<void> setUsername(String username);
@@ -13,4 +14,5 @@ abstract interface class ISettingsRepository {
 
   Future<String> getUserId();
   Future<void> setUserId(String userId);
+
 }

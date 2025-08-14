@@ -83,7 +83,7 @@ class AudioBar extends StatelessWidget {
                 const SizedBox(width: 0),
                 Text(
                   state.isAudioExists ? state.totalTime : "--:--",
-                  style: const TextStyle(color: Colors.white),
+                  style: AppStyles.textStyleNormalOnSurface,
                 ),
                 const SizedBox(width: 0),
                 state.isAudioExists
@@ -106,12 +106,12 @@ class AudioBar extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppDimensions.pagePadding,
                         ),
-                        child: const CircularProgress(
+                        child: CircularProgress(
                           color: AppColors.onCardOppositeColor,
                         ),
                       )
                     : IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.download,
                           color: AppColors.onCardOppositeColor,
                           size: AppDimensions.iconSizeMedium,

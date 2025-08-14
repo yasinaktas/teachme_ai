@@ -8,7 +8,15 @@ import 'package:teachme_ai/repositories/interfaces/i_settings_repository.dart';
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final ISettingsRepository _settingsRepository;
   SettingsBloc(this._settingsRepository)
-    : super(SettingsState(username: "", language: "", email: "", userId: "", appLanguage: "")) {
+    : super(
+        SettingsState(
+          username: "",
+          language: "",
+          email: "",
+          userId: "",
+          appLanguage: "",
+        ),
+      ) {
     on<SettingsInitialEvent>(_onSettingsInitialEvent);
     on<GetLanguageEvent>(_onGetLanguageEvent);
     on<GetUsernameEvent>(_onGetUsernameEvent);

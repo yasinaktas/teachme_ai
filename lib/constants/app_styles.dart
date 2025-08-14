@@ -7,12 +7,12 @@ class AppStyles {
   static TextStyle _base({
     double size = 14,
     FontWeight weight = FontWeight.w600,
-    Color color = AppColors.textColor,
+    Color? color,
   }) {
     return GoogleFonts.quicksand(
       fontSize: size,
       fontWeight: weight,
-      color: color,
+      color: color ?? AppColors.textColor,
     );
   }
 

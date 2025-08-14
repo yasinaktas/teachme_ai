@@ -1,3 +1,5 @@
+import 'package:teachme_ai/constants/app_colors.dart';
+
 class SettingsState {
   final String userId;
   final String username;
@@ -19,6 +21,7 @@ class SettingsState {
     String? email,
     String? language,
     String? appLanguage,
+    AppColors? theme,
   }) {
     return SettingsState(
       userId: userId ?? this.userId,

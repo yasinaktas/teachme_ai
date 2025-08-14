@@ -95,7 +95,7 @@ class MainApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: AppColors.backgroundColor,
-          appBarTheme: const AppBarTheme(
+          appBarTheme: AppBarTheme(
             backgroundColor: AppColors.backgroundColor,
             systemOverlayStyle: SystemUiOverlayStyle(
               systemNavigationBarColor: AppColors.backgroundColor,

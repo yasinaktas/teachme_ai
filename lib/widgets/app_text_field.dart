@@ -38,6 +38,7 @@ class _AppTextFieldState extends State<AppTextField> {
       minLines: widget.isMultiline ? 3 : 1,
       maxLines: widget.isMultiline ? null : 1,
       cursorColor: AppColors.primaryColor,
+      autocorrect: false,
       style: AppStyles.textStyleNormalWeak,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

@@ -55,4 +55,6 @@ class HiveSettingsRepository implements ISettingsRepository {
   Future<void> setAppLanguage(String language) {
     return _settingsService.setAppLanguage(language);
   }
+
+
 }

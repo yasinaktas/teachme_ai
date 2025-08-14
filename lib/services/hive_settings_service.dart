@@ -53,4 +53,6 @@ class HiveSettingsService implements ISettingsService {
   Future<void> setUserId(String userId) async {
     return _settingsBox.put("userId", userId);
   }
+
+  
 }

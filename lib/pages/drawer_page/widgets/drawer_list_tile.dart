@@ -15,7 +15,7 @@ class DrawerListTile extends StatelessWidget {
     required this.title,
     required this.icon,
     this.iconSize = AppDimensions.iconSizeMedium,
-    this.iconColor = AppColors.secondaryColor,
+    this.iconColor,
     this.hasDivider = false,
     this.onTap,
   });
@@ -26,7 +26,11 @@ class DrawerListTile extends StatelessWidget {
       children: [
         if (hasDivider == true) Divider(color: AppColors.secondarySurfaceColor),
         ListTile(
-          leading: Icon(icon, color: iconColor, size: iconSize),
+          leading: Icon(
+            icon,
+            color: iconColor ?? AppColors.secondaryColor,
+            size: iconSize,
+          ),
           title: Text(title, style: AppStyles.textStyleNormalWeak),
           onTap: onTap,
         ),

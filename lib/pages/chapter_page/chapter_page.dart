@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_bloc.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_event.dart';
 import 'package:teachme_ai/blocs/course/course_bloc.dart';
@@ -13,7 +14,6 @@ import 'package:teachme_ai/models/chapter.dart';
 import 'package:teachme_ai/pages/chapter_page/widgets/audio_bar.dart';
 import 'package:teachme_ai/pages/chapter_page/widgets/question_list.dart';
 import 'package:teachme_ai/pages/chapter_page/widgets/chapter_page_chapter_card%20copy.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:teachme_ai/widgets/list_card.dart';
 
 class ChapterPage extends StatefulWidget {
@@ -44,6 +44,7 @@ class ChapterPageState extends State<ChapterPage> {
   @override
   Widget build(BuildContext context) {
     final chapter = widget.chapter;
+    debugPrint(chapter.content);
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: _onPopInvokedWithResult,
@@ -87,7 +88,8 @@ class ChapterPageState extends State<ChapterPage> {
             ListCard(
               hasBorder: true,
               elevation: 0,
-              child: Html(data: chapter.content).withPadding(
+              child: //ChapterContent(htmlContent: chapter.content),
+              Html(data: chapter.content).withPadding(
                 const EdgeInsets.symmetric(
                   horizontal: AppDimensions.pagePadding / 2,
                   vertical: AppDimensions.pagePadding / 2,

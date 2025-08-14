@@ -15,8 +15,8 @@ class GenerateCourseState extends Equatable {
   final Map<String, ChapterStatus> chapterLoadingStatus;
   final bool isCourseGenerated;
   final String? errorMessage;
-  final CourseDetailLevel? detailLevel;
-  final KnowledgeLevel? knowledgeLevel;
+  final CourseDetailLevel detailLevel;
+  final KnowledgeLevel knowledgeLevel;
 
   const GenerateCourseState({
     required this.course,

@@ -26,12 +26,16 @@ class GenerateCourseRepository implements IGenerateCourseRepository {
     String language,
     String chapterTitle,
     List<String> chapterTitles,
+    String detailLevel,
+    String knowledgeLevel,
   ) async {
     return await _aiApiService.generateChapterContent(
       title,
       language,
       chapterTitle,
       chapterTitles,
+      detailLevel,
+      knowledgeLevel,
     );
   }
 

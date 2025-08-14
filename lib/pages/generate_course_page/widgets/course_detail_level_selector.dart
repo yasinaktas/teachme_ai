@@ -18,7 +18,7 @@ class CourseDetailLevelSelector extends StatelessWidget {
       },
       builder: (context, state) {
         final selectedDetailLevel =
-            state.detailLevel ?? CourseDetailLevel.detailed;
+            state.detailLevel;
         return Wrap(
           spacing: 8.0,
           children: CourseDetailLevel.values.map((detailLevel) {

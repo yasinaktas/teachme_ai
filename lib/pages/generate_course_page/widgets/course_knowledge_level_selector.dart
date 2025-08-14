@@ -18,7 +18,7 @@ class CourseKnowledgeLevelSelector extends StatelessWidget {
       },
       builder: (context, state) {
         final selectedKnowledgeLevel =
-            state.knowledgeLevel ?? KnowledgeLevel.beginner;
+            state.knowledgeLevel;
         return Wrap(
           spacing: 8.0,
           children: KnowledgeLevel.values.map((knowledgeLevel) {

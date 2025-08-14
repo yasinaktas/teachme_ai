@@ -1,3 +1,5 @@
+import 'package:teachme_ai/constants/app_colors.dart';
+
 abstract class SettingsEvent {}
 
 class SettingsInitialEvent extends SettingsEvent {}
@@ -40,4 +42,12 @@ class SetAppLanguageEvent extends SettingsEvent {
   final String appLanguage;
 
   SetAppLanguageEvent(this.appLanguage);
+}
+
+class GetThemeEvent extends SettingsEvent {}
+
+class SetThemeEvent extends SettingsEvent {
+  final AppColors theme;
+
+  SetThemeEvent(this.theme);
 }

@@ -44,6 +44,8 @@ class GeminiApiService implements IAiApiService {
     String language,
     String chapterTitle,
     List<String> chapterTitles,
+    String detailLevel,
+    String knowledgeLevel,
   ) async {
     try {
       final response = await _dio.post(
@@ -53,6 +55,8 @@ class GeminiApiService implements IAiApiService {
           'language': language,
           'chapter_title': chapterTitle,
           'chapter_titles': chapterTitles,
+          'detail_level': detailLevel,
+          'knowledge_level': knowledgeLevel,
         },
       );
       if (response.statusCode == 200) {

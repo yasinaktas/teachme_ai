@@ -15,6 +15,8 @@ abstract interface class IAiApiService {
     String language,
     String chapterTitle,
     List<String> chapterTitles,
+    String detailLevel,
+    String knowledgeLevel,
   );
 
   Future<ApiResult<DtoChapterTranscript>> generateChapterTranscript(

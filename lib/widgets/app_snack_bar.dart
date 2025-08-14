@@ -7,7 +7,7 @@ class AppSnackBar {
   static void show(
     BuildContext context, {
     required String message,
-    Color backgroundColor = AppColors.primaryColor,
+    Color? backgroundColor,
   }) {
     final snackBar = SnackBar(
       behavior: SnackBarBehavior.floating,
@@ -18,7 +18,7 @@ class AppSnackBar {
         left: AppDimensions.pagePadding,
         right: AppDimensions.pagePadding / 2,
       ),
-      backgroundColor: backgroundColor,
+      backgroundColor: backgroundColor ?? AppColors.primaryColor,
       elevation: 2,
       showCloseIcon: true,
       closeIconColor: AppColors.onCardOppositeColor,

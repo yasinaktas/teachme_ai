@@ -15,6 +15,8 @@ abstract interface class IGenerateCourseRepository {
     String language,
     String chapterTitle,
     List<String> chapterTitles,
+    String detailLevel,
+    String knowledgeLevel,
   );
 
   Future<ApiResult<DtoChapterTranscript>> getGeneratedChapterTranscript(

@@ -6,6 +6,8 @@ import 'package:teachme_ai/dto/dto_chapter_content.dart';
 import 'package:teachme_ai/dto/dto_chapter_questions.dart';
 import 'package:teachme_ai/dto/dto_chapter_transcript.dart';
 import 'package:teachme_ai/dto/dto_subtitles.dart';
+import 'package:teachme_ai/enums/course_detail_level.dart';
+import 'package:teachme_ai/enums/course_knowledge_level.dart';
 import 'package:teachme_ai/helper/generate_random_id.dart';
 import 'package:teachme_ai/models/answer.dart';
 import 'package:teachme_ai/models/chapter.dart';
@@ -186,72 +188,6 @@ class GenerateCourseBloc
     );
   }
 
-  /*Future<void> _onGenerateChapterTitles(
-    GenerateChapterTitles event,
-    Emitter<GenerateCourseState> emit,
-  ) async {
-    if (state.course.title.isEmpty) {
-      emit(state.copyWith(errorMessage: "Title cannot be empty"));
-      return;
-    }
-    emit(
-      state.copyWith(
-        isLoadingChapterTitles: true,
-        errorMessage: null,
-        lockTop: true,
-      ),
-    );
-    try {
-      final apiResult = await generateCourseRepository.getGeneratedSubtitles(
-        state.course.title,
-        state.course.language,
-      );
-      if (apiResult is Success) {
-        final dtoSubtitles = apiResult as Success<DtoSubtitles>;
-        emit(
-          state.copyWith(
-            course: state.course.copyWith(
-              chapters: dtoSubtitles.data.subtitles.map((e) {
-                return Chapter(
-                  id: GenerateRandomId.generateRandomUUID(),
-                  courseId: state.course.id,
-                  title: e.title,
-                  description: "",
-                  content: "",
-                  transcript: "",
-                  questions: [],
-                );
-              }).toList(),
-              description: dtoSubtitles.data.courseShortDescription,
-            ),
-            isLoadingChapterTitles: false,
-            errorMessage: null,
-            lockTop: true,
-            lockBottom: false,
-          ),
-        );
-      } else {
-        final errorResult = apiResult as Failure<DtoSubtitles>;
-        emit(
-          state.copyWith(
-            isLoadingChapterTitles: false,
-            errorMessage: errorResult.message,
-            lockTop: false,
-          ),
-        );
-      }
-    } catch (e) {
-      emit(
-        state.copyWith(
-          isLoadingChapterTitles: false,
-          lockTop: false,
-          errorMessage: "Failed to generate chapter titles: ${e.toString()}",
-        ),
-      );
-      return;
-    }
-  }*/
-
   Future<void> _onGenerateChapterTitles(
     GenerateChapterTitles event,
     Emitter<GenerateCourseState> emit,
@@ -324,6 +260,8 @@ class GenerateCourseBloc
     String title,
     String language,
     List<String> subtitles,
+    String detailLevel,
+    String knowledgeLevel,
   ) async {
     final ApiResult<DtoChapterContent> apiResultGeneratedContent =
         await generateCourseRepository.getGeneratedChapterContent(
@@ -331,6 +269,8 @@ class GenerateCourseBloc
           language,
           chapter.title,
           subtitles,
+          detailLevel,
+          knowledgeLevel,
         );
     if (apiResultGeneratedContent is Success) {
       return (apiResultGeneratedContent as Success).data;
@@ -416,6 +356,8 @@ class GenerateCourseBloc
     final title = state.course.title;
     final language = state.course.language;
     final subtitles = state.course.chapters.map((c) => c.title).toList();
+    final detailLevel = state.detailLevel.label;
+    final knowledgeLevel = state.knowledgeLevel.label;
     const int waitTime = 1000;
     emit(
       state.copyWith(
@@ -439,6 +381,8 @@ class GenerateCourseBloc
         title,
         language,
         subtitles,
+        detailLevel,
+        knowledgeLevel,
       );
       if (dtoContent is Failure<DtoChapterContent>) {
         emit(
