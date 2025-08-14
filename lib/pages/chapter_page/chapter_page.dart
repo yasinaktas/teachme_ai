@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_bloc.dart';
 import 'package:teachme_ai/blocs/chapter/chapter_event.dart';
 import 'package:teachme_ai/blocs/course/course_bloc.dart';
@@ -12,6 +11,7 @@ import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/extensions/sliver_box_extension.dart';
 import 'package:teachme_ai/models/chapter.dart';
 import 'package:teachme_ai/pages/chapter_page/widgets/audio_bar.dart';
+import 'package:teachme_ai/pages/chapter_page/widgets/chapter_content.dart';
 import 'package:teachme_ai/pages/chapter_page/widgets/question_list.dart';
 import 'package:teachme_ai/pages/chapter_page/widgets/chapter_page_chapter_card%20copy.dart';
 import 'package:teachme_ai/widgets/list_card.dart';
@@ -88,13 +88,13 @@ class ChapterPageState extends State<ChapterPage> {
             ListCard(
               hasBorder: true,
               elevation: 0,
-              child: //ChapterContent(htmlContent: chapter.content),
-              Html(data: chapter.content).withPadding(
+              child: ChapterContent(htmlContent: chapter.content),
+              /*Html(data: chapter.content).withPadding(
                 const EdgeInsets.symmetric(
                   horizontal: AppDimensions.pagePadding / 2,
                   vertical: AppDimensions.pagePadding / 2,
                 ),
-              ),
+              ),*/
             ).withPadding().asSliverBox(),
             if (chapter.questions.isNotEmpty)
               Text(
