@@ -28,6 +28,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<SetUserIdEvent>(_onSetUserIdEvent);
     on<GetAppLanguageEvent>(_onGetAppLanguageEvent);
     on<SetAppLanguageEvent>(_onSetAppLanguageEvent);
+    on<ClearAllEvent>(_onClearAllEvent);
   }
 
   Future<void> _onSettingsInitialEvent(
@@ -128,5 +129,25 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   ) async {
     await _settingsRepository.setAppLanguage(event.appLanguage);
     emit(state.copyWith(appLanguage: event.appLanguage));
+  }
+
+  Future<void> _onClearAllEvent(
+    ClearAllEvent event,
+    Emitter<SettingsState> emit,
+  ) async {
+    await _settingsRepository.setUsername("");
+    await _settingsRepository.setEmail("");
+    await _settingsRepository.setUserId("");
+    await _settingsRepository.setLanguage("");
+    await _settingsRepository.setAppLanguage("");
+    emit(
+      SettingsState(
+        username: "",
+        email: "",
+        userId: "",
+        language: "",
+        appLanguage: "",
+      ),
+    );
   }
 }

@@ -57,6 +57,11 @@ class MainApp extends StatelessWidget {
     AuthRepository authRepository = AuthRepository();
     return MultiBlocProvider(
       providers: [
+        BlocProvider<SettingsBloc>(
+          create: (context) =>
+              SettingsBloc(HiveSettingsRepository(HiveSettingsService()))
+                ..add(SettingsInitialEvent()),
+        ),
         BlocProvider<CourseBloc>(
           create: (context) =>
               CourseBloc(courseRepository: courseRepository)
@@ -66,7 +71,7 @@ class MainApp extends StatelessWidget {
           create: (context) => AuthBloc(
             FirebaseAuth.instance,
             FirebaseFirestore.instance,
-            settingsRepository,
+            context.read<SettingsBloc>(),
             authRepository,
           )..add(AppStarted()),
         ),
@@ -84,11 +89,6 @@ class MainApp extends StatelessWidget {
             courseRepository: courseRepository,
             ttsRepository: ttsRepository,
           ),
-        ),
-        BlocProvider<SettingsBloc>(
-          create: (context) =>
-              SettingsBloc(HiveSettingsRepository(HiveSettingsService()))
-                ..add(SettingsInitialEvent()),
         ),
       ],
       child: MaterialApp(

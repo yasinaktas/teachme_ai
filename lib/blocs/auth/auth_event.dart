@@ -39,6 +39,15 @@ class AuthStateChanged extends AuthEvent {
   List<Object?> get props => [uid];
 }
 
-class GoSignup extends AuthEvent{}
+class GoSignup extends AuthEvent {}
 
-class GoLogin extends AuthEvent{}
+class GoLogin extends AuthEvent {}
+
+class DeleteAccountRequested extends AuthEvent {
+  final String userId;
+
+  const DeleteAccountRequested(this.userId);
+
+  @override
+  List<Object> get props => [userId];
+}

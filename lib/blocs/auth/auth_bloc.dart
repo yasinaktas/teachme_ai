@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:teachme_ai/blocs/settings/settings_bloc.dart';
+import 'package:teachme_ai/blocs/settings/settings_event.dart';
 import 'package:teachme_ai/repositories/auth_repository.dart';
-import 'package:teachme_ai/repositories/interfaces/i_settings_repository.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,14 +12,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
-  final ISettingsRepository _settingsRepository;
+  final SettingsBloc _settingsBloc;
   final AuthRepository _authRepository;
   StreamSubscription<User?>? _authSubscription;
 
   AuthBloc(
     this._firebaseAuth,
     this._firestore,
-    this._settingsRepository,
+    this._settingsBloc,
     this._authRepository,
   ) : super(AuthInitial()) {
     _authSubscription = _firebaseAuth.authStateChanges().listen((user) {
@@ -41,6 +42,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               emit(Unauthenticated());
             } else {
               await _authRepository.getCustomJwt();
+              _settingsBloc.add(SetUsernameEvent(username));
+              _settingsBloc.add(SetEmailEvent(email));
+              _settingsBloc.add(SetUserIdEvent(uid));
               emit(Authenticated(uid: uid, username: username, email: email));
             }
           } else {
@@ -98,9 +102,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     on<SignOutRequested>((event, emit) async {
-      await _settingsRepository.setUsername('');
-      await _settingsRepository.setEmail('');
-      await _settingsRepository.setUserId('');
+      _settingsBloc.add(SetUsernameEvent(""));
+      _settingsBloc.add(SetEmailEvent(""));
+      _settingsBloc.add(SetUserIdEvent(""));
       await _authRepository.deleteStoredJwt();
       await _firebaseAuth.signOut();
     });
@@ -120,9 +124,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               debugPrint("User document is incomplete");
               emit(Unauthenticated());
             } else {
-              await _settingsRepository.setUsername(username);
-              await _settingsRepository.setEmail(email);
-              await _settingsRepository.setUserId(uid);
+              _settingsBloc.add(SetUsernameEvent(username));
+              _settingsBloc.add(SetEmailEvent(email));
+              _settingsBloc.add(SetUserIdEvent(uid));
               await _authRepository.getCustomJwt();
               debugPrint("User authenticated: $username, $email");
               emit(Authenticated(uid: uid, username: username, email: email));
@@ -138,6 +142,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else {
         debugPrint("User is unauthenticated");
         emit(Unauthenticated());
+      }
+    });
+
+    on<DeleteAccountRequested>((event, emit) async {
+      emit(AuthLoading());
+
+      final user = _firebaseAuth.currentUser;
+
+      if (user == null) {
+        emit(AuthError("No user logged in"));
+        return;
+      }
+
+      try {
+        final uid = user.uid;
+
+        await _firestore.collection('users').doc(uid).delete();
+
+        await user.delete();
+
+        await _authRepository.deleteStoredJwt();
+        _settingsBloc.add(ClearAllEvent());
+
+        emit(Unauthenticated());
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'requires-recent-login') {
+          emit(AuthError("Please reauthenticate and try again"));
+        } else {
+          emit(AuthError(e.message ?? "Account deletion failed"));
+        }
+      } catch (e) {
+        emit(AuthError("Something went wrong: $e"));
       }
     });
   }

@@ -51,3 +51,5 @@ class SetThemeEvent extends SettingsEvent {
 
   SetThemeEvent(this.theme);
 }
+
+class ClearAllEvent extends SettingsEvent {}
