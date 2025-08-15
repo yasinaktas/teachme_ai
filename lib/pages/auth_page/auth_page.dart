@@ -10,6 +10,7 @@ import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/extensions/sliver_box_extension.dart';
 import 'package:teachme_ai/pages/auth_page/login_page.dart';
 import 'package:teachme_ai/pages/auth_page/signup_page.dart';
+import 'package:teachme_ai/widgets/app_snack_bar.dart';
 import 'package:teachme_ai/widgets/circular_progress.dart';
 import 'package:teachme_ai/widgets/list_card.dart';
 import 'package:teachme_ai/widgets/top_banner.dart';
@@ -42,11 +43,13 @@ class _AuthPageState extends State<AuthPage>
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is Authenticated) {
+          AppSnackBar.show(
+            context,
+            message: "Welcome back, ${state.username}!",
+          );
           Navigator.of(context).pushReplacementNamed('/host');
         } else if (state is AuthError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
+          AppErrorSnackBar.show(context, message: state.message);
         }
       },
       builder: (context, state) {

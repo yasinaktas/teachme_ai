@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/auth/auth_bloc.dart';
 import 'package:teachme_ai/blocs/auth/auth_event.dart';
-import 'package:teachme_ai/blocs/settings/settings_bloc.dart';
+import 'package:teachme_ai/blocs/cache/cache_bloc.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
@@ -36,7 +36,7 @@ class DeleteAccount extends StatelessWidget {
                     "Are you sure you want to delete your account? This action cannot be undone.",
                 actionButtonText: "Delete",
                 onActionButtonPressed: () {
-                  final userId = context.read<SettingsBloc>().state.userId;
+                  final userId = context.read<CacheBloc>().state.userId;
                   context.read<AuthBloc>().add(DeleteAccountRequested(userId));
                 },
               ),

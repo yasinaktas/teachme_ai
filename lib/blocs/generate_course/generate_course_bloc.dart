@@ -17,18 +17,18 @@ import 'package:teachme_ai/models/course.dart';
 import 'package:teachme_ai/models/question.dart';
 import 'package:teachme_ai/repositories/api_result.dart';
 import 'package:teachme_ai/repositories/interfaces/i_generate_course_repository.dart';
-import 'package:teachme_ai/repositories/interfaces/i_settings_repository.dart';
+import 'package:teachme_ai/repositories/interfaces/i_cache_repository.dart';
 import 'package:teachme_ai/repositories/interfaces/i_tts_repository.dart';
 
 class GenerateCourseBloc
     extends Bloc<GenerateCourseEvent, GenerateCourseState> {
   final IGenerateCourseRepository generateCourseRepository;
   final ITtsRepository ttsRepository;
-  final ISettingsRepository settingsRepository;
+  final ICacheRepository cacheRepository;
   GenerateCourseBloc({
     required this.generateCourseRepository,
     required this.ttsRepository,
-    required this.settingsRepository,
+    required this.cacheRepository,
   }) : super(
          GenerateCourseState(
            course: Course(
@@ -64,7 +64,7 @@ class GenerateCourseBloc
   }
 
   void _initializeLanguage() async {
-    final lang = await settingsRepository.getLanguage();
+    final lang = await cacheRepository.getLanguage();
     add(SelectLanguage(lang));
   }
 
@@ -116,7 +116,7 @@ class GenerateCourseBloc
     emit(
       state.copyWith(course: state.course.copyWith(language: event.language)),
     );
-    await settingsRepository.setLanguage(event.language);
+    await cacheRepository.setLanguage(event.language);
   }
 
   void _onSelectDetailLevel(

@@ -10,8 +10,8 @@ import 'package:teachme_ai/blocs/chapter/chapter_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_event.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_bloc.dart';
-import 'package:teachme_ai/blocs/settings/settings_bloc.dart';
-import 'package:teachme_ai/blocs/settings/settings_event.dart';
+import 'package:teachme_ai/blocs/cache/cache_bloc.dart';
+import 'package:teachme_ai/blocs/cache/cache_event.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/firebase_options.dart';
 import 'package:teachme_ai/models/chapter.dart';
@@ -21,18 +21,19 @@ import 'package:teachme_ai/pages/chapter_page/chapter_page.dart';
 import 'package:teachme_ai/pages/course_page/course_page.dart';
 import 'package:teachme_ai/pages/host_page/host_page.dart';
 import 'package:teachme_ai/pages/profile_page/profile_page.dart';
+import 'package:teachme_ai/pages/settings_page/settings_page.dart';
 import 'package:teachme_ai/pages/splash_page/splash_page.dart';
 import 'package:teachme_ai/pages/subscription_page/subscription_page.dart';
 import 'package:teachme_ai/repositories/auth_repository.dart';
 import 'package:teachme_ai/repositories/generate_course_repository.dart';
 import 'package:teachme_ai/repositories/google_tts_repository.dart';
 import 'package:teachme_ai/repositories/hive_course_repository.dart';
-import 'package:teachme_ai/repositories/hive_settings_repository.dart';
+import 'package:teachme_ai/repositories/hive_cache_repository.dart';
 import 'package:teachme_ai/services/gemini_api_service.dart';
 import 'package:teachme_ai/services/google_tts_service.dart';
 import 'package:teachme_ai/services/hive_course_service.dart';
 import 'package:teachme_ai/services/hive_service.dart';
-import 'package:teachme_ai/services/hive_settings_service.dart';
+import 'package:teachme_ai/services/hive_cache_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,17 +51,17 @@ class MainApp extends StatelessWidget {
     HiveCourseRepository courseRepository = HiveCourseRepository(
       HiveCourseService(),
     );
-    HiveSettingsRepository settingsRepository = HiveSettingsRepository(
-      HiveSettingsService(),
+    HiveCacheRepository cacheRepository = HiveCacheRepository(
+      HiveCacheService(),
     );
     GoogleTtsRepository ttsRepository = GoogleTtsRepository(GoogleTtsService());
     AuthRepository authRepository = AuthRepository();
     return MultiBlocProvider(
       providers: [
-        BlocProvider<SettingsBloc>(
+        BlocProvider<CacheBloc>(
           create: (context) =>
-              SettingsBloc(HiveSettingsRepository(HiveSettingsService()))
-                ..add(SettingsInitialEvent()),
+              CacheBloc(HiveCacheRepository(HiveCacheService()))
+                ..add(CacheInitialEvent()),
         ),
         BlocProvider<CourseBloc>(
           create: (context) =>
@@ -71,7 +72,7 @@ class MainApp extends StatelessWidget {
           create: (context) => AuthBloc(
             FirebaseAuth.instance,
             FirebaseFirestore.instance,
-            context.read<SettingsBloc>(),
+            context.read<CacheBloc>(),
             authRepository,
           )..add(AppStarted()),
         ),
@@ -81,7 +82,7 @@ class MainApp extends StatelessWidget {
               aiApiService: GeminiApiService(),
             ),
             ttsRepository: ttsRepository,
-            settingsRepository: settingsRepository,
+            cacheRepository: cacheRepository,
           ),
         ),
         BlocProvider<ChapterBloc>(
@@ -121,6 +122,7 @@ class MainApp extends StatelessWidget {
             return ChapterPage(chapter: chapter as Chapter);
           },
           "/subscription": (context) => const SubscriptionPage(),
+          "/settings": (context) => const SettingsPage(),
         },
       ),
     );

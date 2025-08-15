@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_bloc.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_event.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_state.dart';
+import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/widgets/app_text_field.dart';
 
@@ -43,7 +44,20 @@ class _CourseAboutInputState extends State<CourseAboutInput> {
           controller: widget.controller,
           isEnabled: !state.lockTop,
           isMultiline: true,
-          hintText: "Describe what you want to learn in this course",
+          hintText: "Describe what you want to learn.",
+          hint: RichText(
+            text: TextSpan(
+              text: "Describe what you want to learn.\n",
+              style: AppStyles.textStyleNormalPrimaryDark,
+              children: [
+                TextSpan(
+                  text:
+                      "\"I want to understand AI and how machine learning works so I can build a chatbot for my website\"",
+                  style: AppStyles.textStyleNormalLight,
+                ),
+              ],
+            ),
+          ),
           onChanged: (value) {
             context.read<GenerateCourseBloc>().add(SetAbout(value));
           },

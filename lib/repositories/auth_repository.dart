@@ -9,7 +9,7 @@ class AuthRepository {
   final Dio _dio = DioClient().dio;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
-  Future<String> getCustomJwt() async {
+  Future<void> exchangeFirebaseToken() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) throw NotLoginErrorException();
 
@@ -21,23 +21,34 @@ class AuthRepository {
         options: Options(headers: {'Authorization': 'Bearer $idToken'}),
       );
 
-      final customJwt = res.data['access_token'];
-      if (customJwt == null) {
+      final accessToken = res.data['access_token'];
+      final accessTokenExpiry = res.data['expires_at'];
+      final refreshToken = res.data['refresh_token'];
+      final refreshTokenExpiry = res.data['refresh_expires_at'];
+
+      if (accessToken == null || refreshToken == null) {
         throw AccessTokenErrorException();
       }
 
-      await _storage.write(key: 'custom_jwt', value: customJwt);
-      return customJwt;
+      await _storage.write(key: 'custom_jwt', value: accessToken);
+      await _storage.write(
+        key: 'custom_jwt_expiry',
+        value: accessTokenExpiry.toString(),
+      );
+      await _storage.write(key: 'refresh_token', value: refreshToken);
+      await _storage.write(
+        key: 'refresh_token_expiry',
+        value: refreshTokenExpiry.toString(),
+      );
     } catch (e) {
       throw AccessTokenErrorException();
     }
   }
 
-  Future<String?> getStoredJwt() async {
-    return await _storage.read(key: 'custom_jwt');
-  }
-
-  Future<void> deleteStoredJwt() async {
+  Future<void> deleteTokens() async {
     await _storage.delete(key: 'custom_jwt');
+    await _storage.delete(key: 'custom_jwt_expiry');
+    await _storage.delete(key: 'refresh_token');
+    await _storage.delete(key: 'refresh_token_expiry');
   }
 }

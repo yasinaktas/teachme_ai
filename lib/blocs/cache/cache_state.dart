@@ -1,14 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 
-class SettingsState extends Equatable {
+class CacheState extends Equatable {
   final String userId;
   final String username;
   final String email;
   final String language;
   final String appLanguage;
 
-  const SettingsState({
+  const CacheState({
     required this.userId,
     required this.username,
     required this.email,
@@ -16,7 +16,7 @@ class SettingsState extends Equatable {
     required this.appLanguage,
   });
 
-  SettingsState copyWith({
+  CacheState copyWith({
     String? userId,
     String? username,
     String? email,
@@ -24,7 +24,7 @@ class SettingsState extends Equatable {
     String? appLanguage,
     AppColors? theme,
   }) {
-    return SettingsState(
+    return CacheState(
       userId: userId ?? this.userId,
       email: email ?? this.email,
       username: username ?? this.username,

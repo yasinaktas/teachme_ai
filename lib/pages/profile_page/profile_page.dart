@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/auth/auth_bloc.dart';
 import 'package:teachme_ai/blocs/auth/auth_state.dart';
-import 'package:teachme_ai/blocs/settings/settings_bloc.dart';
-import 'package:teachme_ai/blocs/settings/settings_state.dart';
+import 'package:teachme_ai/blocs/cache/cache_bloc.dart';
+import 'package:teachme_ai/blocs/cache/cache_state.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
@@ -25,7 +25,7 @@ class ProfilePage extends StatelessWidget {
           ).pushNamedAndRemoveUntil("/auth", (route) => false);
         });
       },
-      child: BlocBuilder<SettingsBloc, SettingsState>(
+      child: BlocBuilder<CacheBloc, CacheState>(
         builder: (context, state) {
           return Scaffold(
             extendBody: true,
@@ -60,7 +60,7 @@ class ProfilePage extends StatelessWidget {
                   title: "Language",
                   subtitle: state.appLanguage,
                   children: [
-                    AppLanguageSelector(),
+                    const AppLanguageSelector(),
                     const SizedBox(height: AppDimensions.pagePadding),
                   ],
                 ).withPadding(),

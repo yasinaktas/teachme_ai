@@ -54,7 +54,10 @@ class DrawerContent extends StatelessWidget {
               title: "My Profile",
               icon: Icons.person_outline,
               iconColor: AppColors.primaryColor,
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed("/profile");
+              },
             ),
             DrawerListTile(
               title: "My Statistics",
@@ -67,7 +70,10 @@ class DrawerContent extends StatelessWidget {
               title: "Settings",
               icon: Icons.settings_outlined,
               hasDivider: true,
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed("/settings");
+              },
             ),
             DrawerListTile(
               title: "Privacy Policy",

@@ -45,10 +45,10 @@ class AudioBar extends StatelessWidget {
             state.totalTime,
           ).inSeconds.toDouble();
           return Card(
-            color: AppColors.blackColor,
+            color: AppColors.onCardColor,
             margin: EdgeInsets.zero,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(28),
+              borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
             ),
             child: Row(
               children: [

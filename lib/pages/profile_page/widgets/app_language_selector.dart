@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:teachme_ai/blocs/settings/settings_bloc.dart';
-import 'package:teachme_ai/blocs/settings/settings_event.dart';
-import 'package:teachme_ai/blocs/settings/settings_state.dart';
+import 'package:teachme_ai/blocs/cache/cache_bloc.dart';
+import 'package:teachme_ai/blocs/cache/cache_event.dart';
+import 'package:teachme_ai/blocs/cache/cache_state.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/constants/app_languages.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
@@ -13,7 +13,7 @@ class AppLanguageSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SettingsBloc, SettingsState>(
+    return BlocBuilder<CacheBloc, CacheState>(
       buildWhen: (previous, current) {
         return previous.appLanguage != current.appLanguage;
       },
@@ -27,7 +27,7 @@ class AppLanguageSelector extends StatelessWidget {
               backgroundColor: AppColors.cardColor,
               isSelected: isSelected,
               onSelected: (selected) {
-                context.read<SettingsBloc>().add(
+                context.read<CacheBloc>().add(
                   SetAppLanguageEvent(language.name),
                 );
               },

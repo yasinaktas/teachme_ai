@@ -4,6 +4,7 @@ import 'package:teachme_ai/blocs/course/course_bloc.dart';
 import 'package:teachme_ai/blocs/course/course_event.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 import 'package:teachme_ai/widgets/app_alert_dialog.dart';
+import 'package:teachme_ai/widgets/app_snack_bar.dart';
 
 class DeleteCoursePopup extends StatelessWidget {
   final String courseId;
@@ -39,6 +40,10 @@ class DeleteCoursePopup extends StatelessWidget {
                     context,
                   ).add(CourseDeleteEvent(courseId));
                   Navigator.of(context).pop();
+                  AppSnackBar.show(
+                    context,
+                    message: "Course deleted successfully",
+                  );
                 },
               );
             },

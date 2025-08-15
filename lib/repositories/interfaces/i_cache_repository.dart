@@ -1,5 +1,4 @@
-
-abstract interface class ISettingsService {
+abstract interface class ICacheRepository {
   Future<String> getUsername();
   Future<void> setUsername(String username);
 
@@ -14,5 +13,4 @@ abstract interface class ISettingsService {
 
   Future<String> getUserId();
   Future<void> setUserId(String userId);
-
 }

@@ -1,9 +1,9 @@
 enum KnowledgeLevel {
-  novice,       // Very new
-  beginner,     // Knows basics
-  intermediate, // Solid understanding
-  advanced,     // High skill level
-  expert        // Complete mastery
+  novice,      
+  beginner,    
+  intermediate, 
+  advanced,    
+  expert       
 }
 
 extension KnowledgeLevelExtension on KnowledgeLevel {

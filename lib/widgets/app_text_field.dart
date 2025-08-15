@@ -10,6 +10,7 @@ class AppTextField extends StatefulWidget {
   final bool isEnabled;
   final TextInputType keyboardType;
   final bool isMultiline;
+  final Widget? hint;
   final Function(String)? onChanged;
   const AppTextField({
     super.key,
@@ -18,6 +19,7 @@ class AppTextField extends StatefulWidget {
     this.isPassword = false,
     this.isEnabled = true,
     this.isMultiline = false,
+    this.hint,
     this.keyboardType = TextInputType.text,
     this.onChanged,
   });
@@ -49,8 +51,11 @@ class _AppTextFieldState extends State<AppTextField> {
           borderRadius: BorderRadius.circular(AppDimensions.textFieldRadius),
           borderSide: BorderSide(color: AppColors.primaryDarkColor, width: 1.5),
         ),
-        hintText: widget.hintText,
-        hintStyle: AppStyles.textStyleNormalLight,
+        hint:
+            widget.hint ??
+            Text(widget.hintText, style: AppStyles.textStyleNormalLight),
+        //hintText: widget.hintText,
+        //hintStyle: AppStyles.textStyleNormalLight,
         suffixIcon: widget.isPassword
             ? Padding(
                 padding: const EdgeInsets.only(right: 8.0),

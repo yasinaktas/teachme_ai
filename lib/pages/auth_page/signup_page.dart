@@ -9,6 +9,7 @@ import 'package:teachme_ai/constants/app_styles.dart';
 import 'package:teachme_ai/extensions/expanded_extension.dart';
 import 'package:teachme_ai/pages/auth_page/widgets/password_policy.dart';
 import 'package:teachme_ai/widgets/app_elevated_button.dart';
+import 'package:teachme_ai/widgets/app_snack_bar.dart';
 import 'package:teachme_ai/widgets/app_text_field.dart';
 
 class SignupPage extends StatefulWidget {
@@ -62,44 +63,6 @@ class _SignupPageState extends State<SignupPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 32.0),
-                  /*Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Your Name",
-                              style: AppStyles.textStyleNormalStrong,
-                            ),
-                            const SizedBox(height: 8.0),
-                            AppTextField(
-                              hintText: "Name",
-                              isEnabled: !isLoading,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 16.0),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Your Surname",
-                              style: AppStyles.textStyleNormalStrong,
-                            ),
-                            const SizedBox(height: 8.0),
-                            AppTextField(
-                              hintText: "Surname",
-                              isEnabled: !isLoading,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16.0),*/
                   Text("Your Username", style: AppStyles.textStyleNormalStrong),
                   const SizedBox(height: 8.0),
                   AppTextField(
@@ -157,8 +120,9 @@ class _SignupPageState extends State<SignupPage> {
                       if (email.isEmpty ||
                           password.isEmpty ||
                           username.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Please fill in all fields")),
+                        AppErrorSnackBar.show(
+                          context,
+                          message: "Please fill in all fields",
                         );
                         return;
                       }
@@ -167,12 +131,9 @@ class _SignupPageState extends State<SignupPage> {
                           !isNumber ||
                           !isUppercase ||
                           !isSpecialCharacter) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              "Password must meet all requirements",
-                            ),
-                          ),
+                        AppErrorSnackBar.show(
+                          context,
+                          message: "Password must meet all requirements",
                         );
                         return;
                       }

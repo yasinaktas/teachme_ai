@@ -22,7 +22,7 @@ class TopBanner extends StatelessWidget {
     return Card(
       color: AppColors.primarySurfaceColor,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppDimensions.radiusLarge),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
         side: BorderSide(color: AppColors.primaryShadowColor, width: 1),
       ),
       elevation: 0,
