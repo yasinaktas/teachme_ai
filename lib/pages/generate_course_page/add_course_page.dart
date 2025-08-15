@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_bloc.dart';
+import 'package:teachme_ai/blocs/generate_course/generate_course_event.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_state.dart';
 import 'package:teachme_ai/constants/app_dimensions.dart';
 import 'package:teachme_ai/constants/app_styles.dart';
@@ -58,7 +59,7 @@ class _AddCoursePageState extends State<AddCoursePage> {
     return BlocListener<GenerateCourseBloc, GenerateCourseState>(
       listenWhen: (previous, current) {
         return previous.isCourseGenerated != current.isCourseGenerated ||
-            previous.errorMessage != current.errorMessage;
+            current.errorMessage != null;
       },
       listener: (context, state) {
         if (state.isCourseGenerated) {
@@ -75,29 +76,39 @@ class _AddCoursePageState extends State<AddCoursePage> {
           FocusScope.of(context).unfocus();
         },
         child: Scaffold(
-          appBar: AppBar(
-            scrolledUnderElevation: 0,
-            centerTitle: true,
-            title: Text("New Course", style: AppStyles.textStylePageTitle),
-            actions: [
-              BlocBuilder<GenerateCourseBloc, GenerateCourseState>(
-                buildWhen: (previous, current) {
-                  return previous.chapterLoadingStatus !=
-                          current.chapterLoadingStatus ||
-                      previous.isLoadingChapterTitles !=
-                          current.isLoadingChapterTitles;
-                },
-                builder: (context, state) {
-                  bool isLoadingChapters = state.chapterLoadingStatus.values
-                      .any((status) => status.isGenerating);
-                  return Visibility(
-                    visible: isLoadingChapters || state.isLoadingChapterTitles,
-                    child: CircularProgress(),
-                  );
-                },
-              ),
-              SizedBox(width: AppDimensions.pagePadding),
-            ],
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(kToolbarHeight),
+            child: BlocBuilder<GenerateCourseBloc, GenerateCourseState>(
+              buildWhen: (previous, current) {
+                        return previous.chapterLoadingStatus !=
+                                current.chapterLoadingStatus ||
+                            previous.isLoadingChapterTitles !=
+                                current.isLoadingChapterTitles;
+                      },
+              builder: (context, state) {
+                bool isLoadingChapters = state.chapterLoadingStatus.values
+                            .any((status) => status.isGenerating);
+                return AppBar(
+                  scrolledUnderElevation: 0,
+                  centerTitle: true,
+                  title: Text("New Course", style: AppStyles.textStylePageTitle),
+                  actions: [
+                    TextButton(
+                      onPressed: isLoadingChapters ? null : () {
+                        context.read<GenerateCourseBloc>().add(Clear());
+                      },
+                      child: Text("Clear", style: AppStyles.textStyleNormalWeak),
+                    ),
+                    Visibility(
+                          visible:
+                              isLoadingChapters || state.isLoadingChapterTitles,
+                          child: CircularProgress(),
+                        ),
+                    SizedBox(width: AppDimensions.pagePadding),
+                  ],
+                );
+              },
+            ),
           ),
           body: Padding(
             padding: EdgeInsets.only(

@@ -28,10 +28,10 @@ class CourseState extends Equatable {
       filteredCourses: filteredCourses ?? this.filteredCourses,
       isLoading: isLoading ?? this.isLoading,
       searchText: searchText ?? this.searchText,
-      error: error ?? this.error,
+      error: error,
     );
   }
 
   @override
-  List<Object?> get props => [courses, isLoading, error, searchText];
+  List<Object?> get props => [courses, isLoading, error, searchText,filteredCourses];
 }

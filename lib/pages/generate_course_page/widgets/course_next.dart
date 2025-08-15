@@ -14,6 +14,7 @@ class CourseNext extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final generateCourseBloc = context.read<GenerateCourseBloc>();
     return BlocBuilder<GenerateCourseBloc, GenerateCourseState>(
       buildWhen: (previous, current) {
         return previous.isLoadingChapterTitles !=
@@ -29,7 +30,10 @@ class CourseNext extends StatelessWidget {
               isActive: !state.lockTop,
               text: "Next",
               onPressed: () async {
-                context.read<GenerateCourseBloc>().add(GenerateChapterTitles());
+                debugPrint(
+                  "Current Error Message: ${generateCourseBloc.state.errorMessage}",
+                );
+                generateCourseBloc.add(GenerateChapterTitles());
               },
             ).asExpanded(),
             const SizedBox(height: AppDimensions.pagePadding),

@@ -177,19 +177,11 @@ class GenerateCourseBloc
 
   void _onAddSubtitle(AddSubtitle event, Emitter<GenerateCourseState> emit) {
     if (state.subtitle == null || state.subtitle!.isEmpty) {
-      emit(
-        state.copyWith(
-          errorMessage: "Please enter a subtitle.",
-        ),
-      );
+      emit(state.copyWith(errorMessage: "Please enter a subtitle."));
       return;
     }
     if (state.course.chapters.length >= 10) {
-      emit(
-        state.copyWith(
-          errorMessage: "You can add up to 10 chapters.",
-        ),
-      );
+      emit(state.copyWith(errorMessage: "You can add up to 10 chapters."));
       return;
     }
     final updatedChapters = List<Chapter>.from(state.course.chapters);
@@ -255,6 +247,7 @@ class GenerateCourseBloc
     GenerateChapterTitles event,
     Emitter<GenerateCourseState> emit,
   ) async {
+    emit(state.copyWith(errorMessage: null));
     if (state.about.isEmpty) {
       emit(
         state.copyWith(
@@ -445,6 +438,7 @@ class GenerateCourseBloc
             generationResultCode: 0,
           ),
         },
+        errorMessage: null,
       ),
     );
 
@@ -568,30 +562,21 @@ class GenerateCourseBloc
     GenerateCourse event,
     Emitter<GenerateCourseState> emit,
   ) async {
+    emit(state.copyWith(errorMessage: null));
     if (state.course.title.isEmpty) {
-      emit(
-        state.copyWith(
-          errorMessage: "Please add a title to the course.",
-        ),
-      );
+      emit(state.copyWith(errorMessage: "Please add a title to the course."));
       return;
     }
 
     if (state.course.description.isEmpty) {
       emit(
-        state.copyWith(
-          errorMessage: "Please add a description to the course.",
-        ),
+        state.copyWith(errorMessage: "Please add a description to the course."),
       );
       return;
     }
 
     if (state.course.chapters.isEmpty) {
-      emit(
-        state.copyWith(
-          errorMessage: "Please add at least one chapter.",
-        ),
-      );
+      emit(state.copyWith(errorMessage: "Please add at least one chapter."));
       return;
     }
 

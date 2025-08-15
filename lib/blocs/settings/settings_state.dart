@@ -1,13 +1,14 @@
+import 'package:equatable/equatable.dart';
 import 'package:teachme_ai/constants/app_colors.dart';
 
-class SettingsState {
+class SettingsState extends Equatable {
   final String userId;
   final String username;
   final String email;
   final String language;
   final String appLanguage;
 
-  SettingsState({
+  const SettingsState({
     required this.userId,
     required this.username,
     required this.email,
@@ -31,4 +32,7 @@ class SettingsState {
       appLanguage: appLanguage ?? this.appLanguage,
     );
   }
+
+  @override
+  List<Object?> get props => [userId, username, email, language, appLanguage];
 }

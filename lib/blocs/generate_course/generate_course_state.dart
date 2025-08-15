@@ -50,7 +50,7 @@ class GenerateCourseState extends Equatable {
     return GenerateCourseState(
       course: course ?? this.course,
       about: about ?? this.about,
-      subtitle: subtitle ?? this.subtitle,
+      subtitle: subtitle,
       generateQuestions: generateQuestions ?? this.generateQuestions,
       lockTop: lockTop ?? this.lockTop,
       lockBottom: lockBottom ?? this.lockBottom,
@@ -58,7 +58,7 @@ class GenerateCourseState extends Equatable {
           isLoadingChapterTitles ?? this.isLoadingChapterTitles,
       chapterLoadingStatus: chapterLoadingStatus ?? this.chapterLoadingStatus,
       isCourseGenerated: isCourseGenerated ?? this.isCourseGenerated,
-      errorMessage: errorMessage ?? this.errorMessage,
+      errorMessage: errorMessage,
       detailLevel: detailLevel ?? this.detailLevel,
       knowledgeLevel: knowledgeLevel ?? this.knowledgeLevel,
     );
