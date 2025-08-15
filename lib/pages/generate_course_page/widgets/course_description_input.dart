@@ -47,6 +47,7 @@ class _CourseDescriptionInputState extends State<CourseDescriptionInput> {
           controller: widget.controller,
           isEnabled: !state.lockBottom,
           hintText: "Course description",
+          isMultiline: true,
           onChanged: (value) {
             context.read<GenerateCourseBloc>().add(SetDescription(value));
           },

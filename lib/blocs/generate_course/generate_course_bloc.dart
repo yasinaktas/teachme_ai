@@ -9,6 +9,7 @@ import 'package:teachme_ai/dto/dto_subtitles.dart';
 import 'package:teachme_ai/enums/course_detail_level.dart';
 import 'package:teachme_ai/enums/course_knowledge_level.dart';
 import 'package:teachme_ai/helper/generate_random_id.dart';
+import 'package:teachme_ai/helper/get_error_message.dart';
 import 'package:teachme_ai/models/answer.dart';
 import 'package:teachme_ai/models/chapter.dart';
 import 'package:teachme_ai/models/chapter_status.dart';
@@ -67,6 +68,47 @@ class GenerateCourseBloc
     add(SelectLanguage(lang));
   }
 
+  void _onClear(Clear event, Emitter<GenerateCourseState> emit) {
+    emit(
+      state.copyWith(
+        course: state.course.copyWith(
+          id: GenerateRandomId.generateRandomUUID(),
+          createdAt: DateTime.now(),
+          title: "",
+          description: "",
+          chapters: [],
+        ),
+        about: "",
+        subtitle: "",
+        generateQuestions: false,
+        lockTop: false,
+        lockBottom: true,
+        isLoadingChapterTitles: false,
+        isCourseGenerated: false,
+        errorMessage: null,
+        chapterLoadingStatus: {},
+      ),
+    );
+  }
+
+  void _onToggleLockTop(
+    ToggleLockTop event,
+    Emitter<GenerateCourseState> emit,
+  ) {
+    emit(state.copyWith(lockTop: event.lockTop));
+  }
+
+  void _onToggleLockBottom(
+    ToggleLockBottom event,
+    Emitter<GenerateCourseState> emit,
+  ) {
+    emit(state.copyWith(lockBottom: event.lockBottom));
+  }
+
+  void _onSetAbout(SetAbout event, Emitter<GenerateCourseState> emit) {
+    emit(state.copyWith(about: event.about, errorMessage: null));
+  }
+
   void _onSelectLanguage(
     SelectLanguage event,
     Emitter<GenerateCourseState> emit,
@@ -77,26 +119,18 @@ class GenerateCourseBloc
     await settingsRepository.setLanguage(event.language);
   }
 
-  void _onToggleGenerateQuestions(
-    ToggleGenerateQuestions event,
+  void _onSelectDetailLevel(
+    SelectDetailLevel event,
     Emitter<GenerateCourseState> emit,
   ) {
-    emit(state.copyWith(generateQuestions: !state.generateQuestions));
+    emit(state.copyWith(detailLevel: event.detailLevel));
   }
 
-  void _onSetTitle(SetTitle event, Emitter<GenerateCourseState> emit) {
-    emit(state.copyWith(course: state.course.copyWith(title: event.title)));
-  }
-
-  void _onSetDescription(
-    SetDescription event,
+  void _onSelectKnowledgeLevel(
+    SelectKnowledgeLevel event,
     Emitter<GenerateCourseState> emit,
   ) {
-    emit(
-      state.copyWith(
-        course: state.course.copyWith(description: event.description),
-      ),
-    );
+    emit(state.copyWith(knowledgeLevel: event.knowledgeLevel));
   }
 
   void _onSetChapterTitles(
@@ -122,35 +156,40 @@ class GenerateCourseBloc
     );
   }
 
+  void _onSetTitle(SetTitle event, Emitter<GenerateCourseState> emit) {
+    emit(state.copyWith(course: state.course.copyWith(title: event.title)));
+  }
+
+  void _onSetDescription(
+    SetDescription event,
+    Emitter<GenerateCourseState> emit,
+  ) {
+    emit(
+      state.copyWith(
+        course: state.course.copyWith(description: event.description),
+      ),
+    );
+  }
+
   void _onSetSubtitle(SetSubtitle event, Emitter<GenerateCourseState> emit) {
-    if (event.subtitle.isEmpty) {
-      emit(state.copyWith(errorMessage: "Subtitle cannot be empty"));
-      return;
-    }
     emit(state.copyWith(subtitle: event.subtitle, errorMessage: null));
-  }
-
-  void _onToggleLockTop(
-    ToggleLockTop event,
-    Emitter<GenerateCourseState> emit,
-  ) {
-    emit(state.copyWith(lockTop: event.lockTop));
-  }
-
-  void _onToggleLockBottom(
-    ToggleLockBottom event,
-    Emitter<GenerateCourseState> emit,
-  ) {
-    emit(state.copyWith(lockBottom: event.lockBottom));
   }
 
   void _onAddSubtitle(AddSubtitle event, Emitter<GenerateCourseState> emit) {
     if (state.subtitle == null || state.subtitle!.isEmpty) {
-      emit(state.copyWith(errorMessage: "Subtitle cannot be empty"));
+      emit(
+        state.copyWith(
+          errorMessage: "Please enter a subtitle.",
+        ),
+      );
       return;
     }
     if (state.course.chapters.length >= 10) {
-      emit(state.copyWith(errorMessage: "Maximum 10 chapters allowed"));
+      emit(
+        state.copyWith(
+          errorMessage: "You can add up to 10 chapters.",
+        ),
+      );
       return;
     }
     final updatedChapters = List<Chapter>.from(state.course.chapters);
@@ -188,12 +227,40 @@ class GenerateCourseBloc
     );
   }
 
+  void _reOrderChapters(
+    ReorderChapters event,
+    Emitter<GenerateCourseState> emit,
+  ) async {
+    if (event.oldIndex == event.newIndex) return;
+    if (event.oldIndex < event.newIndex) {
+      event.newIndex -= 1;
+    }
+    final updatedChapters = List<Chapter>.from(state.course.chapters);
+    final chapter = updatedChapters.removeAt(event.oldIndex);
+    updatedChapters.insert(event.newIndex, chapter);
+
+    emit(
+      state.copyWith(course: state.course.copyWith(chapters: updatedChapters)),
+    );
+  }
+
+  void _onToggleGenerateQuestions(
+    ToggleGenerateQuestions event,
+    Emitter<GenerateCourseState> emit,
+  ) {
+    emit(state.copyWith(generateQuestions: !state.generateQuestions));
+  }
+
   Future<void> _onGenerateChapterTitles(
     GenerateChapterTitles event,
     Emitter<GenerateCourseState> emit,
   ) async {
     if (state.about.isEmpty) {
-      emit(state.copyWith(errorMessage: "Please tell us about the course"));
+      emit(
+        state.copyWith(
+          errorMessage: "Please tell us about what you want to learn.",
+        ),
+      );
       return;
     }
     emit(
@@ -238,17 +305,20 @@ class GenerateCourseBloc
         emit(
           state.copyWith(
             isLoadingChapterTitles: false,
-            errorMessage: errorResult.message,
+            errorMessage: GetErrorMessage.getErrorMessage(
+              errorResult.code ?? 0,
+            ),
             lockTop: false,
           ),
         );
+        return;
       }
     } catch (e) {
       emit(
         state.copyWith(
           isLoadingChapterTitles: false,
           lockTop: false,
-          errorMessage: "Failed to generate chapter titles: ${e.toString()}",
+          errorMessage: "Failed to generate chapter titles. Please try again.",
         ),
       );
       return;
@@ -275,6 +345,7 @@ class GenerateCourseBloc
     if (apiResultGeneratedContent is Success) {
       return (apiResultGeneratedContent as Success).data;
     } else {
+      // Throw yapıyor
       final errorResult =
           apiResultGeneratedContent as Failure<DtoChapterContent>;
       throw Exception("Failed to generate content: ${errorResult.message}");
@@ -299,6 +370,7 @@ class GenerateCourseBloc
     if (apiResultGeneratedTranscript is Success) {
       return (apiResultGeneratedTranscript as Success).data;
     } else {
+      // Throw yapıyor
       final errorResult =
           apiResultGeneratedTranscript as Failure<DtoChapterTranscript>;
       throw Exception("Failed to generate transcript: ${errorResult.message}");
@@ -342,6 +414,7 @@ class GenerateCourseBloc
       }).toList();
       return questions;
     } else {
+      // Throw yapıyor
       final errorResult =
           apiResultGeneratedQuestions as Failure<DtoChapterQuestions>;
       throw Exception("Failed to generate questions: ${errorResult.message}");
@@ -388,7 +461,7 @@ class GenerateCourseBloc
         emit(
           state.copyWith(
             errorMessage:
-                "Failed to generate content for ${chapter.title}: ${(dtoContent as Failure).message}",
+                "Failed to generate content for ${chapter.title}. Click retry button.",
             chapterLoadingStatus: {
               ...state.chapterLoadingStatus,
               chapter.id: ChapterStatus(generationResultCode: -1),
@@ -409,7 +482,7 @@ class GenerateCourseBloc
         emit(
           state.copyWith(
             errorMessage:
-                "Failed to generate transcript for ${chapter.title}: ${(dtoTranscript as Failure).message}",
+                "Failed to generate transcript for ${chapter.title}. Click retry button.",
             chapterLoadingStatus: {
               ...state.chapterLoadingStatus,
               chapter.id: ChapterStatus(generationResultCode: -2),
@@ -431,7 +504,7 @@ class GenerateCourseBloc
           emit(
             state.copyWith(
               errorMessage:
-                  "Failed to generate questions for ${chapter.title}: ${(dtoQuestions as Failure).message}",
+                  "Failed to generate questions for ${chapter.title}. Click retry button.",
               chapterLoadingStatus: {
                 ...state.chapterLoadingStatus,
                 chapter.id: ChapterStatus(generationResultCode: -3),
@@ -480,7 +553,8 @@ class GenerateCourseBloc
     } catch (e) {
       emit(
         state.copyWith(
-          errorMessage: "Failed to generate ${chapter.title}: $e",
+          errorMessage:
+              "Failed to generate ${chapter.title}. Click retry button.",
           chapterLoadingStatus: {
             ...state.chapterLoadingStatus,
             chapter.id: ChapterStatus(generationResultCode: -1),
@@ -495,12 +569,29 @@ class GenerateCourseBloc
     Emitter<GenerateCourseState> emit,
   ) async {
     if (state.course.title.isEmpty) {
-      emit(state.copyWith(errorMessage: "Title cannot be empty"));
+      emit(
+        state.copyWith(
+          errorMessage: "Please add a title to the course.",
+        ),
+      );
+      return;
+    }
+
+    if (state.course.description.isEmpty) {
+      emit(
+        state.copyWith(
+          errorMessage: "Please add a description to the course.",
+        ),
+      );
       return;
     }
 
     if (state.course.chapters.isEmpty) {
-      emit(state.copyWith(errorMessage: "Chapter titles cannot be empty"));
+      emit(
+        state.copyWith(
+          errorMessage: "Please add at least one chapter.",
+        ),
+      );
       return;
     }
 
@@ -516,63 +607,5 @@ class GenerateCourseBloc
       add(GenerateChapter(chapter));
       Future.delayed(Duration(milliseconds: 1000));
     }
-  }
-
-  void _onClear(Clear event, Emitter<GenerateCourseState> emit) {
-    emit(
-      state.copyWith(
-        course: state.course.copyWith(
-          id: GenerateRandomId.generateRandomUUID(),
-          createdAt: DateTime.now(),
-          title: "",
-          description: "",
-          chapters: [],
-        ),
-        about: "",
-        subtitle: "",
-        generateQuestions: false,
-        lockTop: false,
-        lockBottom: true,
-        isLoadingChapterTitles: false,
-        isCourseGenerated: false,
-        errorMessage: null,
-        chapterLoadingStatus: {},
-      ),
-    );
-  }
-
-  void _reOrderChapters(
-    ReorderChapters event,
-    Emitter<GenerateCourseState> emit,
-  ) async {
-    if (event.oldIndex == event.newIndex) return;
-    if (event.oldIndex < event.newIndex) {
-      event.newIndex -= 1;
-    }
-    final updatedChapters = List<Chapter>.from(state.course.chapters);
-    final chapter = updatedChapters.removeAt(event.oldIndex);
-    updatedChapters.insert(event.newIndex, chapter);
-
-    emit(
-      state.copyWith(course: state.course.copyWith(chapters: updatedChapters)),
-    );
-  }
-
-  void _onSelectDetailLevel(
-    SelectDetailLevel event,
-    Emitter<GenerateCourseState> emit,
-  ) {
-    emit(state.copyWith(detailLevel: event.detailLevel));
-  }
-
-  void _onSelectKnowledgeLevel(
-    SelectKnowledgeLevel event,
-    Emitter<GenerateCourseState> emit,
-  ) {
-    emit(state.copyWith(knowledgeLevel: event.knowledgeLevel));
-  }
-
-  void _onSetAbout(SetAbout event, Emitter<GenerateCourseState> emit) {
-    emit(state.copyWith(about: event.about, errorMessage: null));
   }
 }

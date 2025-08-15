@@ -16,6 +16,7 @@ import 'package:teachme_ai/pages/generate_course_page/widgets/course_next.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_progress.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_subtitle_input.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_title_input.dart';
+import 'package:teachme_ai/widgets/app_snack_bar.dart';
 import 'package:teachme_ai/widgets/circular_progress.dart';
 import 'package:teachme_ai/widgets/divider_with_text.dart';
 import 'package:teachme_ai/pages/generate_course_page/widgets/course_language_selector.dart';
@@ -56,11 +57,16 @@ class _AddCoursePageState extends State<AddCoursePage> {
   Widget build(BuildContext context) {
     return BlocListener<GenerateCourseBloc, GenerateCourseState>(
       listenWhen: (previous, current) {
-        return previous.isCourseGenerated != current.isCourseGenerated;
+        return previous.isCourseGenerated != current.isCourseGenerated ||
+            previous.errorMessage != current.errorMessage;
       },
       listener: (context, state) {
         if (state.isCourseGenerated) {
           Navigator.of(context).pop();
+          return;
+        }
+        if (state.errorMessage != null) {
+          AppErrorSnackBar.show(context, message: state.errorMessage!);
         }
       },
       child: GestureDetector(
@@ -103,14 +109,9 @@ class _AddCoursePageState extends State<AddCoursePage> {
                 children: [
                   TopBanner(
                     topText: "Start learning",
-                    bottomText: "In minutes",
+                    bottomText: "In seconds",
                     imagePath: "assets/images/balik.png",
                   ),
-                  /*Text(
-                    "Title",
-                    style: AppStyles.textStyleTitleStrong,
-                  ).withPadding(),
-                  CourseTitleInput(controller: _titleController),*/
                   Text(
                     "What to learn",
                     style: AppStyles.textStyleTitleStrong,

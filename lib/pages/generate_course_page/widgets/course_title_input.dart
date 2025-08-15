@@ -47,6 +47,7 @@ class _CourseTitleInputState extends State<CourseTitleInput> {
           controller: widget.controller,
           isEnabled: !state.lockBottom,
           hintText: "Course title",
+          isMultiline: true,
           onChanged: (value) {
             context.read<GenerateCourseBloc>().add(SetTitle(value));
           },

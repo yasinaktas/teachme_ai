@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_bloc.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_event.dart';
 import 'package:teachme_ai/blocs/generate_course/generate_course_state.dart';
+import 'package:teachme_ai/constants/app_dimensions.dart';
+import 'package:teachme_ai/extensions/expanded_extension.dart';
 import 'package:teachme_ai/extensions/padding_extension.dart';
 import 'package:teachme_ai/widgets/app_elevated_button.dart';
 import 'package:teachme_ai/widgets/loading_bar.dart';
@@ -14,23 +16,26 @@ class CourseNext extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<GenerateCourseBloc, GenerateCourseState>(
       buildWhen: (previous, current) {
-        return previous.isLoadingChapterTitles != current.isLoadingChapterTitles ||
+        return previous.isLoadingChapterTitles !=
+                current.isLoadingChapterTitles ||
             previous.lockTop != current.lockTop;
       },
       builder: (context, state) {
-        return Row(
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Visibility(
-              visible: state.isLoadingChapterTitles,
-              child: LoadingBar(title: "Generating subtitles..."),
-            ),
-            const Spacer(),
+            const SizedBox(height: AppDimensions.pagePadding),
             AppElevatedButton(
               isActive: !state.lockTop,
               text: "Next",
               onPressed: () async {
                 context.read<GenerateCourseBloc>().add(GenerateChapterTitles());
               },
+            ).asExpanded(),
+            const SizedBox(height: AppDimensions.pagePadding),
+            Visibility(
+              visible: state.isLoadingChapterTitles,
+              child: LoadingBar(title: "Generating subtitles..."),
             ),
           ],
         ).withPadding();

@@ -143,3 +143,4 @@ class ReorderChapters extends GenerateCourseEvent {
 
   ReorderChapters(this.oldIndex, this.newIndex);
 }
+

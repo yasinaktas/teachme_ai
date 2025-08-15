@@ -47,7 +47,7 @@ class _AppTextFieldState extends State<AppTextField> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.textFieldRadius),
-          borderSide: BorderSide(color: AppColors.primaryColor, width: 1.5),
+          borderSide: BorderSide(color: AppColors.primaryDarkColor, width: 1.5),
         ),
         hintText: widget.hintText,
         hintStyle: AppStyles.textStyleNormalLight,
