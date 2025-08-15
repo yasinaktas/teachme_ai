@@ -8,6 +8,8 @@ abstract interface class IAiApiService {
   Future<ApiResult<DtoSubtitles>> generateSubtitlesAndDescription(
     String about,
     String language,
+    String detailLevel,
+    String knowledgeLevel,
   );
 
   Future<ApiResult<DtoChapterContent>> generateChapterContent(

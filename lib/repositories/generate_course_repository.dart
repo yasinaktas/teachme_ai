@@ -16,8 +16,15 @@ class GenerateCourseRepository implements IGenerateCourseRepository {
   Future<ApiResult<DtoSubtitles>> getGeneratedSubtitles(
     String about,
     String language,
+    String detailLevel,
+    String knowledgeLevel,
   ) async {
-    return await _aiApiService.generateSubtitlesAndDescription(about, language);
+    return await _aiApiService.generateSubtitlesAndDescription(
+      about,
+      language,
+      detailLevel,
+      knowledgeLevel,
+    );
   }
 
   @override

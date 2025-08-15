@@ -267,6 +267,8 @@ class GenerateCourseBloc
       final apiResult = await generateCourseRepository.getGeneratedSubtitles(
         state.about,
         state.course.language,
+        state.detailLevel.label,
+        state.knowledgeLevel.label,
       );
       if (apiResult is Success) {
         final dtoSubtitles = apiResult as Success<DtoSubtitles>;
